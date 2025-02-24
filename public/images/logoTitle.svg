@@ -1,0 +1,16 @@
+<svg width="53" height="40" viewBox="0 0 53 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_153_3106)">
+<rect y="40" width="13.3333" height="13.25" transform="rotate(-90 0 40)" fill="#3333C1"/>
+<rect x="15.75" y="37.5" width="8.33333" height="8.25" transform="rotate(-90 15.75 37.5)" fill="#3333C1" stroke="#3333C1" stroke-width="5"/>
+<rect x="29" y="24.1665" width="8.33333" height="8.25" transform="rotate(-90 29 24.1665)" fill="#3333C1" stroke="#3333C1" stroke-width="5"/>
+<rect x="39.75" y="40" width="13.3333" height="13.25" transform="rotate(-90 39.75 40)" fill="#7AAD1A"/>
+<rect x="2.5" y="24.1665" width="8.33333" height="8.25" transform="rotate(-90 2.5 24.1665)" fill="#3333C1" stroke="#3333C1" stroke-width="5"/>
+<rect x="15.75" y="10.8335" width="8.33333" height="8.25" transform="rotate(-90 15.75 10.8335)" fill="#3333C1" stroke="#3333C1" stroke-width="5"/>
+<rect x="29" y="10.8335" width="8.33333" height="8.25" transform="rotate(-90 29 10.8335)" fill="#3333C1" stroke="#3333C1" stroke-width="5"/>
+</g>
+<defs>
+<clipPath id="clip0_153_3106">
+<rect width="40" height="53" fill="white" transform="matrix(0 -1 1 0 0 40)"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,0 +1,3 @@
+const FormIcons = {};
+
+export { FormIcons };
