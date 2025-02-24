@@ -43,7 +43,7 @@ const disableFooterTexts = ["/upload-documents", "/send-money"];
 
 const SlantedBlock = ({ reversed = false }: { reversed?: boolean }) => (
   <div
-    className={`w-0 h-0 bg-blue-500 border-r-[27.5rem] border-b-[10.3rem] border-b-[#2E2EA0] border-white ${
+    className={` w-0 h-0 border-r-[27.5rem] border-b-[10.3rem] border-b-[#2E2EA0] border-white ${
       reversed && "scale-x-[-1]"
     }`}
   />

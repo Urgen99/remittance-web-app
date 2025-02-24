@@ -1,21 +1,21 @@
 import { FormIcons } from "@/components/icons/Icons";
 import FormComponent from "@/components/shared/Generic/FormComponent";
-import { LoginFormSchema } from "@/lib/formSchema";
-import { loginFields } from "@/lib/inputFields";
+import { ForgotPasswordSchema } from "@/lib/formSchema";
+import { forgotPasswordFields } from "@/lib/inputFields";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const Login = () => {
-  const form = useForm<z.infer<typeof LoginFormSchema>>({
-    resolver: zodResolver(LoginFormSchema),
-    defaultValues: loginFields.reduce((acc, field) => {
+const ForgotPassword = () => {
+  const form = useForm<z.infer<typeof ForgotPasswordSchema>>({
+    resolver: zodResolver(ForgotPasswordSchema),
+    defaultValues: forgotPasswordFields.reduce((acc, field) => {
       acc[field.name] = "";
       return acc;
     }, {} as Record<string, string>),
   });
-  function onSubmit(data: z.infer<typeof LoginFormSchema>) {
+  function onSubmit(data: z.infer<typeof ForgotPasswordSchema>) {
     console.log("form is submitted", data);
 
     alert({
@@ -33,7 +33,7 @@ const Login = () => {
       <section className="flex  items-center justify-center">
         <FormComponent
           form={form}
-          fields={loginFields}
+          fields={forgotPasswordFields}
           onSubmit={onSubmit}
           formDescription={formDescription}
           links={formDescription.links}
@@ -43,15 +43,15 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;
 
 const formDescription: FormDescription = {
-  Icon: FormIcons.Upload,
-  title: "Login to SwiftSend",
+  Icon: FormIcons.Lock,
+  title: "Forgot your password?",
   subtitle:
-    "We've found this email on our system , meaning its already registered with us , so you can just login with us",
+    "Forgot your password? No worries! Enter your email below, and we'll send you an OTP to reset your password securely.",
   links: {
-    title: "Forgot Password?",
-    to: "/forgot-password",
+    title: "Back to Login",
+    to: "/login",
   },
 };
