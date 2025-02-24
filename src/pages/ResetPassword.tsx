@@ -1,21 +1,21 @@
 import { FormIcons } from "@/components/icons/Icons";
 import FormComponent from "@/components/shared/Generic/FormComponent";
-import { LoginFormSchema } from "@/lib/formSchema";
-import { loginFields } from "@/lib/inputFields";
+import { CreatePasswordSchema } from "@/lib/formSchema";
+import { createPasswordFields } from "@/lib/inputFields";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const Login = () => {
-  const form = useForm<z.infer<typeof LoginFormSchema>>({
-    resolver: zodResolver(LoginFormSchema),
-    defaultValues: loginFields.reduce((acc, field) => {
+const ResetPassword = () => {
+  const form = useForm<z.infer<typeof CreatePasswordSchema>>({
+    resolver: zodResolver(CreatePasswordSchema),
+    defaultValues: createPasswordFields.reduce((acc, field) => {
       acc[field.name] = "";
       return acc;
     }, {} as Record<string, string>),
   });
-  function onSubmit(data: z.infer<typeof LoginFormSchema>) {
+  function onSubmit(data: z.infer<typeof CreatePasswordSchema>) {
     console.log("form is submitted", data);
 
     alert({
@@ -33,25 +33,27 @@ const Login = () => {
       <section className="flex  items-center justify-center">
         <FormComponent
           form={form}
-          fields={loginFields}
+          fields={createPasswordFields}
           onSubmit={onSubmit}
           formDescription={formDescription}
-          links={formDescription.links}
+          info={formDescription.info}
         />
       </section>
     </main>
   );
 };
 
-export default Login;
+export default ResetPassword;
 
 const formDescription: FormDescription = {
-  Icon: FormIcons.Upload,
-  title: "Login to SwiftSend",
+  Icon: FormIcons.Lock,
+  title: "Forgot your password?",
   subtitle:
-    "We've found this email on our system , meaning its already registered with us , so you can just login with us",
-  links: {
-    title: "Forgot Password?",
-    to: "/forgot-password",
-  },
+    "Forgot your password? No worries! Enter your email below, and we'll send you an OTP to reset your password securely.",
+  info: [
+    "Minimum 8 characters (Longer passwords are more secure)",
+    "At least one uppercase letter (A-Z) (Enhances complexity)",
+    "At least one uppercase letter (A-Z) (Enhances complexity)",
+    "At least one special character (!@#$%^&*) (Makes it harder to guess)",
+  ],
 };

@@ -1,21 +1,21 @@
 import { FormIcons } from "@/components/icons/Icons";
 import FormComponent from "@/components/shared/Generic/FormComponent";
-import { LoginFormSchema } from "@/lib/formSchema";
-import { loginFields } from "@/lib/inputFields";
+import { RegisterFormSchema } from "@/lib/formSchema";
+import { registerFields } from "@/lib/inputFields";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const Login = () => {
-  const form = useForm<z.infer<typeof LoginFormSchema>>({
-    resolver: zodResolver(LoginFormSchema),
-    defaultValues: loginFields.reduce((acc, field) => {
+const Register = () => {
+  const form = useForm<z.infer<typeof RegisterFormSchema>>({
+    resolver: zodResolver(RegisterFormSchema),
+    defaultValues: registerFields.reduce((acc, field) => {
       acc[field.name] = "";
       return acc;
     }, {} as Record<string, string>),
   });
-  function onSubmit(data: z.infer<typeof LoginFormSchema>) {
+  function onSubmit(data: z.infer<typeof RegisterFormSchema>) {
     console.log("form is submitted", data);
 
     alert({
@@ -33,25 +33,24 @@ const Login = () => {
       <section className="flex  items-center justify-center">
         <FormComponent
           form={form}
-          fields={loginFields}
+          fields={registerFields}
           onSubmit={onSubmit}
           formDescription={formDescription}
-          links={formDescription.links}
+          info={formDescription.info}
         />
       </section>
     </main>
   );
 };
 
-export default Login;
+export default Register;
 
 const formDescription: FormDescription = {
   Icon: FormIcons.Upload,
-  title: "Login to SwiftSend",
+  title: "Welcome to SwiftSend",
   subtitle:
-    "We've found this email on our system , meaning its already registered with us , so you can just login with us",
-  links: {
-    title: "Forgot Password?",
-    to: "/forgot-password",
-  },
+    "Enjoy a seamless, hassle-free way to send money to Nepal with ease!",
+  info: [
+    "If you have an account , you will be prompted to login in the next step",
+  ],
 };
