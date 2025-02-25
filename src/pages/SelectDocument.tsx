@@ -1,6 +1,5 @@
 import { FormIcons } from "@/components/icons/Icons";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FormDescription } from "@/lib/type";
 import FormHeadingDescription from "../components/shared/FormHeadingDescription";
@@ -31,12 +30,6 @@ const SelectDocument = () => {
                   {title}
                 </TabsTrigger>
               ))}
-              {/* <TabsTrigger
-                value="back"
-                className="px-4 py-[6px] rounded-[20px] !w-full !bg-[#f7f7f7]"
-              >
-                Document Back
-              </TabsTrigger> */}
             </TabsList>
 
             {/* Make it generic */}
