@@ -9,6 +9,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyOtp from "./pages/VerifyOtp";
+import SelectDocument from "./pages/SelectDocument";
+import UploadDocument from "./pages/UploadDocument";
 const App = () => {
   return (
     <Router>
@@ -39,6 +41,8 @@ const AppContent = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/verify-otp" element={<VerifyOtp />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/select-documents" element={<SelectDocument />} />
+      <Route path="/upload-documents" element={<UploadDocument />} />
     </Routes>
   );
 };

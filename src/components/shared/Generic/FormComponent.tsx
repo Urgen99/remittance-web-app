@@ -15,6 +15,7 @@ import { FormComponentProps } from "@/lib/interface";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 import OTPForm from "../OTPForm";
+import FormHeadingDescription from "../FormHeadingDescription";
 
 const FormComponent = <T extends z.ZodTypeAny>({
   form,
@@ -28,19 +29,7 @@ const FormComponent = <T extends z.ZodTypeAny>({
   return (
     <section className="max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
       {/* ---------- FORM DESCRIPTION ---------- */}
-      <div className="flex flex-col gap-6 items-center">
-        <div className="border border-[#E2E2FF] bg-gradient-to-br from-[#FFFF] to-[#E2E2FF] size-[3.37rem] rounded-[12px] shadow-sm shadow-[#07073A0D] flex items-center justify-center">
-          <formDescription.Icon />
-        </div>
-        <div className="flex flex-col gap-3">
-          <h1 className="text-center font-semibold font-general-sans text-2xl tracking-[-1%] text-[#0A090B]">
-            {formDescription.title}
-          </h1>
-          <h3 className="text-center font-inter tracking-[-0.18px] text-base text-[#696969]">
-            {formDescription.subtitle}
-          </h3>
-        </div>
-      </div>
+      <FormHeadingDescription formDescription={formDescription} />
 
       {/* ---------- FORM CONTAINER ---------- */}
       <Form {...form}>
@@ -49,7 +38,9 @@ const FormComponent = <T extends z.ZodTypeAny>({
           className="w-full flex flex-col gap-[18px]"
         >
           {isOTPForm ? (
-            <OTPForm />
+            <div className="flex justify-center">
+              <OTPForm />
+            </div>
           ) : (
             fields.map((inputField) => (
               <FormField
