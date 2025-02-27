@@ -14,17 +14,15 @@ import { Input } from "@/components/ui/input";
 import { FormComponentProps } from "@/lib/interface";
 import { Link } from "react-router-dom";
 import { z } from "zod";
-import OTPForm from "../OTPForm";
 import FormHeadingDescription from "../FormHeadingDescription";
 
 const FormComponent = <T extends z.ZodTypeAny>({
   form,
-  fields,
+  fields = [],
   onSubmit,
   formDescription,
   links,
   info,
-  isOTPForm = false,
 }: FormComponentProps<T>) => {
   return (
     <section className="max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
@@ -37,39 +35,33 @@ const FormComponent = <T extends z.ZodTypeAny>({
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full flex flex-col gap-[18px]"
         >
-          {isOTPForm ? (
-            <div className="flex justify-center">
-              <OTPForm />
-            </div>
-          ) : (
-            fields.map((inputField) => (
-              <FormField
-                key={inputField.name}
-                control={form.control}
-                name={inputField.name}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
-                      {inputField.label}{" "}
-                      {inputField.isImportant && (
-                        <span className="text-[#D32F2F]">*</span>
-                      )}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type={inputField.type}
-                        placeholder={inputField.placeholder || ""}
-                        {...field}
-                        className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83]"
-                      />
-                    </FormControl>
+          {fields.map((inputField) => (
+            <FormField
+              key={inputField.name}
+              control={form.control}
+              name={inputField.name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
+                    {inputField.label}{" "}
+                    {inputField.isImportant && (
+                      <span className="text-[#D32F2F]">*</span>
+                    )}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type={inputField.type}
+                      placeholder={inputField.placeholder || ""}
+                      {...field}
+                      className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83]"
+                    />
+                  </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))
-          )}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
 
           <Button
             type="submit"

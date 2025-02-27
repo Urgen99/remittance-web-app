@@ -32,16 +32,34 @@ const CreatePasswordSchema = z
   });
 
 const OTPSchema = z.object({
-  otp: z
-    .string()
-    .length(6, "OTP must be exactly 6 digits long")
-    .regex(/^\d{6}$/, "OTP must contain only numbers (0-9)"),
+  otp: z.string().min(6, "Invalid OTP").max(6),
+});
+
+const PersonalDetailSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  middleName: z.optional(z.string().min(1, "Middle name is required")),
+  lastName: z.string().min(1, "Last name is required"),
+  birthDate: z.string().date(),
+  document: z.object({
+    type: z.union([
+      z.literal("passport"),
+      z.literal("license"),
+      z.literal("nationalId"),
+    ]),
+    number: z.string().min(1, "Document number is required"),
+    expiry: z.string().date().min(1, "Document expiry date is required"),
+  }),
+  address: z.object({
+    city: z.string().min(1, "City is required"),
+    addressLine: z.string().min(1, "Address line is required"),
+  }),
 });
 
 export {
   CreatePasswordSchema,
   ForgotPasswordSchema,
   LoginFormSchema,
-  RegisterFormSchema,
   OTPSchema,
+  PersonalDetailSchema,
+  RegisterFormSchema,
 };
