@@ -1,7 +1,14 @@
 import { FormIcons } from "@/components/icons/Icons";
-import FormComponent from "@/components/shared/Generic/FormComponent";
+import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
+import { Button } from "@/components/ui/button";
+import { Form, FormField, FormItem } from "@/components/ui/form";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import { OTPSchema } from "@/lib/formSchema";
-import { otpField } from "@/lib/inputFields";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -10,10 +17,7 @@ import { z } from "zod";
 const VerifyOtp = () => {
   const form = useForm<z.infer<typeof OTPSchema>>({
     resolver: zodResolver(OTPSchema),
-    defaultValues: otpField.reduce((acc, field) => {
-      acc[field.name] = "";
-      return acc;
-    }, {} as Record<string, string>),
+    defaultValues: { otp: "" },
   });
   function onSubmit(data: z.infer<typeof OTPSchema>) {
     console.log("form is submitted", data);
@@ -31,14 +35,46 @@ const VerifyOtp = () => {
   return (
     <main className="mt-7">
       <section className="flex  items-center justify-center">
-        <FormComponent
-          form={form}
-          fields={otpField}
-          onSubmit={onSubmit}
-          formDescription={formDescription}
-          links={formDescription.links}
-          isOTPForm
-        />
+        <div className="max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
+          {/* ---------- FORM DESCRIPTION ---------- */}
+          <FormHeadingDescription formDescription={formDescription} />
+
+          {/* ---------- FORM CONTAINER ---------- */}
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-full flex flex-col gap-[18px]"
+            >
+              <FormField
+                control={form.control}
+                name="otp"
+                render={({ field }) => (
+                  <FormItem>
+                    <InputOTP maxLength={6} {...field}>
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                      </InputOTPGroup>
+                      <InputOTPSeparator />
+                      <InputOTPGroup>
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </FormItem>
+                )}
+              />
+              <Button
+                className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full"
+                type="submit"
+              >
+                Submit
+              </Button>
+            </form>
+          </Form>
+        </div>
       </section>
     </main>
   );

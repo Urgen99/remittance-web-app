@@ -2,7 +2,6 @@ import {
   CreatePasswordSchema,
   ForgotPasswordSchema,
   LoginFormSchema,
-  OTPSchema,
   RegisterFormSchema,
 } from "./formSchema";
 import { InputFieldsType } from "./type";
@@ -54,18 +53,9 @@ const createPasswordFields: InputFieldsType<typeof CreatePasswordSchema>[] = [
   },
 ];
 
-const otpField: InputFieldsType<typeof OTPSchema>[] = [
-  {
-    name: "otp",
-    type: "text",
-    placeholder: "********",
-  },
-];
-
 export {
   createPasswordFields,
   forgotPasswordFields,
   loginFields,
-  otpField,
   registerFields,
 };

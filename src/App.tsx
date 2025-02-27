@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Footer from "./components/shared/Footer/Footer";
 import Header from "./components/shared/Header/Header";
 import TailwindIndicator from "./components/shared/TailwindIndicator";
@@ -8,9 +8,10 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
-import VerifyOtp from "./pages/VerifyOtp";
 import SelectDocument from "./pages/SelectDocument";
 import UploadDocument from "./pages/UploadDocument";
+import VerifyOtp from "./pages/VerifyOtp";
+import PersonalDetails from "./pages/PersonalDetails";
 const App = () => {
   return (
     <Router>
@@ -43,6 +44,37 @@ const AppContent = () => {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/select-documents" element={<SelectDocument />} />
       <Route path="/upload-documents" element={<UploadDocument />} />
+      <Route path="/personal-details" element={<PersonalDetails />} />
+      <Route path="/test" element={<TestPaths />} />
     </Routes>
+  );
+};
+
+const TestPaths = () => {
+  const paths = [
+    {
+      title: "Register",
+      to: "/",
+    },
+    { title: "Login", to: "/login" },
+    { title: "Create Password", to: "/create-password" },
+    { title: "Forgot Password", to: "/forgot-password" },
+    { title: "Verify Otp", to: "/verify-otp" },
+    { title: "Reset Password", to: "/reset-password" },
+    { title: "Select Documents", to: "/select-documents" },
+    { title: "Upload Documents", to: "/upload-documents" },
+    { title: "Personal Details", to: "/personal-details" },
+  ];
+
+  return (
+    <main className="h-screen flex border border-red-500 ">
+      <div className="w-full flex flex-wrap gap-4 justify-center items-center">
+        {paths.map(({ title, to }) => (
+          <Link to={to} className="bg-black text-white px-4 py-3">
+            {title}
+          </Link>
+        ))}
+      </div>
+    </main>
   );
 };
