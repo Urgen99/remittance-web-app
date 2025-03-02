@@ -63,7 +63,8 @@ const UploadDocument = () => {
 
           <Button
             onClick={handleNavigate}
-            className="w-full max-w-[15.5rem] cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px]"
+            disabled={selected === ""}
+            className="w-full max-w-[15.5rem] cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] disabled:bg-[#696969] disabled:opacity-100"
           >
             Continue
           </Button>

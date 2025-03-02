@@ -1,7 +1,12 @@
 import { FormIcons } from "@/components/icons/Icons";
 import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
-import { Command, CommandItem, CommandList } from "@/components/ui/command";
+import {
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import {
   Form,
   FormControl,
@@ -33,6 +38,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const PersonalDetails = () => {
+  const [open, setOpen] = useState<string | null>(null);
   const form = useForm({
     resolver:
       zodResolver<z.infer<typeof PersonalDetailSchema>>(PersonalDetailSchema),
@@ -53,10 +59,11 @@ const PersonalDetails = () => {
     const newDate = { ...selectedDate, [type]: value };
     setSelectedDate(newDate);
     if (newDate.day && newDate.month && newDate.year) {
-      form.setValue(
-        "birthDate",
-        `${newDate.year}/${newDate.month}/${newDate.day}`
+      const formattedDate = `${newDate.year}/${newDate.month}/${newDate.day}`;
+      const dateObj = new Date(
+        formattedDate.replace(/(\d{4})\/(\d{2})\/(\d{2})/, "$1-$2-$3")
       );
+      form.setValue("birthDate", dateObj);
     }
   };
 
@@ -132,7 +139,7 @@ const PersonalDetails = () => {
 
                 <FormField
                   control={form.control}
-                  name="firstName"
+                  name="lastName"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
@@ -166,11 +173,16 @@ const PersonalDetails = () => {
                           key={type}
                           control={form.control}
                           name="birthDate"
-                          render={({ field }) => (
+                          render={() => (
                             <FormItem className="flex flex-col">
-                              <Popover>
+                              <Popover
+                                open={open === type}
+                                onOpenChange={() => setOpen(type)}
+                              >
                                 <PopoverTrigger asChild>
                                   <Button
+                                    role="combobox"
+                                    aria-expanded={open === type}
                                     variant="outline"
                                     className={cn(
                                       "w-[120px] justify-between border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12 ",
@@ -191,30 +203,34 @@ const PersonalDetails = () => {
                                 <PopoverContent className="w-[100px] p-0">
                                   <Command>
                                     <CommandList>
-                                      {(type === "year"
-                                        ? years
-                                        : type === "month"
-                                        ? months
-                                        : days
-                                      ).map((item) => (
-                                        <CommandItem
-                                          key={item.value}
-                                          value={item.label}
-                                          onSelect={() =>
-                                            handleSelect(type, item.label)
-                                          }
-                                        >
-                                          <Check
-                                            className={cn(
-                                              "mr-2 h-4 w-4",
-                                              selectedDate[type] === item.label
-                                                ? "opacity-100"
-                                                : "opacity-0"
-                                            )}
-                                          />
-                                          {item.label}
-                                        </CommandItem>
-                                      ))}
+                                      <CommandGroup>
+                                        {(type === "year"
+                                          ? years
+                                          : type === "month"
+                                          ? months
+                                          : days
+                                        ).map((item) => (
+                                          <CommandItem
+                                            key={item.value}
+                                            value={item.label}
+                                            onSelect={() => {
+                                              handleSelect(type, item.label);
+                                              setOpen(null);
+                                            }}
+                                          >
+                                            <Check
+                                              className={cn(
+                                                "mr-2 h-4 w-4",
+                                                selectedDate[type] ===
+                                                  item.label
+                                                  ? "opacity-100"
+                                                  : "opacity-0"
+                                              )}
+                                            />
+                                            {item.label}
+                                          </CommandItem>
+                                        ))}
+                                      </CommandGroup>
                                     </CommandList>
                                   </Command>
                                 </PopoverContent>
@@ -238,10 +254,7 @@ const PersonalDetails = () => {
                           Document Type{" "}
                           <span className="text-[#D32F2F]">*</span>
                         </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
+                        <Select onValueChange={field.onChange}>
                           <FormControl>
                             <SelectTrigger className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12">
                               <SelectValue placeholder="Select Document Type" />
@@ -361,13 +374,13 @@ const PersonalDetails = () => {
 
               <Button
                 type="submit"
-                className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] max-w-[15.5rem] w-full"
+                className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] max-w-[15.5rem] w-full disabled:bg-[#696969] disabled:opacity-100"
+                disabled={!form.formState.isValid}
               >
                 Continue
               </Button>
             </form>
           </Form>
-          {/* <TestForm /> */}
         </div>
       </section>
     </main>
