@@ -39,7 +39,7 @@ const PersonalDetailSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   middleName: z.optional(z.string().min(1, "Middle name is required")),
   lastName: z.string().min(1, "Last name is required"),
-  birthDate: z.string().date(),
+  birthDate: z.coerce.date(),
   document: z.object({
     type: z.union([
       z.literal("passport"),
@@ -47,7 +47,16 @@ const PersonalDetailSchema = z.object({
       z.literal("nationalId"),
     ]),
     number: z.string().min(1, "Document number is required"),
-    expiry: z.string().date().min(1, "Document expiry date is required"),
+    expiry: z.coerce
+      .date()
+      .refine((date) => date > new Date(), {
+        message: "Document expiry date must be in the future",
+        path: ["expiry"],
+      })
+      .refine((date) => date.toISOString().match(/^\d{4}-\d{2}-\d{2}$/), {
+        message: "Invalid date format",
+        path: ["expiry"],
+      }),
   }),
   address: z.object({
     city: z.string().min(1, "City is required"),

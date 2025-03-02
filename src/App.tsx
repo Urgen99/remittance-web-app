@@ -1,30 +1,24 @@
 import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Footer from "./components/shared/Footer/Footer";
-import Header from "./components/shared/Header/Header";
+import DashboardLayout from "./components/layouts/DashboardLayout";
+import DefaultLayout from "./components/layouts/DefaultLayout";
 import TailwindIndicator from "./components/shared/TailwindIndicator";
 import useScrollToTop from "./hooks/scrollToTop";
 import CreatePassword from "./pages/CreatePassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import Login from "./pages/Login";
+import PersonalDetails from "./pages/PersonalDetails";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import SelectDocument from "./pages/SelectDocument";
 import UploadDocument from "./pages/UploadDocument";
 import VerifyOtp from "./pages/VerifyOtp";
-import PersonalDetails from "./pages/PersonalDetails";
+import Dashboard from "./pages/user/dashboard/Dashboard";
 const App = () => {
   return (
     <Router>
-      <div className="min-h-screen flex flex-col ">
-        <Header />
+      <AppContent />
 
-        <div className="grow">
-          <AppContent />
-        </div>
-
-        <TailwindIndicator />
-        <Footer />
-      </div>
+      <TailwindIndicator />
     </Router>
   );
 };
@@ -36,15 +30,26 @@ const AppContent = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Register />} />
-      <Route path="/create-password" element={<CreatePassword />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/verify-otp" element={<VerifyOtp />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/select-documents" element={<SelectDocument />} />
-      <Route path="/upload-documents" element={<UploadDocument />} />
-      <Route path="/personal-details" element={<PersonalDetails />} />
+      <Route element={<DefaultLayout />}>
+        <Route path="/" element={<Register />} />
+        <Route path="/create-password" element={<CreatePassword />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+      </Route>
+
+      <Route element={<DefaultLayout />}>
+        <Route path="/select-documents" element={<SelectDocument />} />
+        <Route path="/upload-documents" element={<UploadDocument />} />
+        <Route path="/personal-details" element={<PersonalDetails />} />
+      </Route>
+
+      {/* ---------- PROTECTED ROUTES Add (Authentication later) ---------- */}
+      <Route element={<DashboardLayout />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Route>
+
       <Route path="/test" element={<TestPaths />} />
     </Routes>
   );
@@ -64,6 +69,7 @@ const TestPaths = () => {
     { title: "Select Documents", to: "/select-documents" },
     { title: "Upload Documents", to: "/upload-documents" },
     { title: "Personal Details", to: "/personal-details" },
+    { title: "Dashboard", to: "/dashboard" },
   ];
 
   return (

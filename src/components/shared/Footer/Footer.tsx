@@ -38,8 +38,13 @@ const Footer = () => {
 
 export default Footer;
 
-const disableFooterPaths = ["/send-money"];
-const disableFooterTexts = ["/upload-documents", "/send-money"];
+const disableFooterPaths = ["/send-money", "/dashboard"];
+const disableFooterTexts = [
+  "/upload-documents",
+  "/select-documents",
+  "/send-money",
+  "/dashboard",
+];
 
 const SlantedBlock = ({ reversed = false }: { reversed?: boolean }) => (
   <div
