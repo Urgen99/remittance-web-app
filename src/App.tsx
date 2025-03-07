@@ -13,6 +13,8 @@ import SelectDocument from "./pages/SelectDocument";
 import UploadDocument from "./pages/UploadDocument";
 import VerifyOtp from "./pages/VerifyOtp";
 import Dashboard from "./pages/user/dashboard/Dashboard";
+import TransactionHistory from "./pages/user/dashboard/TransactionHistory";
+import Recipients from "./pages/user/dashboard/Recipients";
 const App = () => {
   return (
     <Router>
@@ -48,6 +50,8 @@ const AppContent = () => {
       {/* ---------- PROTECTED ROUTES Add (Authentication later) ---------- */}
       <Route element={<DashboardLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/transactions" element={<TransactionHistory />} />
+        <Route path="/recipients" element={<Recipients />} />
       </Route>
 
       <Route path="/test" element={<TestPaths />} />
