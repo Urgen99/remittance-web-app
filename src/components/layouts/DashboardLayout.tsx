@@ -1,21 +1,23 @@
 import { Outlet } from "react-router-dom";
+import DashboardHeader from "../shared/Header/DashboardHeader";
 import DashboardSideBar from "../shared/Sidebar/DashboardSideBar";
 
 const DashboardLayout = () => {
   return (
     <div>
       <main>
-        <div className="min-h-screen flex gap-4">
-          <div className="border-red-500 border-2">
+        <div className="min-h-screen flex">
+          <section className="max-w-[19.25rem] w-full bg-[#EBEBF9]">
             <DashboardSideBar />
-          </div>
-          <div className="border-black p-4 border-2 flex-grow">
-            <div className="p-4 border-red-500 border-2">Header</div>
-            <div className="border-blue-500 border-2">
+          </section>
+          <section className="flex-grow">
+            <DashboardHeader />
+
+            <div>
               <Outlet />
               {/* Dashboard Content */}
             </div>
-          </div>
+          </section>
         </div>
       </main>
     </div>
