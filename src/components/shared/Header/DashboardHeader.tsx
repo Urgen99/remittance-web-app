@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import NotificationMenu from "./NotificationMenu";
-import UserMenu from "./UserMenu";
+import UserMenu from "../Menu/UserMenu";
+import NotificationMenu from "../Menu/NotificationMenu";
 const DashboardHeader = () => {
   return (
     <div className="h-14 px-6 py-2 bg-[#EBEBF9] flex items-center justify-end">

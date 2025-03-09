@@ -10,11 +10,13 @@ import PersonalDetails from "./pages/PersonalDetails";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import SelectDocument from "./pages/SelectDocument";
+import StepperPage from "./pages/StepperPage";
 import UploadDocument from "./pages/UploadDocument";
 import VerifyOtp from "./pages/VerifyOtp";
 import Dashboard from "./pages/user/dashboard/Dashboard";
-import TransactionHistory from "./pages/user/dashboard/TransactionHistory";
 import Recipients from "./pages/user/dashboard/Recipients";
+import TransactionHistory from "./pages/user/dashboard/TransactionHistory";
+import CompleteProfile from "./pages/CompleteProfile";
 const App = () => {
   return (
     <Router>
@@ -39,12 +41,12 @@ const AppContent = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-      </Route>
 
-      <Route element={<DefaultLayout />}>
         <Route path="/select-documents" element={<SelectDocument />} />
         <Route path="/upload-documents" element={<UploadDocument />} />
         <Route path="/personal-details" element={<PersonalDetails />} />
+        <Route path="/stepper-page" element={<StepperPage />} />
+        <Route path="/complete-profile" element={<CompleteProfile />} />
       </Route>
 
       {/* ---------- PROTECTED ROUTES Add (Authentication later) ---------- */}
@@ -74,6 +76,8 @@ const TestPaths = () => {
     { title: "Upload Documents", to: "/upload-documents" },
     { title: "Personal Details", to: "/personal-details" },
     { title: "Dashboard", to: "/dashboard" },
+    { title: "Complete Profile", to: "/complete-profile" },
+    { title: "Stepper Page", to: "/stepper-page" },
   ];
 
   return (
