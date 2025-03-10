@@ -37,7 +37,7 @@ const OTPSchema = z.object({
 
 const PersonalDetailSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
-  middleName: z.optional(z.string().min(1, "Middle name is required")),
+  middleName: z.optional(z.string()),
   lastName: z.string().min(1, "Last name is required"),
   birthDate: z.coerce.date(),
   document: z.object({
@@ -47,22 +47,39 @@ const PersonalDetailSchema = z.object({
       z.literal("nationalId"),
     ]),
     number: z.string().min(1, "Document number is required"),
-    expiry: z.coerce
-      .date()
-      .refine((date) => date > new Date(), {
-        message: "Document expiry date must be in the future",
-        path: ["expiry"],
-      })
-      .refine((date) => date.toISOString().match(/^\d{4}-\d{2}-\d{2}$/), {
-        message: "Invalid date format",
-        path: ["expiry"],
-      }),
+    expiry: z.date({ required_error: "Expiry date is required" }),
   }),
   address: z.object({
     city: z.string().min(1, "City is required"),
     addressLine: z.string().min(1, "Address line is required"),
   }),
 });
+
+const UserFormSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  middleName: z.optional(z.string()),
+  lastName: z.string().min(1, "Last name is required"),
+  birthDate: z.string().date(),
+  document: z.object({
+    type: z.union([
+      z.literal("passport"),
+      z.literal("license"),
+      z.literal("nationalId"),
+    ]),
+    number: z.string().min(1, "Document number is required"),
+    expiry: z.string().date().min(1, "Expiry date is required"),
+    document_front: z.instanceof(File, {
+      message: "Document front is required",
+    }),
+    document_back: z.instanceof(File, { message: "Document back is required" }),
+  }),
+  address: z.object({
+    city: z.string().min(1, "City is required"),
+    addressLine: z.string().min(1, "Address line is required"),
+  }),
+});
+
+export type UserFormSchemaType = z.infer<typeof UserFormSchema>;
 
 export {
   CreatePasswordSchema,
@@ -71,4 +88,5 @@ export {
   OTPSchema,
   PersonalDetailSchema,
   RegisterFormSchema,
+  UserFormSchema,
 };

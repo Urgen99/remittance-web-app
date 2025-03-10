@@ -1,12 +1,12 @@
-import { FormIcons } from "@/components/icons/Icons";
-import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
+import { PersonalDetailSchema } from "@/lib/formSchema";
+import { FormDescription } from "@/lib/type";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { FormIcons } from "../icons/Icons";
+import { z } from "zod";
+import FormHeadingDescription from "../shared/FormHeadingDescription";
+import { format } from "date-fns";
 import {
   Form,
   FormControl,
@@ -14,31 +14,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
+import { Check } from "lucide-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { PersonalDetailSchema } from "@/lib/formSchema";
-import { FormDescription } from "@/lib/type";
-import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Check } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+} from "../ui/select";
+import NavigationButtons from "./NavigationButtons";
 
-const PersonalDetails = () => {
-  const [open, setOpen] = useState<string | null>(null);
+interface PersonalDetailProps {
+  handlePrev: () => void;
+}
+
+const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
+  const [open, setOpen] = React.useState<string | null>(null);
   const form = useForm({
     mode: "all",
     resolver:
@@ -50,7 +49,7 @@ const PersonalDetails = () => {
     alert(`data: ${JSON.stringify(data)}`);
   }
 
-  const [selectedDate, setSelectedDate] = useState<SelectedDate>({
+  const [selectedDate, setSelectedDate] = React.useState<SelectedDate>({
     day: "",
     month: "",
     year: "",
@@ -314,11 +313,7 @@ const PersonalDetails = () => {
                         <span className="text-[#D32F2F]">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Eg: 2025-12-11"
-                          className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                          {...field}
-                        />
+                        <DatePicker field={field} />
                       </FormControl>
 
                       <FormMessage />
@@ -373,13 +368,11 @@ const PersonalDetails = () => {
                 />
               </div>
 
-              <Button
+              <NavigationButtons
                 type="submit"
-                className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] max-w-[15.5rem] w-full disabled:bg-[#696969] disabled:opacity-100"
+                onBackClick={handlePrev}
                 disabled={!form.formState.isValid}
-              >
-                Continue
-              </Button>
+              />
             </form>
           </Form>
         </div>
@@ -401,11 +394,11 @@ const defaultValues: z.infer<typeof PersonalDetailSchema> = {
   firstName: "",
   lastName: "",
   middleName: "",
-  birthDate: "",
+  birthDate: new Date(),
   document: {
     type: "license",
     number: "",
-    expiry: "",
+    expiry: new Date(),
   },
   address: {
     city: "",
@@ -418,3 +411,31 @@ type SelectedDate = {
   month: string;
   year: string;
 };
+
+export function DatePicker({ field }: { field: any }) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "justify-start text-left font-normal",
+            !field.value && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon />
+          {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          mode="single"
+          selected={field.value}
+          onSelect={field.onChange}
+          initialFocus
+          disabled={(date) => date < new Date()}
+        />
+      </PopoverContent>
+    </Popover>
+  );
+}

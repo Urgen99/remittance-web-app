@@ -1,12 +1,15 @@
+import PersonalDetails from "@/components/complete-profile/PersonalDetails";
+import SelectDocument from "@/components/complete-profile/SelectDocument";
+import UploadDocument from "@/components/complete-profile/UploadDocument";
 import { StepperIcons } from "@/components/icons/Icons";
-import { Button } from "@/components/ui/button";
-import Steppers, { Step } from "@/components/ui/stepper/steppers";
-import { motion } from "framer-motion";
+import Steppers from "@/components/ui/stepper/steppers";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import PersonalDetails from "./PersonalDetails";
-import SelectDocument from "./SelectDocument";
-import UploadDocument from "./UploadDocument";
-
+export interface Steps {
+  step: number;
+  name: string;
+  Icon: React.FC<{ fill?: string }>;
+}
 const steps = [
   {
     step: 1,
@@ -43,69 +46,41 @@ const CompleteProfile = () => {
       setActiveStep((prev) => prev - 1);
     }
   };
+
   return (
-    <div className="flex flex-col justify-between">
-      {/* <div className="border-red-500 border-2 p-4 flex items-center justify-center"> */}
-      {/* <Steppers margins={margins} progressValue={progressValue}>
-          {steps.map(({ step, name, Icon }) => (
-            <Step key={step} steps={steps} setMargins={setMargins} step={step}>
-              <div
-                className={`flex items-center justify-center mb-[5px] z-[2] text-[12px] lg:text-base `}
-              >
-                <Icon fill={`${activeStep > step ? "#3333C1" : "#696969"}`} />
-              </div>
-              <h6
-                className={`font-roboto ${
-                  activeStep > step ? "text-[#3333C1]" : "text-[#696969]"
-                }`}
-              >
-                {name}
-              </h6>
-            </Step>
-          ))}
-        </Steppers> */}
-
-      <div className="flex flex-col justify-between items-center w-full max-w-xl mx-auto space-y-6">
-        <Steppers progressValue={progressValue} steps={steps}>
-          {(stepRef) =>
-            steps.map(({ step, name, Icon }) => (
-              <Step key={step} step={step} stepRef={stepRef}>
-                <div className="flex items-center justify-center mb-[5px] z-[2] text-[12px] lg:text-base">
-                  <Icon fill={activeStep >= step ? "#3333C1" : "#696969"} />
-                </div>
-                <h6
-                  className={`font-roboto ${
-                    activeStep >= step ? "text-[#3333C1]" : "text-[#696969]"
-                  }`}
-                >
-                  {name}
-                </h6>
-              </Step>
-            ))
-          }
-        </Steppers>
+    <div className="flex flex-col justify-between items-center ">
+      <div className="fixed top-2 z-10 flex flex-col justify-center items-center w-full max-w-xl">
+        <Steppers
+          progressValue={progressValue}
+          steps={steps as Steps[]}
+          activeStep={activeStep}
+        />
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -50 }}
-        transition={{ duration: 0.3 }}
-      >
-        {activeStep === 1 && <UploadDocument />}
-        {activeStep === 2 && <SelectDocument />}
-        {activeStep === 3 && <SelectDocument />}
-        {activeStep === 4 && <PersonalDetails />}
-      </motion.div>
-
-      <div className="flex justify-between w-full items-center">
-        <Button onClick={handlePrev} disabled={activeStep === 1}>
-          Prev
-        </Button>
-        <Button onClick={handleNext} disabled={activeStep === steps.length}>
-          Continue
-        </Button>
-      </div>
+      <AnimatePresence mode="wait">
+        {activeStep && (
+          <motion.div
+            key={activeStep}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.3 }}
+          >
+            {activeStep === 1 && <SelectDocument handleNext={handleNext} />}
+            {activeStep === 2 && (
+              <UploadDocument handleNext={handleNext} handlePrev={handlePrev} />
+            )}
+            {activeStep === 3 && (
+              <UploadDocument
+                handleNext={handleNext}
+                handlePrev={handlePrev}
+                documentSide="back"
+              />
+            )}
+            {activeStep === 4 && <PersonalDetails handlePrev={handlePrev} />}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

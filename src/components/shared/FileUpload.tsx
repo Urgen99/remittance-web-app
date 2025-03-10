@@ -11,18 +11,21 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { FormIcons } from "../icons/Icons";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+interface FileUploadProps {
+  documentSide?: "front" | "back";
+}
 const formSchema = z.object({
   name_0897061406: z.string().optional(),
 });
-const FileUpload = () => {
+const FileUpload: React.FC<FileUploadProps> = ({ documentSide = "front" }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -50,7 +53,7 @@ const FileUpload = () => {
   return (
     <>
       <Tabs
-        defaultValue="back"
+        defaultValue={documentSide}
         className="flex flex-col items-center gap-5 w-full"
       >
         <TabsList className="!w-fit rounded-full px-1 py-4 grid grid-cols-2 place-content-center !bg-white shadow-sm gap-2.5">
@@ -108,13 +111,6 @@ const FileUpload = () => {
                     </FileInput>
                     {files && files.length > 0 && (
                       <FileUploaderContent>
-                        {/* <FileUploaderItem index={Math.random()}>
-                      <FormIcons.InfoFilled />
-                      <span className="text-[13px] text-[#3333C1] leading-[18px] ">
-                        Document front.png
-                      </span>
-                    </FileUploaderItem> */}
-
                         {files.map((file, i) => (
                           <FileUploaderItem key={file.name} index={i}>
                             <FormIcons.InfoFilled />
