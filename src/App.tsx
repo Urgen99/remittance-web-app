@@ -3,6 +3,7 @@ import DashboardLayout from "./components/layouts/DashboardLayout";
 import DefaultLayout from "./components/layouts/DefaultLayout";
 import TailwindIndicator from "./components/shared/TailwindIndicator";
 import useScrollToTop from "./hooks/scrollToTop";
+import CompleteProfile from "./pages/CompleteProfile";
 import CreatePassword from "./pages/CreatePassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import Login from "./pages/Login";
@@ -13,8 +14,8 @@ import SelectDocument from "./pages/SelectDocument";
 import UploadDocument from "./pages/UploadDocument";
 import VerifyOtp from "./pages/VerifyOtp";
 import Dashboard from "./pages/user/dashboard/Dashboard";
-import TransactionHistory from "./pages/user/dashboard/TransactionHistory";
 import Recipients from "./pages/user/dashboard/Recipients";
+import TransactionHistory from "./pages/user/dashboard/TransactionHistory";
 const App = () => {
   return (
     <Router>
@@ -39,12 +40,11 @@ const AppContent = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-      </Route>
 
-      <Route element={<DefaultLayout />}>
         <Route path="/select-documents" element={<SelectDocument />} />
         <Route path="/upload-documents" element={<UploadDocument />} />
         <Route path="/personal-details" element={<PersonalDetails />} />
+        <Route path="/complete-profile" element={<CompleteProfile />} />
       </Route>
 
       {/* ---------- PROTECTED ROUTES Add (Authentication later) ---------- */}
@@ -74,6 +74,7 @@ const TestPaths = () => {
     { title: "Upload Documents", to: "/upload-documents" },
     { title: "Personal Details", to: "/personal-details" },
     { title: "Dashboard", to: "/dashboard" },
+    { title: "Complete Profile", to: "/complete-profile" },
   ];
 
   return (
