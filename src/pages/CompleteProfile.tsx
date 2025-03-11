@@ -68,7 +68,11 @@ const CompleteProfile = () => {
           >
             {activeStep === 1 && <SelectDocument handleNext={handleNext} />}
             {activeStep === 2 && (
-              <UploadDocument handleNext={handleNext} handlePrev={handlePrev} />
+              <UploadDocument
+                handleNext={handleNext}
+                handlePrev={handlePrev}
+                documentSide="front"
+              />
             )}
             {activeStep === 3 && (
               <UploadDocument

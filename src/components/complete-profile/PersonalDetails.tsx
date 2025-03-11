@@ -1,14 +1,19 @@
-import { PersonalDetailSchema } from "@/lib/formSchema";
+import { Calendar } from "@/components/ui/calendar";
+import { PersonalDetailSchema, UserFormSchema } from "@/lib/formSchema";
 import { FormDescription } from "@/lib/type";
+import { cn } from "@/lib/utils";
+import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { FormIcons } from "../icons/Icons";
-import { z } from "zod";
-import FormHeadingDescription from "../shared/FormHeadingDescription";
 import { format } from "date-fns";
+import { CalendarIcon, Check } from "lucide-react";
+import React from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
+import { FormIcons } from "../icons/Icons";
+import FormHeadingDescription from "../shared/FormHeadingDescription";
+import { Button } from "../ui/button";
+import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
 import {
-  Form,
   FormControl,
   FormField,
   FormItem,
@@ -16,13 +21,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
-import { Check } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -31,22 +30,74 @@ import {
   SelectValue,
 } from "../ui/select";
 import NavigationButtons from "./NavigationButtons";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/features/store";
+import { setFormData } from "@/features/complete-profile/slice";
 
 interface PersonalDetailProps {
   handlePrev: () => void;
 }
+const personalDetailSchema = UserFormSchema.pick({
+  firstName: true,
+  middleName: true,
+  lastName: true,
+  address: true,
+  document: true,
+  birthDate: true,
+});
+
+type PersonalDetailSchema = z.infer<typeof personalDetailSchema>;
 
 const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
+  const { document } = useSelector((state: RootState) => state.userForm);
   const [open, setOpen] = React.useState<string | null>(null);
-  const form = useForm({
+  const dispatch = useDispatch();
+  const form = useForm<PersonalDetailSchema>({
     mode: "all",
-    resolver:
-      zodResolver<z.infer<typeof PersonalDetailSchema>>(PersonalDetailSchema),
-    defaultValues,
+    resolver: zodResolver(personalDetailSchema),
+    defaultValues: {
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      birthDate: new Date(),
+      document: {
+        type: document?.type || "license",
+        number: "",
+        expiry: new Date(),
+        document_front: document?.document_front,
+        document_back: document?.document_back,
+      },
+      address: {
+        city: "",
+        addressLine: "",
+      },
+    },
   });
 
-  function onSubmit(data: z.infer<typeof PersonalDetailSchema>) {
-    alert(`data: ${JSON.stringify(data)}`);
+  console.log("error is here", form.formState.errors);
+
+  function onSubmit(data: PersonalDetailSchema) {
+    dispatch(
+      setFormData({
+        firstName: data.firstName,
+        middleName: data.middleName,
+        lastName: data.lastName,
+        birthDate: data.birthDate,
+        document: {
+          type: data.document.type,
+          number: data.document.number,
+          expiry: data.document.expiry,
+          document_front: data.document.document_front,
+          document_back: data.document.document_back,
+        },
+        address: {
+          city: data.address.city,
+          addressLine: data.address.addressLine,
+        },
+      })
+    );
+
+    console.log(data);
   }
 
   const [selectedDate, setSelectedDate] = React.useState<SelectedDate>({
@@ -88,9 +139,9 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
           <FormHeadingDescription formDescription={formDescription} />
 
           {/* ---------- FORM CONTAINER ---------- */}
-          <Form {...form}>
+          <FormProvider {...form}>
             <form
-              className="w-full flex flex-col gap-[18px] items-center"
+              className="w-full flex flex-col items-center"
               onSubmit={form.handleSubmit(onSubmit)}
             >
               <div className="w-full flex items-center gap-3">
@@ -102,15 +153,16 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                       <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
                         First Name <span className="text-[#D32F2F]">*</span>
                       </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter your first name"
-                          className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <FormMessage />
+                      <div className="flex flex-col gap-2 min-h-20">
+                        <FormControl>
+                          <Input
+                            placeholder="Enter your first name"
+                            className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
                     </FormItem>
                   )}
                 />
@@ -124,15 +176,17 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                         Middle Name{" "}
                         <span className="text-[#7F7D83]">Optional</span>
                       </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter your middle name"
-                          className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                          {...field}
-                        />
-                      </FormControl>
+                      <div className="flex flex-col gap-2 min-h-20">
+                        <FormControl>
+                          <Input
+                            placeholder="Enter your middle name"
+                            className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
+                            {...field}
+                          />
+                        </FormControl>
 
-                      <FormMessage />
+                        <FormMessage />
+                      </div>
                     </FormItem>
                   )}
                 />
@@ -145,15 +199,17 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                       <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
                         Last Name <span className="text-[#D32F2F]">*</span>
                       </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter your last name"
-                          className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                          {...field}
-                        />
-                      </FormControl>
+                      <div className="flex flex-col gap-2 min-h-20">
+                        <FormControl>
+                          <Input
+                            placeholder="Enter your last name"
+                            className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
+                            {...field}
+                          />
+                        </FormControl>
 
-                      <FormMessage />
+                        <FormMessage />
+                      </div>
                     </FormItem>
                   )}
                 />
@@ -175,67 +231,69 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                           name="birthDate"
                           render={() => (
                             <FormItem className="flex flex-col">
-                              <Popover
-                                open={open === type}
-                                onOpenChange={() => setOpen(type)}
-                              >
-                                <PopoverTrigger asChild>
-                                  <Button
-                                    role="combobox"
-                                    aria-expanded={open === type}
-                                    variant="outline"
-                                    className={cn(
-                                      "w-[120px] justify-between border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12 ",
-                                      !selectedDate[type] &&
-                                        "text-muted-foreground"
-                                    )}
-                                  >
-                                    {selectedDate[type] ||
-                                      `${
-                                        type === "year"
-                                          ? "YY"
-                                          : type === "month"
-                                          ? "MM"
-                                          : "DD"
-                                      }`}
-                                  </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-[100px] p-0">
-                                  <Command>
-                                    <CommandList>
-                                      <CommandGroup>
-                                        {(type === "year"
-                                          ? years
-                                          : type === "month"
-                                          ? months
-                                          : days
-                                        ).map((item) => (
-                                          <CommandItem
-                                            key={item.value}
-                                            value={item.label}
-                                            onSelect={() => {
-                                              handleSelect(type, item.label);
-                                              setOpen(null);
-                                            }}
-                                          >
-                                            <Check
-                                              className={cn(
-                                                "mr-2 h-4 w-4",
-                                                selectedDate[type] ===
-                                                  item.label
-                                                  ? "opacity-100"
-                                                  : "opacity-0"
-                                              )}
-                                            />
-                                            {item.label}
-                                          </CommandItem>
-                                        ))}
-                                      </CommandGroup>
-                                    </CommandList>
-                                  </Command>
-                                </PopoverContent>
-                              </Popover>
-                              <FormMessage />
+                              <div className="flex flex-col gap-2 min-h-20">
+                                <Popover
+                                  open={open === type}
+                                  onOpenChange={() => setOpen(type)}
+                                >
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      role="combobox"
+                                      aria-expanded={open === type}
+                                      variant="outline"
+                                      className={cn(
+                                        "w-[120px] justify-between border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12 ",
+                                        !selectedDate[type] &&
+                                          "text-muted-foreground"
+                                      )}
+                                    >
+                                      {selectedDate[type] ||
+                                        `${
+                                          type === "year"
+                                            ? "YY"
+                                            : type === "month"
+                                            ? "MM"
+                                            : "DD"
+                                        }`}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-[100px] p-0">
+                                    <Command>
+                                      <CommandList>
+                                        <CommandGroup>
+                                          {(type === "year"
+                                            ? years
+                                            : type === "month"
+                                            ? months
+                                            : days
+                                          ).map((item) => (
+                                            <CommandItem
+                                              key={item.value}
+                                              value={item.label}
+                                              onSelect={() => {
+                                                handleSelect(type, item.label);
+                                                setOpen(null);
+                                              }}
+                                            >
+                                              <Check
+                                                className={cn(
+                                                  "mr-2 h-4 w-4",
+                                                  selectedDate[type] ===
+                                                    item.label
+                                                    ? "opacity-100"
+                                                    : "opacity-0"
+                                                )}
+                                              />
+                                              {item.label}
+                                            </CommandItem>
+                                          ))}
+                                        </CommandGroup>
+                                      </CommandList>
+                                    </Command>
+                                  </PopoverContent>
+                                </Popover>
+                                <FormMessage />
+                              </div>
                             </FormItem>
                           )}
                         />
@@ -254,26 +312,26 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                           Document Type{" "}
                           <span className="text-[#D32F2F]">*</span>
                         </FormLabel>
-                        <Select onValueChange={field.onChange}>
-                          <FormControl>
-                            <SelectTrigger className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12">
-                              <SelectValue placeholder="Select Document Type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="passport">Passport</SelectItem>
-                            <SelectItem value="license">
-                              Driving License
-                            </SelectItem>
-                            <SelectItem value="nationalId">
-                              National Id
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <div className="flex flex-col gap-2 min-h-20">
+                          <Select onValueChange={field.onChange}>
+                            <FormControl>
+                              <SelectTrigger className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12">
+                                <SelectValue placeholder="Select Document Type" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="passport">Passport</SelectItem>
+                              <SelectItem value="license">
+                                Driving License
+                              </SelectItem>
+                              <SelectItem value="nationalId">
+                                National Id
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
 
-                        <FormMessage />
-
-                        <FormMessage />
+                          <FormMessage />
+                        </div>
                       </FormItem>
                     )}
                   />
@@ -290,15 +348,16 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                         Document Number{" "}
                         <span className="text-[#D32F2F]">*</span>
                       </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Eg: 123456"
-                          className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <FormMessage />
+                      <div className="flex flex-col gap-2 min-h-20">
+                        <FormControl>
+                          <Input
+                            placeholder="Eg: 123456"
+                            className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
                     </FormItem>
                   )}
                 />
@@ -312,11 +371,13 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                         Document Expiry Date{" "}
                         <span className="text-[#D32F2F]">*</span>
                       </FormLabel>
-                      <FormControl>
-                        <DatePicker field={field} />
-                      </FormControl>
+                      <div className="flex flex-col gap-2 min-h-20">
+                        <FormControl>
+                          <DatePicker field={field} />
+                        </FormControl>
 
-                      <FormMessage />
+                        <FormMessage />
+                      </div>
                     </FormItem>
                   )}
                 />
@@ -332,15 +393,18 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                         Enter your city Name{" "}
                         <span className="text-[#D32F2F]">*</span>
                       </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Eg: Kathmandu"
-                          className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                          {...field}
-                        />
-                      </FormControl>
 
-                      <FormMessage />
+                      <div className="flex flex-col gap-2 min-h-20">
+                        <FormControl>
+                          <Input
+                            placeholder="Eg: Kathmandu"
+                            className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
+                            {...field}
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+                      </div>
                     </FormItem>
                   )}
                 />
@@ -354,15 +418,17 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                         Enter the address line*{" "}
                         <span className="text-[#D32F2F]">*</span>
                       </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Eg:Bhaktpur, Jadibuti"
-                          className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                          {...field}
-                        />
-                      </FormControl>
+                      <div className="flex flex-col gap-2 min-h-20">
+                        <FormControl>
+                          <Input
+                            placeholder="Eg:Bhaktpur, Jadibuti"
+                            className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
+                            {...field}
+                          />
+                        </FormControl>
 
-                      <FormMessage />
+                        <FormMessage />
+                      </div>
                     </FormItem>
                   )}
                 />
@@ -374,7 +440,8 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 disabled={!form.formState.isValid}
               />
             </form>
-          </Form>
+            <DevTool control={form.control} />
+          </FormProvider>
         </div>
       </section>
     </main>
@@ -390,22 +457,6 @@ const formDescription: FormDescription = {
     "Please enter your personal details below to proceed. Ensure all information is accurate and matches your official identification documents.",
 };
 
-const defaultValues: z.infer<typeof PersonalDetailSchema> = {
-  firstName: "",
-  lastName: "",
-  middleName: "",
-  birthDate: new Date(),
-  document: {
-    type: "license",
-    number: "",
-    expiry: new Date(),
-  },
-  address: {
-    city: "",
-    addressLine: "",
-  },
-};
-
 type SelectedDate = {
   day: string;
   month: string;
@@ -419,7 +470,7 @@ export function DatePicker({ field }: { field: any }) {
         <Button
           variant={"outline"}
           className={cn(
-            "justify-start text-left font-normal",
+            "max-h-12 h-full justify-start text-left font-normal",
             !field.value && "text-muted-foreground"
           )}
         >
@@ -431,7 +482,7 @@ export function DatePicker({ field }: { field: any }) {
         <Calendar
           mode="single"
           selected={field.value}
-          onSelect={field.onChange}
+          onSelect={(date) => field.onChange(date ? date.toLocaleString() : "")}
           initialFocus
           disabled={(date) => date < new Date()}
         />

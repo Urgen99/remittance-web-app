@@ -59,7 +59,10 @@ const UserFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   middleName: z.optional(z.string()),
   lastName: z.string().min(1, "Last name is required"),
-  birthDate: z.string().date(),
+  birthDate: z.preprocess(
+    (val) => (typeof val === "string" ? new Date(val) : val),
+    z.date({ required_error: "Expiry date is required" })
+  ),
   document: z.object({
     type: z.union([
       z.literal("passport"),
@@ -67,7 +70,10 @@ const UserFormSchema = z.object({
       z.literal("nationalId"),
     ]),
     number: z.string().min(1, "Document number is required"),
-    expiry: z.string().date().min(1, "Expiry date is required"),
+    expiry: z.preprocess(
+      (val) => (typeof val === "string" ? new Date(val) : val),
+      z.date({ required_error: "Expiry date is required" })
+    ),
     document_front: z.instanceof(File, {
       message: "Document front is required",
     }),

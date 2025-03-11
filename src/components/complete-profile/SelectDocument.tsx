@@ -1,9 +1,11 @@
+import { setFormData } from "@/features/complete-profile/slice";
 import { UserFormSchema } from "@/lib/formSchema";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { FormIcons } from "../icons/Icons";
@@ -55,13 +57,24 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
     },
   });
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleBack = () => {
     navigate("/", { replace: true });
   };
+
   // remove later
   const onSubmit = (data: SelectDocumentSchema) => {
-    localStorage.setItem("form", JSON.stringify(data));
+    dispatch(
+      setFormData({
+        document: {
+          type: data.type,
+          number: "",
+          expiry: null as unknown as Date,
+          document_front: undefined as unknown as File,
+          document_back: undefined as unknown as File,
+        },
+      })
+    );
     handleNext();
   };
 
@@ -80,42 +93,46 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
             className="max-w-[50rem] w-full flex flex-col items-center gap-5"
           >
             <FormField
-              name="document.type"
-              render={({ field: { value, onChange } }) => (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                  {documents.map(({ Icon, title, subtitle, documentType }) => (
-                    <div
-                      key={documentType}
-                      className={`cursor-pointer p-4 bg-[url('/images/upload.png')] lg:max-w-[16rem] w-full h-[10.5rem] bg-no-repeat bg-top rounded-[8px] border border-[#00000008] hover:border-[#3333C1] hover:bg-[#EBEBF9] flex justify-end relative ${
-                        value === documentType &&
-                        "border-[#3333C1] bg-[#EBEBF9]"
-                      }`}
-                      onClick={() => onChange(documentType)}
-                    >
-                      {value === documentType && (
-                        <div className="absolute">
-                          <FormIcons.CheckIcon />
-                        </div>
-                      )}
+              name="type"
+              render={({ field: { value, onChange } }) => {
+                return (
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    {documents.map(
+                      ({ Icon, title, subtitle, documentType }) => (
+                        <div
+                          key={documentType}
+                          className={`cursor-pointer p-4 bg-[url('/images/upload.png')] lg:max-w-[16rem] w-full h-[10.5rem] bg-no-repeat bg-top rounded-[8px] border border-[#00000008] hover:border-[#3333C1] hover:bg-[#EBEBF9] flex justify-end relative ${
+                            value === documentType &&
+                            "border-[#3333C1] bg-[#EBEBF9]"
+                          }`}
+                          onClick={() => onChange(documentType)}
+                        >
+                          {value === documentType && (
+                            <div className="absolute">
+                              <FormIcons.CheckIcon />
+                            </div>
+                          )}
 
-                      <div className="h-full flex flex-col justify-between">
-                        <div className="w-fit p-2 flex justify-center items-center bg-[#EBEBF9] rounded-full">
-                          <Icon />
-                        </div>
+                          <div className="h-full flex flex-col justify-between">
+                            <div className="w-fit p-2 flex justify-center items-center bg-[#EBEBF9] rounded-full">
+                              <Icon />
+                            </div>
 
-                        <div className="select-none flex flex-col gap-3">
-                          <h4 className="font-general-sans font-medium text-base leading-[20.8px] tracking-[-1%] text-[#1b1b1b]">
-                            {title}
-                          </h4>
-                          <p className="font-roboto text-sm tracking-[-1%] text-[#696969] leading-[18px]">
-                            {subtitle}
-                          </p>
+                            <div className="select-none flex flex-col gap-3">
+                              <h4 className="font-general-sans font-medium text-base leading-[20.8px] tracking-[-1%] text-[#1b1b1b]">
+                                {title}
+                              </h4>
+                              <p className="font-roboto text-sm tracking-[-1%] text-[#696969] leading-[18px]">
+                                {subtitle}
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                      )
+                    )}
+                  </div>
+                );
+              }}
             />
 
             <NavigationButtons
