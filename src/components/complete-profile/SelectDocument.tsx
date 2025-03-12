@@ -44,7 +44,7 @@ const documents = [
   },
 ];
 
-const selectDocumentSchema = UserFormSchema.shape.document.pick({ type: true });
+const selectDocumentSchema = UserFormSchema.pick({ documentType: true });
 
 type SelectDocumentSchema = z.infer<typeof selectDocumentSchema>;
 
@@ -53,7 +53,7 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
     mode: "all",
     resolver: zodResolver(selectDocumentSchema),
     defaultValues: {
-      type: "passport",
+      documentType: "passport",
     },
   });
   const navigate = useNavigate();
@@ -62,19 +62,8 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
     navigate("/", { replace: true });
   };
 
-  // remove later
   const onSubmit = (data: SelectDocumentSchema) => {
-    dispatch(
-      setFormData({
-        document: {
-          type: data.type,
-          number: "",
-          expiry: null as unknown as Date,
-          document_front: undefined as unknown as File,
-          document_back: undefined as unknown as File,
-        },
-      })
-    );
+    dispatch(setFormData({ documentType: data.documentType }));
     handleNext();
   };
 
@@ -93,7 +82,7 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
             className="max-w-[50rem] w-full flex flex-col items-center gap-5"
           >
             <FormField
-              name="type"
+              name="documentType"
               render={({ field: { value, onChange } }) => {
                 return (
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">

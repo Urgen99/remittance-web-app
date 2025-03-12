@@ -1,6 +1,7 @@
 import PersonalDetails from "@/components/complete-profile/PersonalDetails";
 import SelectDocument from "@/components/complete-profile/SelectDocument";
-import UploadDocument from "@/components/complete-profile/UploadDocument";
+import UploadDocumentBack from "@/components/complete-profile/UploadDocumentBack";
+import UploadDocumentFront from "@/components/complete-profile/UploadDocumentFront";
 import { StepperIcons } from "@/components/icons/Icons";
 import Steppers from "@/components/ui/stepper/steppers";
 import { AnimatePresence, motion } from "framer-motion";
@@ -35,6 +36,7 @@ const steps = [
 const CompleteProfile = () => {
   const [activeStep, setActiveStep] = useState(1);
   const progressValue = ((activeStep - 1) / (steps.length - 1)) * 100;
+
   const handleNext = () => {
     if (activeStep < steps.length) {
       setActiveStep((prev) => prev + 1);
@@ -67,20 +69,20 @@ const CompleteProfile = () => {
             transition={{ duration: 0.3 }}
           >
             {activeStep === 1 && <SelectDocument handleNext={handleNext} />}
+
             {activeStep === 2 && (
-              <UploadDocument
+              <UploadDocumentFront
                 handleNext={handleNext}
                 handlePrev={handlePrev}
-                documentSide="front"
               />
             )}
             {activeStep === 3 && (
-              <UploadDocument
+              <UploadDocumentBack
                 handleNext={handleNext}
                 handlePrev={handlePrev}
-                documentSide="back"
               />
             )}
+
             {activeStep === 4 && <PersonalDetails handlePrev={handlePrev} />}
           </motion.div>
         )}

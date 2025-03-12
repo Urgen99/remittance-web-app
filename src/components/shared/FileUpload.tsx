@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   FileInput,
   FileUploader,
@@ -12,26 +13,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { setFormData } from "@/features/complete-profile/slice";
 import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import NavigationButtons from "../complete-profile/NavigationButtons";
-import {
-  DocumentUploadSchema,
-  UploadDocumentProps,
-} from "../complete-profile/UploadDocument";
-import { FormIcons } from "../icons/Icons";
-import { useDispatch, useSelector } from "react-redux";
-import { setFormData } from "@/features/complete-profile/slice";
-import { RootState } from "@/features/store";
 
-const FileUpload: React.FC<UploadDocumentProps> = ({
+import { FormIcons } from "../icons/Icons";
+
+const FileUpload: React.FC<any> = ({
   handleNext,
   handlePrev,
   documentSide = "front",
 }) => {
   const [files, setFiles] = useState<File[] | null>(null);
-  const { document } = useSelector((state: RootState) => state.userForm);
-  const form = useFormContext<DocumentUploadSchema>();
+  const form = useFormContext<any>();
   const dropZoneConfig = {
     maxFiles: 1,
     maxSize: 1024 * 1024 * 2,
@@ -39,43 +35,25 @@ const FileUpload: React.FC<UploadDocumentProps> = ({
   };
   const dispatch = useDispatch();
 
-  const fieldName =
-    documentSide === "front" ? "document_front" : "document_back";
+  useEffect(() => {
+    console.log(form.formState.errors);
+  }, [form.formState.errors]);
+
+  const fieldName = documentSide === "front" ? "documentFront" : "documentBack";
 
   useEffect(() => {
     if (files?.length) {
       form.setValue(fieldName, files[0]);
-      form.setValue("document_back", undefined as unknown as File);
     } else {
       form.setValue(fieldName, undefined as unknown as File);
     }
   }, [fieldName, files, form]);
 
-  function onSubmit(values: DocumentUploadSchema) {
-    if (documentSide === "front") {
-      dispatch(
-        setFormData({
-          document: {
-            document_front: values.document_front,
-            document_back: undefined as unknown as File,
-            expiry: null as unknown as Date,
-            number: "",
-            type: document?.type || "license",
-          },
-        })
-      );
-    } else {
-      dispatch(
-        setFormData({
-          document: {
-            document_back: values.document_back,
-            document_front: undefined as unknown as File,
-            expiry: null as unknown as Date,
-            number: "",
-            type: document?.type || "license",
-          },
-        })
-      );
+  function onSubmit(values: { documentFront?: File; documentBack?: File }) {
+    if (documentSide === "front" && values.documentFront) {
+      dispatch(setFormData({ documentFront: values.documentFront }));
+    } else if (documentSide === "back" && values.documentBack) {
+      dispatch(setFormData({ documentBack: values.documentBack }));
     }
 
     handleNext();

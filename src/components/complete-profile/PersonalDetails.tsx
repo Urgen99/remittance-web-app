@@ -1,4 +1,6 @@
 import { Calendar } from "@/components/ui/calendar";
+import { setFormData } from "@/features/complete-profile/slice";
+import { RootState } from "@/features/store";
 import { PersonalDetailSchema, UserFormSchema } from "@/lib/formSchema";
 import { FormDescription } from "@/lib/type";
 import { cn } from "@/lib/utils";
@@ -6,8 +8,9 @@ import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon, Check } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import { z } from "zod";
 import { FormIcons } from "../icons/Icons";
 import FormHeadingDescription from "../shared/FormHeadingDescription";
@@ -30,9 +33,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import NavigationButtons from "./NavigationButtons";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/features/store";
-import { setFormData } from "@/features/complete-profile/slice";
 
 interface PersonalDetailProps {
   handlePrev: () => void;
@@ -41,15 +41,20 @@ const personalDetailSchema = UserFormSchema.pick({
   firstName: true,
   middleName: true,
   lastName: true,
-  address: true,
-  document: true,
+  documentType: true,
+  documentExpiry: true,
+  documentNumber: true,
+  addressLine: true,
+  city: true,
   birthDate: true,
 });
 
 type PersonalDetailSchema = z.infer<typeof personalDetailSchema>;
 
 const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
-  const { document } = useSelector((state: RootState) => state.userForm);
+  const { documentType, documentFront, documentBack } = useSelector(
+    (state: RootState) => state.userForm
+  );
   const [open, setOpen] = React.useState<string | null>(null);
   const dispatch = useDispatch();
   const form = useForm<PersonalDetailSchema>({
@@ -60,44 +65,35 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
       middleName: "",
       lastName: "",
       birthDate: new Date(),
-      document: {
-        type: document?.type || "license",
-        number: "",
-        expiry: new Date(),
-        document_front: document?.document_front,
-        document_back: document?.document_back,
-      },
-      address: {
-        city: "",
-        addressLine: "",
-      },
+      documentType,
+      documentExpiry: new Date(),
+      documentNumber: "",
+      city: "",
+      addressLine: "",
     },
   });
 
-  console.log("error is here", form.formState.errors);
+  useEffect(() => {
+    if (!documentBack) {
+      handlePrev();
+    }
+  }, [documentBack, handlePrev]);
 
   function onSubmit(data: PersonalDetailSchema) {
-    dispatch(
-      setFormData({
-        firstName: data.firstName,
-        middleName: data.middleName,
-        lastName: data.lastName,
-        birthDate: data.birthDate,
-        document: {
-          type: data.document.type,
-          number: data.document.number,
-          expiry: data.document.expiry,
-          document_front: data.document.document_front,
-          document_back: data.document.document_back,
-        },
-        address: {
-          city: data.address.city,
-          addressLine: data.address.addressLine,
-        },
-      })
-    );
-
-    console.log(data);
+    const formData = {
+      firstName: data.firstName,
+      middleName: data.middleName,
+      lastName: data.lastName,
+      birthDate: data.birthDate,
+      documentType: data.documentType,
+      documentNumber: data.documentNumber,
+      documentExpiry: data.documentExpiry,
+      documentFront,
+      documentBack,
+      city: data.city,
+      addressLine: data.addressLine,
+    };
+    dispatch(setFormData(formData));
   }
 
   const [selectedDate, setSelectedDate] = React.useState<SelectedDate>({
@@ -233,7 +229,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                             <FormItem className="flex flex-col">
                               <div className="flex flex-col gap-2 min-h-20">
                                 <Popover
-                                  open={open === type}
+                                  // open={open === type}
                                   onOpenChange={() => setOpen(type)}
                                 >
                                   <PopoverTrigger asChild>
@@ -272,7 +268,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                                               value={item.label}
                                               onSelect={() => {
                                                 handleSelect(type, item.label);
-                                                setOpen(null);
+                                                // setOpen(null);
                                               }}
                                             >
                                               <Check
@@ -305,7 +301,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 <div className="flex-1">
                   <FormField
                     control={form.control}
-                    name="document.type"
+                    name="documentType"
                     render={({ field }) => (
                       <FormItem className="flex-1">
                         <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
@@ -313,7 +309,10 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                           <span className="text-[#D32F2F]">*</span>
                         </FormLabel>
                         <div className="flex flex-col gap-2 min-h-20">
-                          <Select onValueChange={field.onChange}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={documentType}
+                          >
                             <FormControl>
                               <SelectTrigger className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12">
                                 <SelectValue placeholder="Select Document Type" />
@@ -341,7 +340,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
               <div className="w-full flex items-center gap-3">
                 <FormField
                   control={form.control}
-                  name="document.number"
+                  name="documentNumber"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
@@ -364,7 +363,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
 
                 <FormField
                   control={form.control}
-                  name="document.expiry"
+                  name="documentExpiry"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
@@ -386,7 +385,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
               <div className="w-full flex items-center gap-3">
                 <FormField
                   control={form.control}
-                  name="address.city"
+                  name="city"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
@@ -411,7 +410,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
 
                 <FormField
                   control={form.control}
-                  name="address.addressLine"
+                  name="addressLine"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
@@ -482,7 +481,7 @@ export function DatePicker({ field }: { field: any }) {
         <Calendar
           mode="single"
           selected={field.value}
-          onSelect={(date) => field.onChange(date ? date.toLocaleString() : "")}
+          onSelect={(date) => field.onChange(date)}
           initialFocus
           disabled={(date) => date < new Date()}
         />

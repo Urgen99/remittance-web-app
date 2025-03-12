@@ -1,36 +1,51 @@
 import { UserFormSchemaType } from "@/lib/formSchema";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+const getStoredForm = (): Partial<UserFormSchemaType> => {
+  const storedState = localStorage.getItem("userForm");
+
+  if (storedState) {
+    try {
+      return JSON.parse(storedState);
+    } catch (error) {
+      console.error("Error parsing user form. Error: ", error);
+    }
+  }
+
+  return {};
+};
+
 const initialState: Partial<UserFormSchemaType> = {
   firstName: "",
   middleName: "",
   lastName: "",
   birthDate: null as unknown as Date,
-  document: {
-    type: "license",
-    number: "",
-    expiry: null as unknown as Date,
-    document_front: undefined as unknown as File,
-    document_back: undefined as unknown as File,
-  },
-  address: {
-    city: "",
-    addressLine: "",
-  },
+  documentType: "license",
+  documentNumber: "",
+  documentExpiry: null as unknown as Date,
+  documentFront: undefined as unknown as File,
+  documentBack: undefined as unknown as File,
+  city: "",
+  addressLine: "",
 };
 
 const userFormSlice = createSlice({
   name: "userForm",
-  initialState,
+  initialState: getStoredForm() || initialState,
   reducers: {
     //  set form data
     setFormData: (
       state,
       action: PayloadAction<Partial<UserFormSchemaType>>
     ) => {
-      return { ...state, ...action.payload };
+      const newState = { ...state, ...action.payload };
+      localStorage.setItem("userForm", JSON.stringify(newState));
+      return newState;
     },
-    clearFormData: () => initialState,
+    clearFormData: () => {
+      localStorage.removeItem("userForm");
+      return initialState;
+    },
   },
 });
 
