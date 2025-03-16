@@ -11,10 +11,10 @@ import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyOtp from "./pages/VerifyOtp";
 import Dashboard from "./pages/user/dashboard/Dashboard";
-import RecipientDetails from "./pages/user/dashboard/RecipientDetails";
-import Recipients from "./pages/user/dashboard/Recipients";
-import TransactionDetails from "./pages/user/dashboard/TransactionDetails";
-import TransactionHistory from "./pages/user/dashboard/TransactionHistory";
+import RecipientDetails from "./pages/user/recipients/RecipientDetails";
+import Recipients from "./pages/user/recipients/Recipients";
+import TransactionDetails from "./pages/user/transactions/TransactionDetails";
+import TransactionHistory from "./pages/user/transactions/TransactionHistory";
 const App = () => {
   return (
     <Router>
