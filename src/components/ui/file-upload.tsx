@@ -262,7 +262,7 @@ export const FileUploaderContent = forwardRef<
 
   return (
     <div
-      className={cn("bg-[#EBEBF9] w-full px-3 py-2 mt-4")}
+      className={cn("w-full")}
       ref={containerRef}
       aria-description="content file holder"
     >
@@ -293,8 +293,8 @@ export const FileUploaderItem = forwardRef<
     <div
       ref={ref}
       className={cn(
-        buttonVariants({ variant: "ghost" }),
-        "h-6 p-1 justify-between hover:bg-transparent",
+        buttonVariants({ variant: "outline" }),
+        "bg-[#EBEBF9] px-3 py-2 justify-between hover:bg-[#EBEBF9] ",
         className,
         isSelected ? "bg-muted" : ""
       )}

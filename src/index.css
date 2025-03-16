@@ -11,6 +11,7 @@
   --font-roboto: "Roboto", "sans-serif";
   --font-inter: "Inter", "sans-serif";
   --font-mukta: "Mukta", "sans-serif";
+  --shadow-1xl: 0 2px 20px 0px rgba(0, 0, 0, 0.4);
 }
 
 @custom-variant dark (&:is(.dark *));

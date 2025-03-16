@@ -13,10 +13,9 @@ const DashboardLayout = () => {
           <section className="flex-grow">
             <DashboardHeader />
 
-            <div>
+            <section className="p-6 border-red-500 border-2">
               <Outlet />
-              {/* Dashboard Content */}
-            </div>
+            </section>
           </section>
         </div>
       </main>
