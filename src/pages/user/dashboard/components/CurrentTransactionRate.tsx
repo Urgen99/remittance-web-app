@@ -1,4 +1,4 @@
-import { DashboardIcons } from "@/components/icons/Icons";
+import IconTextContainer from "@/components/shared/IconTextContainer";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState } from "react";
 import DropDownCountries from "./DropDownCountries";
@@ -30,40 +30,37 @@ const CurrentTransactionRate = () => {
 
   return (
     <>
-      <div className="min-h-[12.7rem] flex-[0.4] p-4 rounded-[8px] border border-[#0000001A] flex flex-col gap-3">
-        <div className="px-1 border-l-[3px] border-[#3B1AB2] flex gap-2 items-center">
-          <h6 className="font-roboto font-normal text-base tracking-[-1%] text-[#1b1b1b]">
-            Current transaction rate
-          </h6>
-          <DashboardIcons.Info />
-        </div>
+      <div className="min-h-[12.7rem] max-w-[30.68rem] w-full rounded-[8px] border border-[#0000001A]">
+        <div className="p-4 flex flex-col gap-3">
+          <IconTextContainer title="Current transaction rate" />
 
-        <Card className="min-h-[8rem] rounded-[8px] justify-end p-0">
-          <CardContent className="p-3 flex justify-between">
-            <div className="flex flex-col gap-1">
-              <DropDownCountries
-                country={senderCountry}
-                setCountry={setSenderCountry}
-              />
-              <ExchangeRate
-                currency={senderCountry.currency}
-                amount={1}
-                code={senderCountry.code}
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <DropDownCountries
-                country={receiverCountry}
-                setCountry={setReceiverCountry}
-              />
-              <ExchangeRate
-                currency={receiverCountry.currency}
-                amount={1 * 87.5}
-                code={receiverCountry.code}
-              />
-            </div>
-          </CardContent>
-        </Card>
+          <Card className="min-h-[8rem] rounded-[8px] justify-end p-0">
+            <CardContent className="p-3 flex justify-between">
+              <div className="flex flex-col gap-1">
+                <DropDownCountries
+                  country={senderCountry}
+                  setCountry={setSenderCountry}
+                />
+                <ExchangeRate
+                  currency={senderCountry.currency}
+                  amount={1}
+                  code={senderCountry.code}
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <DropDownCountries
+                  country={receiverCountry}
+                  setCountry={setReceiverCountry}
+                />
+                <ExchangeRate
+                  currency={receiverCountry.currency}
+                  amount={1 * 87.5}
+                  code={receiverCountry.code}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </>
   );

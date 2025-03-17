@@ -17,31 +17,24 @@ const ListItemCard: React.FC<ListItemCardProps> = ({ children }) => {
 interface ListItemHeaderProps {
   Icon?: React.FC;
   src?: string;
-  type: "icon" | "image";
 }
-const ListItemHeader: React.FC<ListItemHeaderProps> = ({
-  Icon,
-  src,
-  type = "icon",
-}) => {
-  const renderIcon = () => {
-    if (!Icon) return null;
-    return <Icon />;
-  };
-
-  const renderAvatar = () => {
-    if (!src) return null;
-    <Avatar className="!size-10">
-      <AvatarImage src={src} alt="user profile image" />
-      <AvatarFallback className="uppercase bg-[#2080F6] text-white font-inter font-medium tracking-[-0.5px]">
-        <UserIcons.Default />
-      </AvatarFallback>
-    </Avatar>;
-  };
-
+const ListItemHeader: React.FC<ListItemHeaderProps> = ({ Icon, src }) => {
   return (
-    <div className="rounded-full size-[50px] bg-[#46275A0F] p-2">
-      {type === "icon" ? renderIcon() : renderAvatar()}
+    <div
+      className={`rounded-full ${
+        Icon ? "bg-[#46275A0F]" : "bg-[#F5F8FF]"
+      } p-2 flex items-center justify-center`}
+    >
+      {Icon ? (
+        <Icon />
+      ) : (
+        <Avatar className="!size-10">
+          <AvatarImage src={src} alt="user profile image" />
+          <AvatarFallback>
+            <UserIcons.Default />
+          </AvatarFallback>
+        </Avatar>
+      )}
     </div>
   );
 };
