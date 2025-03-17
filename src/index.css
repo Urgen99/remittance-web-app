@@ -12,6 +12,7 @@
   --font-inter: "Inter", "sans-serif";
   --font-mukta: "Mukta", "sans-serif";
   --shadow-1xl: 0 2px 20px 0px rgba(0, 0, 0, 0.4);
+  --grid-cols-300: repeat(auto-fit, minmax(300px, 1fr))
 }
 
 @custom-variant dark (&:is(.dark *));

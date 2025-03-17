@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 const ReferFriend = () => {
   return (
     <>
-      <div className="flex-[0.6] bg-gradient-to-l from-[#7676d5] to-[#10108D] rounded-[8px]">
+      <div className="max-w-[42rem] w-full bg-gradient-to-l from-[#7676d5] to-[#10108D] rounded-[8px]">
         <div className="p-4 bg-[url('/images/dashboard-bg.svg')] bg-contain bg-right bg-no-repeat flex justify-between items-center rounded-[8px]">
           <div className="max-w-[306px] w-full flex flex-col gap-5">
             <div className="text-white flex flex-col gap-4">

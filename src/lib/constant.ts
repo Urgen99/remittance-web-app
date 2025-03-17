@@ -30,8 +30,8 @@ export const user = {
       createdAt: new Date("2025-03-07T09:10:00Z"),
     },
   ],
-  //   recentTransactions: [],
-  //   recentPeoples: [],
+  // recentTransactions: [],
+  // recentPeoples: [],
 
   recentTransactions: [
     {
@@ -72,20 +72,61 @@ export const user = {
   ],
   recentPeoples: [
     {
-      name: "John Doe",
+      id: "asds",
+      name: "Devon Lane",
+      avatar: "",
       date: "2025-03-06T10:15:00Z",
+      count: 20,
+      contact: "077 6764 8570",
+    },
+
+    {
+      id: "asaawd",
+      name: "Ralph Edwards",
+      avatar: "",
+      date: "2025-03-06T10:15:00Z",
+      count: 20,
+      contact: "070 6302 8446",
     },
     {
-      name: "Bill Gates",
+      id: "asdasqwopmas",
+      name: "Brooklyn Simmons",
+      avatar: "",
       date: "2025-03-06T10:15:00Z",
+      count: 20,
+      contact: "070 5472 6467",
     },
     {
-      name: "Elon Musk",
+      id: "asdas",
+      name: "Jenny Wilson",
+      avatar: "",
       date: "2025-03-06T10:15:00Z",
+      count: 20,
+      contact: "070 5472 6467",
     },
     {
-      name: "Mark Zuckerberg",
+      id: "asdui",
+      name: "Courtney Henry",
+      avatar: "",
       date: "2025-03-06T10:15:00Z",
+      count: 20,
+      contact: "070 8786 0987",
+    },
+    {
+      id: "asduiax",
+      name: "Wade Warren",
+      avatar: "",
+      date: "2025-03-06T10:15:00Z",
+      count: 20,
+      contact: "078 5432 8505",
+    },
+    {
+      id: "asduasiax",
+      name: "Bessie Cooper",
+      avatar: "",
+      date: "2025-03-06T10:15:00Z",
+      count: 20,
+      contact: "070 4099 2620",
     },
   ],
 };

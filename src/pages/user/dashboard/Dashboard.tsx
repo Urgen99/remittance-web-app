@@ -2,12 +2,13 @@ import DataNotFound from "@/components/shared/DataNotFound";
 import TextContainer from "@/components/shared/TextContainer";
 import { user } from "@/lib/constant";
 import CurrentTransactionRate from "./components/CurrentTransactionRate";
+import RecentPeopleContainer from "./components/RecentPeopleContainer";
 import RecentTransactions from "./components/RecentTransactions";
 import ReferFriend from "./components/ReferFriend";
 
 const Dashboard = () => {
   return (
-    <div className="border-2 border-red-500 flex flex-col gap-6">
+    <div className="min-h-screen flex flex-col gap-6">
       <div>
         <TextContainer title="Welcome, User" />
       </div>
@@ -22,7 +23,7 @@ const Dashboard = () => {
       ) : (
         <div className="flex gap-4">
           <RecentTransactions user={user as any} />
-          <div>ad</div>
+          <RecentPeopleContainer user={user as any} />
         </div>
       )}
     </div>
