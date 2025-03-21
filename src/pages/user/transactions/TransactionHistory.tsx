@@ -1,11 +1,16 @@
 import TextContainer from "@/components/shared/TextContainer";
 import { CircleChevronLeft, CircleChevronRight } from "lucide-react";
+import TransactionsTable from "./components/TransactionsTable";
 
 const TransactionHistory = () => {
   return (
-    <div className="border-2 border-red-500 min-h-screen flex flex-col gap-6">
+    <div className="min-h-screen flex flex-col gap-6">
       <div>
         <TextContainer title="Transaction History" Component={TempFilter} />
+      </div>
+
+      <div className="flex items-center justify-center w-full shadow-xs">
+        <TransactionsTable />
       </div>
     </div>
   );
@@ -13,6 +18,7 @@ const TransactionHistory = () => {
 
 export default TransactionHistory;
 
+// Remove later
 const TempFilter = () => {
   return (
     <div className="border border-[#e6e6e6] rounded-[6px] px-2.5 h-8 flex items-center gap-2">

@@ -10,6 +10,14 @@ import TextContainer from "@/components/shared/TextContainer";
 import { user } from "@/lib/constant";
 import { InfoIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+} from "@/components/ui/carousel";
+
 const colorPalettes = [
   "#EAF1FA",
   "#F9FCF2",
@@ -27,16 +35,22 @@ const Recipients = () => {
         <IconTextContainer title="Frequent sending people" />
 
         <div className="flex gap-3 items-center">
-          {user.recentPeoples.slice(0, 5).map((user: any) => (
-            <PeopleCard
-              variant="frequent"
-              user={user}
-              key={user.id}
-              colorPalettes={colorPalettes}
-              patternUrl="/icons/contactPattern.svg"
-            />
-            // <FrequentPeopleCard key={user.id} user={user} />
-          ))}
+          <Carousel className="w-full relative">
+            <CarouselContent className="gap-3 ml-1">
+              {user.recentPeoples.map((user: any) => (
+                <CarouselItem key={user.id} className="basis-56 p-0">
+                  <PeopleCard
+                    variant="frequent"
+                    user={user}
+                    colorPalettes={colorPalettes}
+                    patternUrl="/icons/contactPattern.svg"
+                  />
+                </CarouselItem>
+                // <FrequentPeopleCard key={user.id} user={user} />
+              ))}
+            </CarouselContent>
+            <CarouselNext className="absolute -right-3" />
+          </Carousel>
         </div>
       </div>
 
