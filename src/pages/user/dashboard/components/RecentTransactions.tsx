@@ -40,7 +40,7 @@ const getTextColor = (status: TransactionStatus) => textColors[status];
 const RecentTransactions: React.FC<RecentTransactions> = ({ user }) => {
   return (
     <>
-      <div className="flex flex-col gap-4 max-w-[42rem] w-full">
+      <div className="flex flex-col gap-4 max-w-[42rem] 2xl:max-w-full w-full">
         <div className="flex items-center justify-between">
           <h3 className="font-general-sans font-medium text-lg leading-[120%] tracking-[-2%] text-[#0A090B]">
             Recent transactions

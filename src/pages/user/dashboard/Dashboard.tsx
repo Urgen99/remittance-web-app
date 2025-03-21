@@ -13,7 +13,7 @@ const Dashboard = () => {
         <TextContainer title="Welcome, User" />
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex justify-between items-center gap-4">
         <ReferFriend />
         <CurrentTransactionRate />
       </div>
@@ -21,7 +21,7 @@ const Dashboard = () => {
       {!user.recentTransactions.length && !user.recentPeoples.length ? (
         <DataNotFound />
       ) : (
-        <div className="flex gap-4">
+        <div className="flex justify-between gap-4">
           <RecentTransactions user={user as any} />
           <RecentPeopleContainer user={user as any} />
         </div>

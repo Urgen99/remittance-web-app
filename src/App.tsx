@@ -46,7 +46,10 @@ const AppContent = () => {
       <Route element={<DashboardLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/transactions" element={<TransactionHistory />} />
-        <Route path="/transaction-details" element={<TransactionDetails />} />
+        <Route
+          path="/transaction-details/:id"
+          element={<TransactionDetails />}
+        />
         <Route path="/recipients" element={<Recipients />} />
         <Route path="/recipient-details" element={<RecipientDetails />} />
       </Route>
@@ -76,8 +79,8 @@ const TestPaths = () => {
   ];
 
   return (
-    <main className="h-screen flex border border-red-500 ">
-      <div className="w-full flex flex-wrap gap-4 justify-center items-center">
+    <main className="h-[50vh] flex border border-red-500 items-center">
+      <div className="w-full flex flex-wrap gap-4 justify-center items-center h-fit">
         {paths.map(({ title, to }) => (
           <Link to={to} className="bg-black text-white px-4 py-3">
             {title}
