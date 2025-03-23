@@ -23,6 +23,7 @@ const RecentPeopleContainer = ({ user }: any) => {
             // <RecentPeopleCard key={user.id} user={user} />
 
             <PeopleCard
+              key={user.id}
               variant="recent"
               user={user}
               colorPalettes={colorPalettes}

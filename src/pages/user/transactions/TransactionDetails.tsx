@@ -144,7 +144,12 @@ const TransactionDetails = () => {
             <h4 className="font-general-sans font-medium text-lg tracking-[-1%] text-[#1b1b1b]">
               Transaction # {transactionDetails?.id}
             </h4>
-            <Button variant="ghost" size="icon" className="size-fit">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-fit cursor-pointer"
+              title="Copy"
+            >
               <TransactionIcons.Copy />
             </Button>
           </div>
@@ -152,7 +157,8 @@ const TransactionDetails = () => {
           <div>
             <Button
               variant="outline"
-              className="font-roboto font-normal text-sm leading-[18px] tracking-[-1%] text-[#4F4D55] rounded-[6px] shadow-xs "
+              className="font-roboto font-normal text-sm leading-[18px] tracking-[-1%] text-[#4F4D55] rounded-[6px] shadow-xs cursor-pointer"
+              title="Export Data"
             >
               <TransactionIcons.AddSquare />
               <p>Export Data</p>

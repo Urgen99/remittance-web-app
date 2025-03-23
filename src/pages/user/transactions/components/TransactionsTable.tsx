@@ -1,4 +1,5 @@
 import { TransactionIcons } from "@/components/icons/Icons";
+import DataNotFound from "@/components/shared/DataNotFound";
 import DataTable from "@/components/shared/Generic/DataTable";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { user } from "@/lib/constant";
@@ -144,7 +145,13 @@ const TransactionsTable = () => {
 
   const rows = user.transactions;
 
-  return <DataTable<UserTransaction> rows={rows} columns={columns} />;
+  return rows.length > 0 ? (
+    <DataTable<UserTransaction> rows={rows} columns={columns} />
+  ) : (
+    <div className="w-full h-full">
+      <DataNotFound />
+    </div>
+  );
 };
 
 export default TransactionsTable;

@@ -51,7 +51,7 @@ const AppContent = () => {
           element={<TransactionDetails />}
         />
         <Route path="/recipients" element={<Recipients />} />
-        <Route path="/recipient-details" element={<RecipientDetails />} />
+        <Route path="/recipient-details/:id" element={<RecipientDetails />} />
       </Route>
 
       <Route path="/test" element={<TestPaths />} />
