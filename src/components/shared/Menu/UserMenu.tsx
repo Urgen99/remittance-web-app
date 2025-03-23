@@ -1,4 +1,5 @@
 import { DashboardHeaderIcons } from "@/components/icons/Icons";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,7 +9,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  getRandomColor,
+  getUserInitials,
+  userColorPalettes,
+} from "@/lib/getColors";
 
 const UserMenu = ({ user = {} }: { user: any }) => {
   return (
@@ -22,8 +27,15 @@ const UserMenu = ({ user = {} }: { user: any }) => {
         <DropdownMenuLabel className="flex items-center gap-1.5">
           <Avatar className="!size-8">
             <AvatarImage src={user?.avatar} alt={user?.name + "- profile"} />
-            <AvatarFallback className="uppercase bg-[#2080F6] text-white font-inter font-medium tracking-[-0.5px]">
-              {user?.name.split(" ")[0][0] + user?.name.split(" ")[1][0]}
+            <AvatarFallback
+              className="uppercase text-white font-inter font-medium tracking-[-0.5px]"
+              style={{
+                backgroundColor: getRandomColor(user?.name, userColorPalettes)
+                  .bg,
+                color: getRandomColor(user?.name, userColorPalettes).text,
+              }}
+            >
+              {getUserInitials(user?.name)}
             </AvatarFallback>
           </Avatar>
 

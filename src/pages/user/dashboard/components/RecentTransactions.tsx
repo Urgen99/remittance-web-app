@@ -5,9 +5,13 @@ import {
   ListItemFooter,
   ListItemHeader,
 } from "@/components/shared/Generic/ListItemCard";
+import {
+  getStatusColor,
+  getTextColor,
+  TransactionStatus,
+} from "@/lib/getColors";
 import { Link } from "react-router-dom";
 
-type TransactionStatus = "initiated" | "progress" | "verifying" | "completed";
 interface RecentTransactions {
   user: {
     recentTransactions: {
@@ -19,23 +23,6 @@ interface RecentTransactions {
     }[];
   };
 }
-
-const statusColors: Record<TransactionStatus, string> = {
-  initiated: "bg-[#1E2CA8]",
-  progress: "bg-[#965800]",
-  verifying: "bg-[#7B008B]",
-  completed: "bg-[#1EA843]",
-};
-
-const textColors: Record<TransactionStatus, string> = {
-  initiated: "text-[#1E2CA8]",
-  progress: "text-[#965800]",
-  verifying: "text-[#7B008B]",
-  completed: "text-[#1EA843]",
-};
-
-const getStatusColor = (status: TransactionStatus) => statusColors[status];
-const getTextColor = (status: TransactionStatus) => textColors[status];
 
 const RecentTransactions: React.FC<RecentTransactions> = ({ user }) => {
   return (

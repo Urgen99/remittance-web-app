@@ -1,5 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { user } from "@/lib/constant";
+import {
+  getRandomColor,
+  getUserInitials,
+  userColorPalettes,
+} from "@/lib/getColors";
 import NotificationMenu from "../Menu/NotificationMenu";
 import UserMenu from "../Menu/UserMenu";
 const DashboardHeader = () => {
@@ -12,8 +17,15 @@ const DashboardHeader = () => {
         <div className="flex items-center gap-3">
           <Avatar className="!size-10">
             <AvatarImage src={user?.avatar} alt={user?.name + "- profile"} />
-            <AvatarFallback className="uppercase bg-[#2080F6] text-white font-inter font-medium tracking-[-0.5px]">
-              {user?.name.split(" ")[0][0] + user?.name.split(" ")[1][0]}
+            <AvatarFallback
+              className="uppercase font-inter font-medium tracking-[-0.5px]"
+              style={{
+                backgroundColor: getRandomColor(user?.name, userColorPalettes)
+                  .bg,
+                color: getRandomColor(user?.name, userColorPalettes).text,
+              }}
+            >
+              {getUserInitials(user?.name)}
             </AvatarFallback>
           </Avatar>
           <h6>My Account</h6>

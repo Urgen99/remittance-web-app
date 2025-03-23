@@ -32,10 +32,10 @@ const DetailsTable = <T extends Rows>({
               }`}
             >
               <div className="flex items-center justify-between">
-                <p className="font-roboto font-normal text-[#696969] tracking-[-1%] text-base leading-6">
+                <div className="font-roboto font-normal text-[#696969] tracking-[-1%] text-base leading-6">
                   {label}
-                </p>
-                <p className="text-[#1b1b1b] capitalize">{value}</p>
+                </div>
+                <div className="text-[#1b1b1b] capitalize">{value}</div>
               </div>
             </div>
           ))}
