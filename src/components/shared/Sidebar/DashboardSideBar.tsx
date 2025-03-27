@@ -1,4 +1,13 @@
-import { DashboardIcons } from "@/components/icons/Icons";
+import { DashboardIcons, UserSettingsIcons } from "@/components/icons/Icons";
+import UserSettingsLayout from "@/components/layouts/UserSettingsLayout";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Link, useLocation } from "react-router-dom";
 
 const DashboardSideBar = () => {
@@ -62,15 +71,37 @@ const DashboardSideBar = () => {
               Settings and Profile
             </span>
 
-            <div className="px-1.5 py-2 hover:bg-white rounded-[8px]">
-              <Link
-                className={`flex items-center gap-2 font-inter font-[475] text-sm tracking-[-0.05px] text-[#696969]`}
-                to="/settings"
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className={` px-1.5 py-2 hover:bg-white rounded-[8px] flex justify-start items-center gap-2 font-inter font-[475] text-sm tracking-[-0.05px] text-[#696969]`}
+                >
+                  <DashboardIcons.Settings />
+                  <span>Setting and profile</span>
+                </Button>
+              </DialogTrigger>
+
+              <DialogContent
+                className="gap-0 top-[30rem] p-0 w-full !max-w-[54.35rem] min-h-[40.68rem]"
+                Icon={UserSettingsIcons.Close}
+                iconClassName="-mt-0.5 right-10 focus:!ring-transparent focus:!ring-0 focus:!ring-offset-0 opacity-100 transition-none ring-offset-none"
+                aria-describedby="user-settings"
               >
-                <DashboardIcons.Settings />
-                <span>Setting and profile</span>
-              </Link>
-            </div>
+                <DialogTitle className="hidden">Settings</DialogTitle>
+                {/* SETTINGS HEADER */}
+                <DialogHeader className="bg-[#EBEBF9] h-12 px-6 justify-center py-4 rounded-t-[8px]">
+                  <div className={`flex items-center gap-1`}>
+                    <UserSettingsIcons.Notes />
+                    <h3 className="font-general-sans font-medium text-base leading-5 tracking-[-1%] text-[#0A090B]">
+                      Setting and profile
+                    </h3>
+                  </div>
+                </DialogHeader>
+
+                <UserSettingsLayout />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </div>
