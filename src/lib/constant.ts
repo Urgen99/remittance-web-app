@@ -240,3 +240,5 @@ export const user = {
     },
   ],
 };
+
+export const border = "border-2 border-red-500";

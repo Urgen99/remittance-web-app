@@ -15,6 +15,7 @@ import RecipientDetails from "./pages/user/recipients/RecipientDetails";
 import Recipients from "./pages/user/recipients/Recipients";
 import TransactionDetails from "./pages/user/transactions/TransactionDetails";
 import TransactionHistory from "./pages/user/transactions/TransactionHistory";
+import UserSettingsLayout from "./components/layouts/UserSettingsLayout";
 const App = () => {
   return (
     <Router>
@@ -52,6 +53,10 @@ const AppContent = () => {
         />
         <Route path="/recipients" element={<Recipients />} />
         <Route path="/recipient-details/:id" element={<RecipientDetails />} />
+      </Route>
+
+      <Route element={<UserSettingsLayout />}>
+        <Route path="/user-settings" element={<>Hello here</>} />
       </Route>
 
       <Route path="/test" element={<TestPaths />} />

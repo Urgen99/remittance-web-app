@@ -9,8 +9,8 @@ import NotificationMenu from "../Menu/NotificationMenu";
 import UserMenu from "../Menu/UserMenu";
 const DashboardHeader = () => {
   return (
-    <div className="h-14 px-6 py-2 bg-[#EBEBF9] flex items-center justify-end">
-      <div className="flex items-center gap-3">
+    <header className="h-14 px-6 py-2 bg-[#EBEBF9] flex items-center justify-end">
+      <nav className="flex items-center gap-3">
         <div>
           <NotificationMenu notifications={user?.notifications} />
         </div>
@@ -33,8 +33,8 @@ const DashboardHeader = () => {
         <div>
           <UserMenu user={user} />
         </div>
-      </div>
-    </div>
+      </nav>
+    </header>
   );
 };
 
