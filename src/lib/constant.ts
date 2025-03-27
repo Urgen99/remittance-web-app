@@ -242,3 +242,58 @@ export const user = {
 };
 
 export const border = "border-2 border-red-500";
+
+export const terms: Terms[] = [
+  {
+    title: "User Responsibilities",
+    content:
+      "You are responsible for maintaining the confidentiality of your account information, including your username and password. You agree to notify us immediately of any unauthorized access to your account. Additionally, you agree to use the service in compliance with all applicable laws and regulations.",
+  },
+  {
+    title: "Service Provided",
+    content:
+      "You are responsible for maintaining the confidentiality of your account information, including your username and password. You agree to notify us immediately of any unauthorized access to your account. Additionally, you agree to use the service in compliance with all applicable laws and regulations.",
+  },
+  {
+    title: "Fees and Payment",
+    content:
+      "Fees for using our services will be disclosed at the time of the transaction. You agree to pay all applicable fees and charges. These may include:",
+    subContent: [
+      {
+        title: "Transaction Fees",
+        content: "A percentage or flat fee based on the amount sent.",
+      },
+      {
+        title: "Currency Conversion Fees",
+        content: "Fees for converting between different currencies.",
+      },
+      {
+        title: "Payment Method Fees",
+        content:
+          "Additional charges for using certain payment methods (e.g., credit card, PayPal).",
+      },
+      {
+        title: "Delivery Fees",
+        content:
+          "Fees for certain delivery methods (e.g., bank transfer, cash pickup).",
+      },
+    ],
+    conclusion:
+      "We may change our fee structure from time to time, and such changes will be reflected in the updated Terms and Conditions.",
+  },
+  {
+    title: "Limitation of Liability",
+    content:
+      "You are responsible for maintaining the confidentiality of your account information, including your username and password. You agree to notify us immediately of any unauthorized access to your account. Additionally, you agree to use the service in compliance with all applicable laws and regulations.",
+  },
+];
+
+export type Terms = {
+  title: string;
+  content: string;
+  subContent?: {
+    title: string;
+    content: string;
+  }[];
+  conclusion?: string;
+};

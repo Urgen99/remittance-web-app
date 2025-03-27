@@ -2,48 +2,55 @@ import { useState } from "react";
 import { UserSettingsIcons } from "../icons/Icons";
 import UserSettingsSidebar from "../shared/Sidebar/UserSettingsSidebar";
 import { Tabs, TabsContent } from "../ui/tabs";
+import AccountPrivacy from "../user-settings/account-privacy/AccountPrivacy";
+import HelpSupport from "../user-settings/get-help/HelpSupport";
+import PersonalInformation from "../user-settings/personal-information/PersonalInformation";
+import PrivacyPolicy from "../user-settings/privacy-policy/PrivacyPolicy";
+import ReportBug from "../user-settings/report-bug/ReportBug";
+import TermsConditions from "../user-settings/terms-conditions/TermsConditions";
+import TransactionLimit from "../user-settings/transaction-limit/TransactionLimit";
 const tabs = [
   {
     Icon: UserSettingsIcons.UserCircle,
     title: "Personal details",
     value: "personal-details",
-    Component: <div className="h-full">Personal Details</div>,
+    Component: <PersonalInformation />,
   },
   {
     Icon: UserSettingsIcons.Password,
     title: "Account and Privacy",
     value: "account-and-privacy",
-    Component: <div className="h-full">Account and Privacy</div>,
+    Component: <AccountPrivacy />,
   },
   {
     Icon: UserSettingsIcons.DollarCircle,
     title: "Get help",
     value: "get-help",
-    Component: <div className="h-full">Get Help</div>,
+    Component: <HelpSupport />,
   },
   {
     Icon: UserSettingsIcons.Warning,
     title: "Report a bug",
     value: "report-a-bug",
-    Component: <div className="h-full">Report a Bug</div>,
+    Component: <ReportBug />,
   },
   {
     Icon: UserSettingsIcons.Block,
     title: "Transaction limit",
     value: "transaction-limit",
-    Component: <div className="h-full">Transaction Limit</div>,
+    Component: <TransactionLimit />,
   },
   {
     Icon: UserSettingsIcons.Article,
     title: "Terms and conditions",
     value: "terms-and-conditions",
-    Component: <div className="h-full">Term And Condition</div>,
+    Component: <TermsConditions />,
   },
   {
     Icon: UserSettingsIcons.Shield,
     title: "Privacy policy",
     value: "privacy-policy",
-    Component: <div className="h-full">Privacy Policy</div>,
+    Component: <PrivacyPolicy />,
   },
 ];
 
@@ -57,7 +64,7 @@ const UserSettingsLayout = () => {
     <section className="flex w-full">
       <Tabs
         defaultValue={tabs[0].value}
-        className=" w-full min-h-[37.65rem] flex-row"
+        className=" w-full min-h-[37.65rem] flex-row gap-4"
       >
         <UserSettingsSidebar
           tabs={tabs}
