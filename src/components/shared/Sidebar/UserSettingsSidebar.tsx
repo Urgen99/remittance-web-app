@@ -6,7 +6,7 @@ import React from "react";
 interface UserSettingsSidebarProps {
   tabs: Tabs[];
   activeTab: string;
-  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+  handleTabChange: (args: string) => void;
 }
 
 type Tabs = {
@@ -17,7 +17,7 @@ type Tabs = {
 const UserSettingsSidebar: React.FC<UserSettingsSidebarProps> = ({
   tabs,
   activeTab,
-  setActiveTab,
+  handleTabChange,
 }) => {
   return (
     <TabsList
@@ -29,7 +29,7 @@ const UserSettingsSidebar: React.FC<UserSettingsSidebarProps> = ({
             className="h-10 hover:bg-[#F5F8FD] data-[state=active]:shadow-none px-1.5 py-2 justify-start rounded-[8px] font-inter font-[475] text-sm leading-5 tracking-[-0.05px] text-[#696969] data-[state=active]:text-[#3333C1] data-[state=active]:bg-[#F5F8FD]"
             value={value}
             key={value}
-            onClick={() => setActiveTab(value)}
+            onClick={() => handleTabChange(value)}
           >
             <Icon color={`${value === activeTab ? "#3333C1" : ""}`} />
 

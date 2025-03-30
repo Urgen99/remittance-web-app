@@ -56,6 +56,7 @@ const tabs = [
 
 const UserSettingsLayout = () => {
   const [activeTab, setActiveTab] = useState(tabs[0].value);
+  const handleTabChange = (tab: string) => setActiveTab(tab);
 
   const activeComponent = tabs.find(
     (tab) => tab.value === activeTab
@@ -69,7 +70,7 @@ const UserSettingsLayout = () => {
         <UserSettingsSidebar
           tabs={tabs}
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          handleTabChange={handleTabChange}
         />
 
         <TabsContent value={activeTab}>{activeComponent}</TabsContent>

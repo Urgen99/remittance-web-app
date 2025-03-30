@@ -1,16 +1,19 @@
+import useStepper from "@/hooks/stepper";
+import ContactUs from "./ContactUs";
+import Faqs from "./Faqs";
 import HelpSupportMain from "./HelpSupportMain";
 
 const HelpSupport = () => {
+  const { activeStep, handleNext, handlePrev } = useStepper("help-support");
+  const handlePrevStep = () => handlePrev("help-support");
   return (
-    <div className="h-full pt-4 pr-7">
-      <div className="flex flex-col gap-5">
-        <h3 className="font-general-sans font-medium text-base leading-5 tracking-[-1%] text-[#0A090B]">
-          Help and support
-        </h3>
-
-        <HelpSupportMain />
-      </div>
-    </div>
+    <>
+      {activeStep === "help-support" && (
+        <HelpSupportMain handleNext={handleNext} />
+      )}
+      {activeStep === "faqs" && <Faqs handlePrev={handlePrevStep} />}
+      {activeStep === "contact-us" && <ContactUs handlePrev={handlePrevStep} />}
+    </>
   );
 };
 

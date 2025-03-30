@@ -2,13 +2,13 @@ import { Terms, terms } from "@/lib/constant";
 
 const PrivacyPolicy = () => {
   return (
-    <div className="h-full pt-4 pb-7 pr-12 transition-all ease-in-out duration-300">
+    <div className="h-full pt-4 pr-12 transition-all ease-in-out duration-300">
       <div className="flex flex-col gap-5">
         <h3 className="font-general-sans font-medium text-base leading-5 tracking-[-1%] text-[#0A090B]">
           Privacy Policy
         </h3>
 
-        <div className="max-h-[33rem] box-border rounded-[12px] border border-[#E0E0E0] p-6 overflow-scroll shadow-xs">
+        <div className="max-h-[32.5rem] box-border rounded-[12px] border border-[#E0E0E0] p-6 overflow-scroll shadow-xs">
           <ol className="flex flex-col gap-6">
             {terms.map(
               (
