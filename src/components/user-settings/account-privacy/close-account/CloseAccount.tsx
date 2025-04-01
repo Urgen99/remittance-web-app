@@ -42,7 +42,7 @@ const CloseAccount: React.FC<AccountPrivacyProps> = ({
         </div>
       </div>
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 pl-1">
         <div className="flex items-start gap-3">
           <Checkbox
             id="terms1"

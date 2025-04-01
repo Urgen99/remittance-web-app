@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { AccountPrivacyProps } from "../AccountPrivacy";
 import TextContainer from "../TextContainer";
 
-const ChangePassword: React.FC<AccountPrivacyProps> = ({
+const CreateNewPassword: React.FC<AccountPrivacyProps> = ({
   handleNext,
   handlePrev,
 }) => {
@@ -17,29 +17,45 @@ const ChangePassword: React.FC<AccountPrivacyProps> = ({
         <TextContainer
           handlePrev={handlePrev}
           link="account-privacy"
-          title="Change password"
+          title="Create new password"
           subtitle="To change your password, first you need to provide your old password and then only you can create new one"
         />
 
-        <div className="max-w-[18.25rem] w-full">
+        <div className="max-w-[31.25rem] w-full">
           <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-1.5">
-              <Label
-                htmlFor="password"
-                className="font-inter font-[475] text-sm leading-5 text-[#2D2B32] tracking-[-0.05px]"
-              >
-                Password
-              </Label>
-              <PasswordInput
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+            <div className="max-w-[18.25rem] w-full flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <Label
+                  htmlFor="password"
+                  className="font-inter font-[475] text-sm leading-5 text-[#2D2B32] tracking-[-0.05px]"
+                >
+                  Password
+                </Label>
+                <PasswordInput
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label
+                  htmlFor="password"
+                  className="font-inter font-[475] text-sm leading-5 text-[#2D2B32] tracking-[-0.05px]"
+                >
+                  Confirm new password
+                </Label>
+                <PasswordInput
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
             </div>
 
             <p className="font-roboto font-normal text-[15px] leading-[22px] tracking-[-1%] text-[#1B1B1B]">
-              Forgot current password?{" "}
-              <span className="text-[#3333C1] underline">reset</span>
+              Password must be at least <u>8 word length</u> and must contain a{" "}
+              <u>special character #,$,@</u>
             </p>
           </div>
         </div>
@@ -57,4 +73,4 @@ const ChangePassword: React.FC<AccountPrivacyProps> = ({
   );
 };
 
-export default ChangePassword;
+export default CreateNewPassword;

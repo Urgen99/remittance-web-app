@@ -17,7 +17,7 @@ const ConfirmDeletion: React.FC<{ handlePrev: (args: string) => void }> = ({
         />
       </div>
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 pl-1">
         <div className="border border-[#FF0A1E] bg-[#FFCDD2] flex items-start gap-3 rounded-[4px] px-3 py-4">
           <p className="font-roboto font-normal text-sm leading-[18px] tracking-[-1%] text-[#1b1b1b]">
             Please note that you can recover your account if you log in within 7

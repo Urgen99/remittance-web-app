@@ -6,6 +6,7 @@ import UpdatePin from "./change-pin/UpdatePin";
 import CloseAccount from "./close-account/CloseAccount";
 import EnterOtp from "./close-account/EnterOtp";
 import ConfirmDeletion from "./close-account/ConfirmDeletion";
+import CreateNewPassword from "./change-password/CreateNewPassword";
 export interface AccountPrivacyProps {
   handleNext: (args: string) => void;
   handlePrev: (args: string) => void;
@@ -24,6 +25,10 @@ const AccountPrivacy = () => {
 
       {activeStep === "update-password" && (
         <ChangePassword handleNext={handleNext} handlePrev={handlePrev} />
+      )}
+
+      {activeStep === "create-password" && (
+        <CreateNewPassword handleNext={handleNext} handlePrev={handlePrev} />
       )}
 
       {activeStep === "update-pin" && (

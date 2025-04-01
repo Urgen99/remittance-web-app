@@ -7,7 +7,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AccountPrivacyProps } from "../AccountPrivacy";
 import TextContainer from "../TextContainer";
 
@@ -17,11 +17,7 @@ const EnterOtp: React.FC<AccountPrivacyProps> = ({
 }) => {
   const [otp, setOtp] = useState("");
   const [check, setCheck] = useState(false);
-  console.log(check);
 
-  useEffect(() => {
-    console.log(check);
-  }, [check]);
   return (
     <div className="h-full pb-6 pt-4 pr-7 flex flex-col justify-between">
       <div className="flex flex-col gap-5">
@@ -32,7 +28,7 @@ const EnterOtp: React.FC<AccountPrivacyProps> = ({
           subtitle="We have sent a 6 digit otp in your email , enter that otp before account deletion"
         />
 
-        <div className="max-w-[34.25rem] w-full flex flex-col gap-1.5">
+        <div className="max-w-[18.25rem] w-full flex flex-col gap-1.5">
           <h6 className="text-[#2D2B32] font-inter font-[475] leading-5 tracking-[-0.05px] text-sm">
             Verify Otp
           </h6>
@@ -43,16 +39,20 @@ const EnterOtp: React.FC<AccountPrivacyProps> = ({
             pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
             className="text-[#7F7D83] font-inter font-normal text-sm leading-5 tracking-[-0.05px]"
           >
-            <InputOTPGroup>
+            <InputOTPGroup className="gap-2">
               {Array.from({ length: 6 }).map((_, index) => (
-                <InputOTPSlot key={index} index={index} />
+                <InputOTPSlot
+                  className="h-10 w-[2.6rem]"
+                  key={index}
+                  index={index}
+                />
               ))}
             </InputOTPGroup>
           </InputOTP>
         </div>
       </div>
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 pl-1">
         <div className="flex items-start gap-3">
           <Checkbox
             id="terms1"
