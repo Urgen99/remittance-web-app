@@ -1,16 +1,47 @@
+import useStepper from "@/hooks/stepper";
 import InitialSettings from "./InitialSettings";
-
+import UpdateEmail from "./change-email/UpdateEmail";
+import ChangePassword from "./change-password/ChangePassword";
+import UpdatePin from "./change-pin/UpdatePin";
+import CloseAccount from "./close-account/CloseAccount";
+import EnterOtp from "./close-account/EnterOtp";
+import ConfirmDeletion from "./close-account/ConfirmDeletion";
+export interface AccountPrivacyProps {
+  handleNext: (args: string) => void;
+  handlePrev: (args: string) => void;
+}
 const AccountPrivacy = () => {
+  const { activeStep, handlePrev, handleNext } = useStepper("account-privacy");
   return (
-    <div className="h-full pt-4 pr-7">
-      <div className="flex flex-col gap-5">
-        <h3 className="font-general-sans font-medium text-base leading-5 tracking-[-1%] text-[#0A090B]">
-          Account and Privacy
-        </h3>
+    <>
+      {activeStep === "account-privacy" && (
+        <InitialSettings handleNext={handleNext} />
+      )}
 
-        <InitialSettings />
-      </div>
-    </div>
+      {activeStep === "update-email" && (
+        <UpdateEmail handleNext={handleNext} handlePrev={handlePrev} />
+      )}
+
+      {activeStep === "update-password" && (
+        <ChangePassword handleNext={handleNext} handlePrev={handlePrev} />
+      )}
+
+      {activeStep === "update-pin" && (
+        <UpdatePin handleNext={handleNext} handlePrev={handlePrev} />
+      )}
+
+      {activeStep === "close-account" && (
+        <CloseAccount handleNext={handleNext} handlePrev={handlePrev} />
+      )}
+
+      {activeStep === "enter-otp" && (
+        <EnterOtp handleNext={handleNext} handlePrev={handlePrev} />
+      )}
+
+      {activeStep === "confirm-deletion" && (
+        <ConfirmDeletion handlePrev={handlePrev} />
+      )}
+    </>
   );
 };
 

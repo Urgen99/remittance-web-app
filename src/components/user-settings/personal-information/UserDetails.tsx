@@ -20,7 +20,7 @@ const UserDetails: React.FC<{
         </div>
 
         <div className="bg-gradient-to-r from-[#E0E0E0] via-[#7A7A7A] to-[#E0E0E0] h-0.5" />
-        <div className="flex flex-col gap-8 overflow-scroll max-h-[32.5rem]">
+        <div className="flex flex-col gap-8 overflow-y-scroll max-h-[32.5rem]">
           <div className="flex flex-col gap-4">
             <TextIconContainer
               Icon={DialogSettingsIcons.Face}
