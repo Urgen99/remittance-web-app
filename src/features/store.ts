@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userFormSlice from "./complete-profile/slice";
+import userFormReducer from "./complete-profile/slice";
 
 export const store = configureStore({
   reducer: {
-    [userFormSlice.name]: userFormSlice.reducer,
+    userForm: userFormReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

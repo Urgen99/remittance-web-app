@@ -1,3 +1,5 @@
+export const BASE_URL = import.meta.env.VITE_SERVER;
+
 export const user = {
   name: "Amanda Smith",
   contact: "981823123",

@@ -1,37 +1,19 @@
-import { Calendar } from "@/components/ui/calendar";
 import { setFormData } from "@/features/complete-profile/slice";
 import { RootState } from "@/features/store";
 import { PersonalDetailSchema, UserFormSchema } from "@/lib/formSchema";
 import { FormDescription } from "@/lib/type";
-import { cn } from "@/lib/utils";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
-import { CalendarIcon, Check } from "lucide-react";
 import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { z } from "zod";
 import { FormIcons } from "../icons/Icons";
 import FormHeadingDescription from "../shared/FormHeadingDescription";
-import { Button } from "../ui/button";
-import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import DatePicker from "../ui/complete-profile-form/DatePicker";
+import DateSelector from "../ui/complete-profile-form/DateSelector";
+import DropDownSelect from "../ui/complete-profile-form/DropDownSelect";
+import TextInput from "../ui/complete-profile-form/TextInput";
 import NavigationButtons from "./NavigationButtons";
 
 interface PersonalDetailProps {
@@ -49,13 +31,34 @@ const personalDetailSchema = UserFormSchema.pick({
   birthDate: true,
 });
 
+const formDescription: FormDescription = {
+  Icon: FormIcons.UserAdd,
+  title: "Enter your personal details",
+  subtitle:
+    "Please enter your personal details below to proceed. Ensure all information is accurate and matches your official identification documents.",
+};
+const documentItems = [
+  {
+    value: "passport",
+    label: "Passport",
+  },
+  {
+    value: "license",
+    label: "Driving License",
+  },
+  {
+    value: "nationalId",
+    label: "National Id",
+  },
+];
+
 type PersonalDetailSchema = z.infer<typeof personalDetailSchema>;
 
 const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
   const { documentType, documentFront, documentBack } = useSelector(
     (state: RootState) => state.userForm
   );
-  const [open, setOpen] = React.useState<string | null>(null);
+
   const dispatch = useDispatch();
   const form = useForm<PersonalDetailSchema>({
     mode: "all",
@@ -96,37 +99,6 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
     dispatch(setFormData(formData));
   }
 
-  const [selectedDate, setSelectedDate] = React.useState<SelectedDate>({
-    day: "",
-    month: "",
-    year: "",
-  });
-
-  const handleSelect = (type: keyof SelectedDate, value: string) => {
-    const newDate = { ...selectedDate, [type]: value };
-    setSelectedDate(newDate);
-    if (newDate.day && newDate.month && newDate.year) {
-      const formattedDate = `${newDate.year}/${newDate.month}/${newDate.day}`;
-      const dateObj = new Date(
-        formattedDate.replace(/(\d{4})\/(\d{2})\/(\d{2})/, "$1-$2-$3")
-      );
-      form.setValue("birthDate", dateObj);
-    }
-  };
-
-  const days = Array.from({ length: 31 }, (_, i) => ({
-    value: i + 1,
-    label: String(i + 1).padStart(2, "0"),
-  }));
-  const months = Array.from({ length: 12 }, (_, i) => ({
-    value: i + 1,
-    label: String(i + 1).padStart(2, "0"),
-  }));
-  const years = Array.from({ length: 100 }, (_, i) => ({
-    value: 2025 - i,
-    label: String(2025 - i),
-  }));
-
   return (
     <main className="mt-7">
       <section className="flex  items-center justify-center">
@@ -141,295 +113,82 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
               onSubmit={form.handleSubmit(onSubmit)}
             >
               <div className="w-full flex items-center gap-3">
-                <FormField
-                  control={form.control}
+                <TextInput
                   name="firstName"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
-                        First Name <span className="text-[#D32F2F]">*</span>
-                      </FormLabel>
-                      <div className="flex flex-col gap-2 min-h-20">
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your first name"
-                            className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
+                  label="First Name"
+                  isImportant
+                  placeholder="Enter your first name"
                   control={form.control}
+                />
+                <TextInput
                   name="middleName"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="flex justify-between font-inter font-[475] text-sm tracking-[-0.05px]">
-                        Middle Name{" "}
-                        <span className="text-[#7F7D83]">Optional</span>
-                      </FormLabel>
-                      <div className="flex flex-col gap-2 min-h-20">
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your middle name"
-                            className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                            {...field}
-                          />
-                        </FormControl>
-
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
+                  label="Middle Name"
+                  isImportant={false}
+                  placeholder="Enter your middle name"
+                  control={form.control}
                 />
 
-                <FormField
-                  control={form.control}
+                <TextInput
                   name="lastName"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
-                        Last Name <span className="text-[#D32F2F]">*</span>
-                      </FormLabel>
-                      <div className="flex flex-col gap-2 min-h-20">
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your last name"
-                            className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                            {...field}
-                          />
-                        </FormControl>
-
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
+                  label="Last Name"
+                  isImportant
+                  placeholder="Enter your last name"
+                  control={form.control}
                 />
               </div>
 
               <div className="w-full flex items-center gap-3">
-                <div className="flex flex-col gap-2">
-                  <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
-                    Select your birth date{" "}
-                    <span className="text-[#D32F2F]">*</span>
-                  </FormLabel>
-
-                  <div className="w-full flex items-center gap-[11px]">
-                    {(["year", "month", "day"] as (keyof SelectedDate)[]).map(
-                      (type) => (
-                        <FormField
-                          key={type}
-                          control={form.control}
-                          name="birthDate"
-                          render={() => (
-                            <FormItem className="flex flex-col">
-                              <div className="flex flex-col gap-2 min-h-20">
-                                <Popover
-                                  // open={open === type}
-                                  onOpenChange={() => setOpen(type)}
-                                >
-                                  <PopoverTrigger asChild>
-                                    <Button
-                                      role="combobox"
-                                      aria-expanded={open === type}
-                                      variant="outline"
-                                      className={cn(
-                                        "w-[120px] justify-between border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12 ",
-                                        !selectedDate[type] &&
-                                          "text-muted-foreground"
-                                      )}
-                                    >
-                                      {selectedDate[type] ||
-                                        `${
-                                          type === "year"
-                                            ? "YY"
-                                            : type === "month"
-                                            ? "MM"
-                                            : "DD"
-                                        }`}
-                                    </Button>
-                                  </PopoverTrigger>
-                                  <PopoverContent className="w-[100px] p-0">
-                                    <Command>
-                                      <CommandList>
-                                        <CommandGroup>
-                                          {(type === "year"
-                                            ? years
-                                            : type === "month"
-                                            ? months
-                                            : days
-                                          ).map((item) => (
-                                            <CommandItem
-                                              key={item.value}
-                                              value={item.label}
-                                              onSelect={() => {
-                                                handleSelect(type, item.label);
-                                                // setOpen(null);
-                                              }}
-                                            >
-                                              <Check
-                                                className={cn(
-                                                  "mr-2 h-4 w-4",
-                                                  selectedDate[type] ===
-                                                    item.label
-                                                    ? "opacity-100"
-                                                    : "opacity-0"
-                                                )}
-                                              />
-                                              {item.label}
-                                            </CommandItem>
-                                          ))}
-                                        </CommandGroup>
-                                      </CommandList>
-                                    </Command>
-                                  </PopoverContent>
-                                </Popover>
-                                <FormMessage />
-                              </div>
-                            </FormItem>
-                          )}
-                        />
-                      )
-                    )}
-                  </div>
-                </div>
+                <DateSelector
+                  name="birthDate"
+                  label="Select your birth date"
+                  isImportant
+                  form={form}
+                />
 
                 <div className="flex-1">
-                  <FormField
-                    control={form.control}
+                  <DropDownSelect
                     name="documentType"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
-                          Document Type{" "}
-                          <span className="text-[#D32F2F]">*</span>
-                        </FormLabel>
-                        <div className="flex flex-col gap-2 min-h-20">
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={documentType}
-                          >
-                            <FormControl>
-                              <SelectTrigger className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12">
-                                <SelectValue placeholder="Select Document Type" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="passport">Passport</SelectItem>
-                              <SelectItem value="license">
-                                Driving License
-                              </SelectItem>
-                              <SelectItem value="nationalId">
-                                National Id
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-
-                          <FormMessage />
-                        </div>
-                      </FormItem>
-                    )}
+                    label="Document Type"
+                    control={form.control}
+                    isImportant
+                    defaultValue={documentType}
+                    items={documentItems}
                   />
                 </div>
               </div>
 
               <div className="w-full flex items-center gap-3">
-                <FormField
-                  control={form.control}
+                <TextInput
                   name="documentNumber"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
-                        Document Number{" "}
-                        <span className="text-[#D32F2F]">*</span>
-                      </FormLabel>
-                      <div className="flex flex-col gap-2 min-h-20">
-                        <FormControl>
-                          <Input
-                            placeholder="Eg: 123456"
-                            className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
+                  label="Document Number"
+                  isImportant
+                  placeholder="Eg: 123456"
+                  control={form.control}
                 />
 
-                <FormField
-                  control={form.control}
+                <DatePicker
                   name="documentExpiry"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
-                        Document Expiry Date{" "}
-                        <span className="text-[#D32F2F]">*</span>
-                      </FormLabel>
-                      <div className="flex flex-col gap-2 min-h-20">
-                        <FormControl>
-                          <DatePicker field={field} />
-                        </FormControl>
-
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
+                  label="Document Expiry Date"
+                  control={form.control}
+                  isImportant
                 />
               </div>
 
               <div className="w-full flex items-center gap-3">
-                <FormField
-                  control={form.control}
+                <TextInput
                   name="city"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
-                        Enter your city Name{" "}
-                        <span className="text-[#D32F2F]">*</span>
-                      </FormLabel>
-
-                      <div className="flex flex-col gap-2 min-h-20">
-                        <FormControl>
-                          <Input
-                            placeholder="Eg: Kathmandu"
-                            className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                            {...field}
-                          />
-                        </FormControl>
-
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
+                  label="Enter your city Name"
+                  isImportant
+                  placeholder="Eg: Kathmandu"
+                  control={form.control}
                 />
 
-                <FormField
-                  control={form.control}
+                <TextInput
                   name="addressLine"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
-                        Enter the address line*{" "}
-                        <span className="text-[#D32F2F]">*</span>
-                      </FormLabel>
-                      <div className="flex flex-col gap-2 min-h-20">
-                        <FormControl>
-                          <Input
-                            placeholder="Eg:Bhaktpur, Jadibuti"
-                            className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
-                            {...field}
-                          />
-                        </FormControl>
-
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
+                  label="Enter the address line"
+                  isImportant
+                  placeholder="Eg:Bhaktpur, Jadibuti"
+                  control={form.control}
                 />
               </div>
 
@@ -448,44 +207,3 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
 };
 
 export default PersonalDetails;
-
-const formDescription: FormDescription = {
-  Icon: FormIcons.UserAdd,
-  title: "Enter your personal details",
-  subtitle:
-    "Please enter your personal details below to proceed. Ensure all information is accurate and matches your official identification documents.",
-};
-
-type SelectedDate = {
-  day: string;
-  month: string;
-  year: string;
-};
-
-export function DatePicker({ field }: { field: any }) {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant={"outline"}
-          className={cn(
-            "max-h-12 h-full justify-start text-left font-normal",
-            !field.value && "text-muted-foreground"
-          )}
-        >
-          <CalendarIcon />
-          {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          mode="single"
-          selected={field.value}
-          onSelect={(date) => field.onChange(date)}
-          initialFocus
-          disabled={(date) => date < new Date()}
-        />
-      </PopoverContent>
-    </Popover>
-  );
-}

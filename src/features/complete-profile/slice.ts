@@ -50,4 +50,4 @@ const userFormSlice = createSlice({
 });
 
 export const { setFormData, clearFormData } = userFormSlice.actions;
-export default userFormSlice;
+export default userFormSlice.reducer;

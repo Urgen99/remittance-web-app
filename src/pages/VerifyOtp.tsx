@@ -33,8 +33,8 @@ const VerifyOtp = () => {
   }
 
   return (
-    <main className="mt-7">
-      <section className="flex  items-center justify-center">
+    <section className="mt-7">
+      <div className="flex  items-center justify-center">
         <div className="max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
@@ -75,8 +75,8 @@ const VerifyOtp = () => {
             </form>
           </Form>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 };
 

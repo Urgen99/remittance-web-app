@@ -11,7 +11,7 @@ import {
 
 const SettingsDialog = () => {
   return (
-    <Dialog open>
+    <Dialog>
       <DialogTrigger asChild>
         <Button
           variant="ghost"

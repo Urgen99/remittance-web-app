@@ -16,6 +16,7 @@ import Recipients from "./pages/user/recipients/Recipients";
 import TransactionDetails from "./pages/user/transactions/TransactionDetails";
 import TransactionHistory from "./pages/user/transactions/TransactionHistory";
 import UserSettingsLayout from "./components/layouts/UserSettingsLayout";
+import DocumentExpired from "./pages/DocumentExpired";
 const App = () => {
   return (
     <Router>
@@ -41,6 +42,7 @@ const AppContent = () => {
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
+        <Route path="/document-expired" element={<DocumentExpired />} />
       </Route>
 
       {/* ---------- PROTECTED ROUTES Add (Authentication later) ---------- */}
@@ -81,6 +83,7 @@ const TestPaths = () => {
     { title: "Transaction Details", to: "/transaction-details" },
     { title: "Recipients", to: "/recipients" },
     { title: "Recipient Details", to: "/recipient-details" },
+    { title: "Document Expired", to: "/document-expired" },
   ];
 
   return (

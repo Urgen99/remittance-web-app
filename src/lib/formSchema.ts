@@ -74,10 +74,10 @@ const UserFormSchema = z.object({
     (val) => (typeof val === "string" ? new Date(val) : val),
     z.date({ required_error: "Expiry date is required" })
   ),
-  documentFront: z.instanceof(File, {
-    message: "Document front is required",
-  }),
+
+  documentFront: z.instanceof(File, { message: "Document front is required" }),
   documentBack: z.instanceof(File, { message: "Document back is required" }),
+
   city: z.string().min(1, "City is required"),
   addressLine: z.string().min(1, "Address line is required"),
 });

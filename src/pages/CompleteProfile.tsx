@@ -5,7 +5,7 @@ import UploadDocumentFront from "@/components/complete-profile/UploadDocumentFro
 import { StepperIcons } from "@/components/icons/Icons";
 import Steppers from "@/components/ui/stepper/steppers";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 export interface Steps {
   step: number;
   name: string;
@@ -36,6 +36,8 @@ const steps = [
 const CompleteProfile = () => {
   const [activeStep, setActiveStep] = useState(1);
   const progressValue = ((activeStep - 1) / (steps.length - 1)) * 100;
+  const prevStepRef = useRef(activeStep);
+  const delta = activeStep - prevStepRef.current;
 
   const handleNext = () => {
     if (activeStep < steps.length) {
@@ -49,8 +51,12 @@ const CompleteProfile = () => {
     }
   };
 
+  useEffect(() => {
+    prevStepRef.current = activeStep;
+  }, [activeStep]);
+
   return (
-    <div className="flex flex-col justify-between items-center ">
+    <section className="flex flex-col justify-between items-center ">
       <div className="fixed top-2 z-10 flex flex-col justify-center items-center w-full max-w-xl">
         <Steppers
           progressValue={progressValue}
@@ -63,10 +69,9 @@ const CompleteProfile = () => {
         {activeStep && (
           <motion.div
             key={activeStep}
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             {activeStep === 1 && <SelectDocument handleNext={handleNext} />}
 
@@ -87,7 +92,7 @@ const CompleteProfile = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </section>
   );
 };
 

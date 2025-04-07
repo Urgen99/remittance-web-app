@@ -29,8 +29,8 @@ const CreatePassword = () => {
   }
 
   return (
-    <main className="mt-7">
-      <section className="flex  items-center justify-center">
+    <section className="mt-7">
+      <div className="flex  items-center justify-center">
         <FormComponent
           form={form}
           fields={createPasswordFields}
@@ -38,8 +38,8 @@ const CreatePassword = () => {
           formDescription={formDescription}
           info={formDescription.info}
         />
-      </section>
-    </main>
+      </div>
+    </section>
   );
 };
 
