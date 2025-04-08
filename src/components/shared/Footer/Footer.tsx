@@ -38,7 +38,7 @@ const Footer = () => {
 
 export default Footer;
 
-const disableFooterPaths = ["/send-money", "/dashboard"];
+const disableFooterPaths = ["/dashboard"];
 const disableFooterTexts = [
   "/upload-documents",
   "/select-documents",

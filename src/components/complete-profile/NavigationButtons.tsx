@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 
 interface NavigationButtonsProps {
   onBackClick: () => void;
-  onContinueClick?: () => void;
+  onContinueClick?: (e?: any) => void;
   disabled?: boolean;
   type?: "submit" | "button";
 }

@@ -11,3 +11,9 @@ export interface FormComponentProps<T extends z.ZodTypeAny> {
   info?: string[];
   isOTPForm?: boolean;
 }
+
+export interface Steps {
+  step: number;
+  name: string;
+  Icon: React.FC<{ fill?: string }>;
+}

@@ -2,35 +2,32 @@ import PersonalDetails from "@/components/complete-profile/PersonalDetails";
 import SelectDocument from "@/components/complete-profile/SelectDocument";
 import UploadDocumentBack from "@/components/complete-profile/UploadDocumentBack";
 import UploadDocumentFront from "@/components/complete-profile/UploadDocumentFront";
-import { StepperIcons } from "@/components/icons/Icons";
+import { CompleteProfileStepper } from "@/components/icons/Icons";
 import Steppers from "@/components/ui/stepper/steppers";
+import { Steps } from "@/lib/interface";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-export interface Steps {
-  step: number;
-  name: string;
-  Icon: React.FC<{ fill?: string }>;
-}
+
 const steps = [
   {
     step: 1,
     name: "Select Document",
-    Icon: StepperIcons.SelectDocument,
+    Icon: CompleteProfileStepper.SelectDocument,
   },
   {
     step: 2,
     name: "Document Front",
-    Icon: StepperIcons.DocumentFront,
+    Icon: CompleteProfileStepper.DocumentFront,
   },
   {
     step: 3,
     name: "Document Back",
-    Icon: StepperIcons.DocumentBack,
+    Icon: CompleteProfileStepper.DocumentBack,
   },
   {
     step: 4,
     name: "Personal Details",
-    Icon: StepperIcons.PersonalDetails,
+    Icon: CompleteProfileStepper.PersonalDetails,
   },
 ];
 const CompleteProfile = () => {

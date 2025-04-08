@@ -5,18 +5,18 @@ import TailwindIndicator from "./components/shared/TailwindIndicator";
 import useScrollToTop from "./hooks/scrollToTop";
 import CompleteProfile from "./pages/CompleteProfile";
 import CreatePassword from "./pages/CreatePassword";
+import DocumentExpired from "./pages/DocumentExpired";
 import ForgotPassword from "./pages/ForgotPassword";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
+import SendMoney from "./pages/SendMoney";
 import VerifyOtp from "./pages/VerifyOtp";
 import Dashboard from "./pages/user/dashboard/Dashboard";
 import RecipientDetails from "./pages/user/recipients/RecipientDetails";
 import Recipients from "./pages/user/recipients/Recipients";
 import TransactionDetails from "./pages/user/transactions/TransactionDetails";
 import TransactionHistory from "./pages/user/transactions/TransactionHistory";
-import UserSettingsLayout from "./components/layouts/UserSettingsLayout";
-import DocumentExpired from "./pages/DocumentExpired";
 const App = () => {
   return (
     <Router>
@@ -43,6 +43,7 @@ const AppContent = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
         <Route path="/document-expired" element={<DocumentExpired />} />
+        <Route path="/send-money" element={<SendMoney />} />
       </Route>
 
       {/* ---------- PROTECTED ROUTES Add (Authentication later) ---------- */}
@@ -55,10 +56,6 @@ const AppContent = () => {
         />
         <Route path="/recipients" element={<Recipients />} />
         <Route path="/recipient-details/:id" element={<RecipientDetails />} />
-      </Route>
-
-      <Route element={<UserSettingsLayout />}>
-        <Route path="/user-settings" element={<>Hello here</>} />
       </Route>
 
       <Route path="/test" element={<TestPaths />} />
@@ -84,6 +81,7 @@ const TestPaths = () => {
     { title: "Recipients", to: "/recipients" },
     { title: "Recipient Details", to: "/recipient-details" },
     { title: "Document Expired", to: "/document-expired" },
+    { title: "Send Money", to: "/send-money" },
   ];
 
   return (

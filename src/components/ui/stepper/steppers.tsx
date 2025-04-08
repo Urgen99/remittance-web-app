@@ -1,6 +1,6 @@
+import { Steps } from "@/lib/interface";
 import React, { useEffect, useRef, useState } from "react";
 import { Progress } from "../progress";
-import { Steps } from "@/pages/CompleteProfile";
 
 interface SteppersProps {
   progressValue: number;
