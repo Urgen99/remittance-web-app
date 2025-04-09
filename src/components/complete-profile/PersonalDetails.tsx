@@ -153,6 +153,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                     isImportant
                     defaultValue={documentType}
                     items={documentItems}
+                    placeholder="Select Document Type"
                   />
                 </div>
               </div>

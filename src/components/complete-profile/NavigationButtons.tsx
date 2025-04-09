@@ -21,6 +21,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
   return (
     <div className="flex justify-between items-center w-full">
       <Button
+        type="button"
         onClick={onBackClick}
         variant="outline"
         className={`${classNames} border-[#5F5F5F] text-[#5F5F5F]`}
