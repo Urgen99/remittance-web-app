@@ -1,8 +1,10 @@
 import NavigationButtons from "@/components/complete-profile/NavigationButtons";
-import { FormIcons, SendMoneyForm } from "@/components/icons/Icons";
+import { SendMoneyForm } from "@/components/icons/Icons";
 import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { FormDescription } from "@/lib/type";
+import { useState } from "react";
+import { Recipient, RecipientStep } from "../RecipientDetails";
 
 const formDescription: FormDescription = {
   Icon: SendMoneyForm.ReceiverDetails.ArchiveDown,
@@ -14,31 +16,27 @@ const formDescription: FormDescription = {
 interface RecipientDetailsProps {
   handleNext: () => void;
   handlePrev: () => void;
+  recipients: Recipient[];
+  onStepChange: (step: RecipientStep) => void;
 }
 
-const recipients = [
-  {
-    name: "Ranjit Kumar Shrestha",
-    bankName: "Nepal Bank Limited",
-    accountNumber: "123456789XXXXXXX",
-  },
-  {
-    name: "Ranjit Kumar Shrestha",
-    bankName: "Nepal Bank Limited",
-    accountNumber: "123456789XXXXXXX",
-  },
-  {
-    name: "Ranjit Kumar Shrestha",
-    bankName: "Nepal Bank Limited",
-    accountNumber: "123456789XXXXXXX",
-  },
-];
+const SavedRecipients = ({
+  recipients,
+  handleNext,
+  handlePrev,
+  onStepChange,
+}: RecipientDetailsProps) => {
+  const [selectedUser, setSelectedUser] = useState<Recipient | null>(null);
 
-const SavedRecipients = ({ handleNext, handlePrev }: RecipientDetailsProps) => {
+  const handleSelect = (user: Recipient) => {
+    setSelectedUser(user);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     handleNext();
   };
+
   return (
     <section className="flex flex-col gap-6 items-center justify-center w-[50rem]">
       <div className="max-w-[33.5rem] flex flex-col gap-14 items-center w-full">
@@ -52,10 +50,12 @@ const SavedRecipients = ({ handleNext, handlePrev }: RecipientDetailsProps) => {
         // onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col items-center gap-[7.5rem] justify-between w-full h-full"
       >
-        <div className="space-y-4 max-w-2xl w-full border-red-500 border-2">
+        <div className="space-y-4 max-w-2xl w-full">
           <Button
+            onClick={() => onStepChange("enter-recipient-details")}
+            type="button"
             variant="ghost"
-            className="w-full bg-[#EBEBF9] text-[#3333C1] font-mukta font-medium leading-7 h-10 pl-1.5 pr-4 !text-base py-1.5 justify-start"
+            className="w-full cursor-pointer bg-[#EBEBF9] text-[#3333C1] font-mukta font-medium leading-7 h-10 pl-1.5 pr-4 !text-base py-1.5 justify-start"
           >
             <div className="size-7 bg-[#FBFBFB] rounded-full flex items-center justify-center">
               <SendMoneyForm.ReceiverDetails.UserAdd />
@@ -64,20 +64,44 @@ const SavedRecipients = ({ handleNext, handlePrev }: RecipientDetailsProps) => {
           </Button>
 
           <ul className="space-y-2">
-            <li className="rounded-[6px] border border-[#0000001A] p-4 flex justify-between">
-              <div className="flex ">
-                <SendMoneyForm.ReceiverDetails.User />
-                <div>
-                  <div>
-                    <h5>Ranjit Kumar Shrestha</h5>
-                    <h6>Rastriya Banijya Bank</h6>
-                  </div>
+            {recipients &&
+              recipients.map((user) => (
+                <li
+                  key={Math.random()}
+                  onClick={() => handleSelect(user)}
+                  className={`cursor-pointer hover:bg-[#EBEBF9] rounded-[6px] border p-4 flex justify-between ${
+                    selectedUser === user
+                      ? "border-[#3333C1] bg-[#EBEBF9]"
+                      : "border-[#0000001A] bg-white"
+                  }`}
+                >
+                  <div className="flex gap-3">
+                    <SendMoneyForm.ReceiverDetails.User />
+                    <div className="space-y-1">
+                      <div className="tracking-[-1%] space-y-1">
+                        <h5 className="font-general-sans font-medium leading-5 text-[#222222]">
+                          {user.name}
+                        </h5>
+                        <h6 className="text-[#696969] font-roboto text-sm leading-[18px]">
+                          {user.bankName}
+                        </h6>
+                      </div>
 
-                  <p>Acc no : 9912391xxxxxxxxx</p>
-                </div>
-              </div>
-              <SendMoneyForm.ReceiverDetails.Check />
-            </li>
+                      <p className="font-mukta leading-[18.2px]">
+                        <span className="text-[#1B1B1B] font-medium">
+                          Acc no:
+                        </span>{" "}
+                        <span className="text-[#696969]">
+                          {user.accountNumber}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  {selectedUser === user && (
+                    <SendMoneyForm.ReceiverDetails.Check />
+                  )}
+                </li>
+              ))}
           </ul>
         </div>
 

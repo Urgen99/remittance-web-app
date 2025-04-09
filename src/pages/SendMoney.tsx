@@ -1,5 +1,6 @@
 import { SendMoneyStepper } from "@/components/icons/Icons";
 import AmountDetails from "@/components/send-money/AmountDetails";
+import PaymentInformation from "@/components/send-money/PaymentInformation";
 import RecipientDetails from "@/components/send-money/RecipientDetails";
 import SendMoneyError from "@/components/send-money/SendMoneyError";
 import Steppers from "@/components/ui/stepper/steppers";
@@ -88,6 +89,12 @@ const SendMoney = () => {
                 {activeStep === 1 && <AmountDetails handleNext={handleNext} />}
                 {activeStep === 2 && (
                   <RecipientDetails
+                    handleNext={handleNext}
+                    handlePrev={handlePrev}
+                  />
+                )}
+                {activeStep === 3 && (
+                  <PaymentInformation
                     handleNext={handleNext}
                     handlePrev={handlePrev}
                   />
