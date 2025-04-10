@@ -13,7 +13,7 @@ interface AmountDetailProps {
 const formDescription: FormDescription = {
   Icon: SendMoneyForm.AmountDetails.Dollar,
   title: "Send money",
-  subtitle: "Enter the amount of money you want to send below .",
+  subtitle: "Enter the amount of money you want to send below.",
 };
 
 const defaultSender = {
@@ -63,8 +63,8 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
     handleNext();
   };
   return (
-    <main className="mt-7 ">
-      <section className="flex flex-col gap-6 items-center justify-center w-[50rem]">
+    <section className="mt-7 ">
+      <div className="flex flex-col gap-6 items-center justify-center w-[50rem]">
         <div className="flex flex-col gap-14 items-center w-full">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
@@ -166,8 +166,8 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
         </form>
         {/* <DevTool control={form.control} /> */}
         {/* </FormProvider> */}
-      </section>
-    </main>
+      </div>
+    </section>
   );
 };
 
