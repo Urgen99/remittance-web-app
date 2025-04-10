@@ -1,8 +1,11 @@
 import { SendMoneyStepper } from "@/components/icons/Icons";
 import AmountDetails from "@/components/send-money/AmountDetails";
 import PaymentInformation from "@/components/send-money/PaymentInformation";
+import PaymentTerms from "@/components/send-money/PaymentTerms";
 import RecipientDetails from "@/components/send-money/RecipientDetails";
+import ReviewPayment from "@/components/send-money/ReviewPayment";
 import SendMoneyError from "@/components/send-money/SendMoneyError";
+import TransactionStatus from "@/components/send-money/TransactionStatus";
 import Steppers from "@/components/ui/stepper/steppers";
 import { Steps } from "@/lib/interface";
 import { AnimatePresence, motion } from "framer-motion";
@@ -95,6 +98,24 @@ const SendMoney = () => {
                 )}
                 {activeStep === 3 && (
                   <PaymentInformation
+                    handleNext={handleNext}
+                    handlePrev={handlePrev}
+                  />
+                )}
+                {activeStep === 4 && (
+                  <ReviewPayment
+                    handleNext={handleNext}
+                    handlePrev={handlePrev}
+                  />
+                )}
+                {activeStep === 5 && (
+                  <PaymentTerms
+                    handleNext={handleNext}
+                    handlePrev={handlePrev}
+                  />
+                )}
+                {activeStep === 6 && (
+                  <TransactionStatus
                     handleNext={handleNext}
                     handlePrev={handlePrev}
                   />

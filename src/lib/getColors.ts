@@ -37,13 +37,17 @@ export type TransactionStatus =
   | "initiated"
   | "progress"
   | "verifying"
-  | "completed";
+  | "completed"
+  | "remaining"
+  | "processing";
 
 const statusColors: Record<TransactionStatus, string> = {
   initiated: "bg-[#1E2CA8]",
   progress: "bg-[#965800]",
   verifying: "bg-[#7B008B]",
   completed: "bg-[#1EA843]",
+  remaining: "bg-[#494E40]",
+  processing: "bg-[#3333C1]",
 };
 
 const textColors: Record<TransactionStatus, string> = {
@@ -51,6 +55,8 @@ const textColors: Record<TransactionStatus, string> = {
   progress: "text-[#965800]",
   verifying: "text-[#7B008B]",
   completed: "text-[#1EA843]",
+  remaining: "text-[#494E40]",
+  processing: "text-[#3333C1]",
 };
 
 const getStatusColor = (status: TransactionStatus) => statusColors[status];

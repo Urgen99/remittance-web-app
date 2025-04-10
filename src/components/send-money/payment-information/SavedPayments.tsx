@@ -84,7 +84,7 @@ const SavedPayments = ({
             {/* Latest Payment */}
             <li
               onClick={() => handleSelect(latestPayment)}
-              className={`cursor-pointer hover:bg-[#EBEBF9] rounded-[6px] border p-4 ${
+              className={`cursor-pointer hover:bg-[#EBEBF9] rounded-[6px] border p-4 flex justify-between ${
                 selectedMethod === latestPayment
                   ? "border-[#3333C12E] bg-[#EBEBF9]"
                   : "border-[#0000001A] bg-white"
@@ -102,6 +102,10 @@ const SavedPayments = ({
                   accountNumber={latestPayment.accountNumber}
                 />
               </div>
+
+              {selectedMethod === latestPayment && (
+                <SendMoneyForm.ReceiverDetails.Check />
+              )}
             </li>
 
             {/* Other Payments */}
@@ -111,23 +115,29 @@ const SavedPayments = ({
                   OTHER SAVED PAYMENT METHODS
                 </h6>
 
-                {otherPayments.map((method) => (
-                  <div
-                    key={`${method.accountNumber}-${method.bankName}`}
-                    onClick={() => handleSelect(method)}
-                    className={`cursor-pointer hover:bg-[#EBEBF9] rounded-[6px] border p-4 ${
-                      selectedMethod === method
-                        ? "border-[#3333C12E] bg-[#EBEBF9]"
-                        : "border-[#0000001A] bg-white"
-                    }`}
-                  >
-                    <LatestPayment
-                      bankName={method.bankName}
-                      accountName={method.accountName}
-                      accountNumber={method.accountNumber}
-                    />
-                  </div>
-                ))}
+                <div className="space-y-3 max-h-[13.5rem] overflow-y-scroll">
+                  {otherPayments.map((method) => (
+                    <div
+                      key={`${method.accountNumber}-${method.bankName}`}
+                      onClick={() => handleSelect(method)}
+                      className={`cursor-pointer hover:bg-[#EBEBF9] rounded-[6px] border p-4 flex justify-between ${
+                        selectedMethod === method
+                          ? "border-[#3333C12E] bg-[#EBEBF9]"
+                          : "border-[#0000001A] bg-white"
+                      }`}
+                    >
+                      <LatestPayment
+                        bankName={method.bankName}
+                        accountName={method.accountName}
+                        accountNumber={method.accountNumber}
+                      />
+
+                      {selectedMethod === method && (
+                        <SendMoneyForm.ReceiverDetails.Check />
+                      )}
+                    </div>
+                  ))}
+                </div>
               </li>
             )}
           </ul>

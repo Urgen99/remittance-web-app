@@ -41,6 +41,36 @@ const PaymentInformation = ({
         accountNumber: "123456789xxxxxxxx",
         lastUsed: new Date("2025-03-06T10:15:00Z"),
       },
+      {
+        bankName: "Global IME Bank",
+        accountName: "Ranjit Shrestha",
+        accountNumber: "123456789xxxxxxxx",
+        lastUsed: new Date("2025-03-06T10:15:00Z"),
+      },
+      {
+        bankName: "Global IME Bank",
+        accountName: "Ranjit Shrestha",
+        accountNumber: "123456789xxxxxxxx",
+        lastUsed: new Date("2025-03-06T10:15:00Z"),
+      },
+      {
+        bankName: "Global IME Bank",
+        accountName: "Ranjit Shrestha",
+        accountNumber: "123456789xxxxxxxx",
+        lastUsed: new Date("2025-03-06T10:15:00Z"),
+      },
+      {
+        bankName: "Global IME Bank",
+        accountName: "Ranjit Shrestha",
+        accountNumber: "123456789xxxxxxxx",
+        lastUsed: new Date("2025-03-06T10:15:00Z"),
+      },
+      {
+        bankName: "Global IME Bank",
+        accountName: "Ranjit Shrestha",
+        accountNumber: "123456789xxxxxxxx",
+        lastUsed: new Date("2025-03-06T10:15:00Z"),
+      },
     ],
     []
   );

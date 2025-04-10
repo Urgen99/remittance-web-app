@@ -63,7 +63,7 @@ const SavedRecipients = ({
             Add different receiver..
           </Button>
 
-          <ul className="space-y-2">
+          <ul className="space-y-2 max-h-[20rem] overflow-y-scroll h-full">
             {recipients &&
               recipients.map((user) => (
                 <li
