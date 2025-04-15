@@ -1,40 +1,5 @@
 import { z } from "zod";
 
-const LoginFormSchema = z.object({
-  password: z.string().min(1, "Password is required"),
-});
-
-const RegisterFormSchema = z.object({
-  email: z.string().email(),
-});
-
-const ForgotPasswordSchema = z.object({
-  email: z.string().email(),
-});
-
-const CreatePasswordSchema = z
-  .object({
-    newPassword: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-      .regex(/\d/, "Password must contain at least one number")
-      .regex(
-        /[!@#$%^&*]/,
-        "Password must contain at least one special character"
-      ),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
-const OTPSchema = z.object({
-  otp: z.string().min(6, "Invalid OTP").max(6),
-});
-
 const PersonalDetailSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   middleName: z.optional(z.string()),
@@ -84,12 +49,4 @@ const UserFormSchema = z.object({
 
 export type UserFormSchemaType = z.infer<typeof UserFormSchema>;
 
-export {
-  CreatePasswordSchema,
-  ForgotPasswordSchema,
-  LoginFormSchema,
-  OTPSchema,
-  PersonalDetailSchema,
-  RegisterFormSchema,
-  UserFormSchema,
-};
+export { PersonalDetailSchema, UserFormSchema };

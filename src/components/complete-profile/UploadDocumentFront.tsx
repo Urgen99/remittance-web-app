@@ -1,13 +1,15 @@
 import { setFormData } from "@/features/complete-profile/slice";
 import { RootState } from "@/features/store";
-import { UserFormSchema } from "@/lib/formSchema";
+import {
+  DocumentFrontSchema,
+  DocumentFrontSchemaType,
+} from "@/lib/schemas/user/completeProfile";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { z } from "zod";
 import { FormIcons } from "../icons/Icons";
 import FormHeadingDescription from "../shared/FormHeadingDescription";
 import {
@@ -25,18 +27,12 @@ interface UploadDocumentFrontProps {
   handlePrev: () => void;
 }
 
-const documentFrontSchema = UserFormSchema.pick({
-  documentFront: true,
-});
-
 const formDescription: FormDescription = {
   Icon: FormIcons.Folder,
   title: "Upload front side of document",
   subtitle:
     "To comply with Australian government regulations and verify your status, you are required to submit an approved form of identification. Please select one from the options below.",
 };
-
-type DocumentFrontSchema = z.infer<typeof documentFrontSchema>;
 
 const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
   handleNext,
@@ -51,11 +47,11 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
 
   console.log(files);
 
-  const methods = useForm<DocumentFrontSchema>({
+  const methods = useForm<DocumentFrontSchemaType>({
     mode: "all",
-    resolver: zodResolver(documentFrontSchema),
+    resolver: zodResolver(DocumentFrontSchema),
     defaultValues: {
-      documentFront,
+      front: documentFront,
     },
   });
 
@@ -68,9 +64,9 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
 
   useEffect(() => {
     if (files?.length) {
-      methods.setValue("documentFront", files[0]);
+      methods.setValue("front", files[0]);
     } else {
-      methods.setValue("documentFront", undefined as unknown as File);
+      methods.setValue("front", undefined as unknown as File);
     }
   }, [files, methods]);
 
@@ -80,8 +76,8 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
     }
   }, [documentType, handlePrev]);
 
-  function onSubmit(values: DocumentFrontSchema) {
-    dispatch(setFormData({ documentFront: values.documentFront }));
+  function onSubmit(values: DocumentFrontSchemaType) {
+    dispatch(setFormData({ documentFront: values.front }));
     handleNext();
   }
 
@@ -117,7 +113,7 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
             <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
               <FormField
                 control={methods.control}
-                name="documentFront"
+                name="front"
                 render={() => {
                   return (
                     <FormItem>

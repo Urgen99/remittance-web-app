@@ -8,18 +8,18 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { OTPSchema } from "@/lib/formSchema";
+import { OTPSchema, OTPSchemaType } from "@/lib/schemas/user/verifyOtp";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 const VerifyOtp = () => {
-  const form = useForm<z.infer<typeof OTPSchema>>({
+  const form = useForm<OTPSchemaType>({
     resolver: zodResolver(OTPSchema),
+    mode: "all",
     defaultValues: { otp: "" },
   });
-  function onSubmit(data: z.infer<typeof OTPSchema>) {
+  function onSubmit(data: OTPSchemaType) {
     console.log("form is submitted", data);
 
     alert({

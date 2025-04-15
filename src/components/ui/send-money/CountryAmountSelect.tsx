@@ -2,12 +2,14 @@ import { Country } from "@/pages/user/dashboard/components/CurrentTransactionRat
 import React from "react";
 import DropDownCountries from "./DropDownCountries";
 import { Input } from "../input";
+import { FormField } from "../form";
 interface CountryAmountSelect {
   title: string;
   Icon: React.FC;
   country: Country;
   setCountry: React.Dispatch<React.SetStateAction<Country>>;
   isSender?: boolean;
+  control?: any;
 }
 const CountryAmountSelect = ({
   title,
@@ -15,8 +17,8 @@ const CountryAmountSelect = ({
   country,
   setCountry,
   isSender = false,
+  control,
 }: CountryAmountSelect) => {
-  const defaultValue = 2;
   return (
     <div className="space-y-2 w-full">
       <div className="h-6 flex items-center justify-between">
@@ -35,9 +37,16 @@ const CountryAmountSelect = ({
 
       <div className="relative px-3 w-full py-1 flex items-center justify-between shadow-sm rounded-[8px] h-12 border border-[#E6E6E6]">
         {isSender ? (
-          <Input
-            className="px-0 outline-0 ring-0 border-0 font-general-sans font-medium text-[#000000]"
-            defaultValue={defaultValue.toFixed(2)}
+          <FormField
+            control={control}
+            name="amount"
+            render={({ field }) => (
+              <Input
+                className="px-0 outline-0 ring-0 border-0 font-general-sans font-medium text-[#000000]"
+                placeholder="0.00"
+                {...field}
+              />
+            )}
           />
         ) : (
           <p className="font-general-sans font-medium text-[#5F5F5F]">

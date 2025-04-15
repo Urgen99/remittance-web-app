@@ -1,5 +1,8 @@
 import { setFormData } from "@/features/complete-profile/slice";
-import { UserFormSchema } from "@/lib/formSchema";
+import {
+  DocumentSelectSchema,
+  DocumentSelectSchemaType,
+} from "@/lib/schemas/user/completeProfile";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +10,6 @@ import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { z } from "zod";
 import { FormIcons } from "../icons/Icons";
 import FormHeadingDescription from "../shared/FormHeadingDescription";
 import { FormField } from "../ui/form";
@@ -44,16 +46,12 @@ const documents = [
   },
 ];
 
-const selectDocumentSchema = UserFormSchema.pick({ documentType: true });
-
-type SelectDocumentSchema = z.infer<typeof selectDocumentSchema>;
-
 const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
-  const form = useForm<SelectDocumentSchema>({
+  const form = useForm<DocumentSelectSchemaType>({
     mode: "all",
-    resolver: zodResolver(selectDocumentSchema),
+    resolver: zodResolver(DocumentSelectSchema),
     defaultValues: {
-      documentType: "passport",
+      type: "passport",
     },
   });
   const navigate = useNavigate();
@@ -62,8 +60,8 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
     navigate("/", { replace: true });
   };
 
-  const onSubmit = (data: SelectDocumentSchema) => {
-    dispatch(setFormData({ documentType: data.documentType }));
+  const onSubmit = (data: DocumentSelectSchemaType) => {
+    dispatch(setFormData({ documentType: data.type }));
     handleNext();
   };
 
@@ -82,7 +80,7 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
             className="max-w-[50rem] w-full flex flex-col items-center gap-5"
           >
             <FormField
-              name="documentType"
+              name="type"
               render={({ field: { value, onChange } }) => {
                 return (
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">

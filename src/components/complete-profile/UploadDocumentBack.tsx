@@ -1,12 +1,15 @@
 import { setFormData } from "@/features/complete-profile/slice";
-import { UserFormSchema } from "@/lib/formSchema";
+import { RootState } from "@/features/store";
+import {
+  DocumentBackSchema,
+  DocumentBackSchemaType,
+} from "@/lib/schemas/user/completeProfile";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { z } from "zod";
 import { FormIcons } from "../icons/Icons";
 import FormHeadingDescription from "../shared/FormHeadingDescription";
 import {
@@ -18,16 +21,11 @@ import {
 import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import NavigationButtons from "./NavigationButtons";
-import { RootState } from "@/features/store";
 
 interface UploadDocumentBackProps {
   handleNext: () => void;
   handlePrev: () => void;
 }
-
-const documentBackSchema = UserFormSchema.pick({
-  documentBack: true,
-});
 
 const formDescription: FormDescription = {
   Icon: FormIcons.Folder,
@@ -35,8 +33,6 @@ const formDescription: FormDescription = {
   subtitle:
     "To comply with Australian government regulations and verify your status, you are required to submit an approved form of identification. Please select one from the options below.",
 };
-
-type DocumentBackSchema = z.infer<typeof documentBackSchema>;
 
 const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
   handleNext,
@@ -49,11 +45,11 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
     documentBack ? [documentBack] : null
   );
 
-  const methods = useForm<DocumentBackSchema>({
+  const methods = useForm<DocumentBackSchemaType>({
     mode: "all",
-    resolver: zodResolver(documentBackSchema),
+    resolver: zodResolver(DocumentBackSchema),
     defaultValues: {
-      documentBack,
+      back: documentBack,
     },
   });
 
@@ -66,9 +62,9 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
 
   useEffect(() => {
     if (files?.length) {
-      methods.setValue("documentBack", files[0]);
+      methods.setValue("back", files[0]);
     } else {
-      methods.setValue("documentBack", undefined as unknown as File);
+      methods.setValue("back", undefined as unknown as File);
     }
   }, [files, methods]);
 
@@ -78,8 +74,8 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
     }
   }, [documentFront, handlePrev]);
 
-  function onSubmit(values: DocumentBackSchema) {
-    dispatch(setFormData({ documentBack: values.documentBack }));
+  function onSubmit(values: DocumentBackSchemaType) {
+    dispatch(setFormData({ documentBack: values.back }));
     handleNext();
   }
 
@@ -115,7 +111,7 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
             <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
               <FormField
                 control={methods.control}
-                name="documentBack"
+                name="back"
                 render={() => {
                   return (
                     <FormItem>

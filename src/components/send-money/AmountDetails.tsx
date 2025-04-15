@@ -6,7 +6,15 @@ import NavigationButtons from "../complete-profile/NavigationButtons";
 import { SendMoneyForm } from "../icons/Icons";
 import FormHeadingDescription from "../shared/FormHeadingDescription";
 import CountryAmountSelect from "../ui/send-money/CountryAmountSelect";
-import DropDownSelect from "../ui/send-money/DropDownSelect";
+import TextInput from "../ui/forms/TextInput";
+import { FormProvider, useForm } from "react-hook-form";
+import {
+  AmountDetailSchema,
+  AmountDetailSchemaType,
+} from "@/lib/schemas/send-money/amountDetails";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { DevTool } from "@hookform/devtools";
+import DropDownSelect from "../ui/forms/DropDownSelect";
 interface AmountDetailProps {
   handleNext: () => void;
 }
@@ -36,11 +44,11 @@ const paymentMethods = [
     label: "Card",
   },
   {
-    value: "applePay",
+    value: "apple-pay",
     label: "Apple Pay",
   },
   {
-    value: "googlePay",
+    value: "google-pay",
     label: "Google Pay",
   },
   {
@@ -49,19 +57,51 @@ const paymentMethods = [
   },
 ];
 
+const deliveryMethods = [
+  {
+    value: "pickup",
+    label: "Pickup",
+  },
+  {
+    value: "delivery",
+    label: "Delivery",
+  },
+];
+
 const AmountDetails = ({ handleNext }: AmountDetailProps) => {
   const [senderCountry, setSenderCountry] = useState<Country>(defaultSender);
   const [receiverCountry, setReceiverCountry] =
     useState<Country>(defaultReceiver);
   const navigate = useNavigate();
+
+  const form = useForm<AmountDetailSchemaType>({
+    mode: "all",
+    resolver: zodResolver(AmountDetailSchema),
+    defaultValues: {
+      senderCountry: "AUD",
+      receiverCountry: "NPR",
+      amount: "0.00",
+      paymentMethod: "card",
+      deliveryMethod: "pickup",
+      remarks: "",
+    },
+  });
+
   const handleBack = () => {
     navigate("/", { replace: true });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  function onSubmit(data: AmountDetailSchemaType) {
+    const formData = {
+      ...data,
+      senderCountry: senderCountry.code,
+      receiverCountry: receiverCountry.code,
+    };
+
+    console.log(formData);
     handleNext();
-  };
+  }
+
   return (
     <section className="mt-7 ">
       <div className="flex flex-col gap-6 items-center justify-center w-[50rem]">
@@ -71,101 +111,107 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
         </div>
 
         {/* ---------- FORM CONTAINER ---------- */}
-        {/* <FormProvider {...form}> */}
-        <form
-          // onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col items-center gap-[7.5rem] justify-between w-full h-full"
-        >
-          <div className="space-y-4 max-w-[48.5rem] w-full">
-            <div className="flex items-center gap-3">
-              <CountryAmountSelect
-                title={"YOU ARE SENDING"}
-                Icon={SendMoneyForm.AmountDetails.ArrowDownRight}
-                country={senderCountry}
-                setCountry={setSenderCountry}
-                isSender
-              />
-
-              <CountryAmountSelect
-                title={"THEY WILL RECEIVE"}
-                Icon={SendMoneyForm.AmountDetails.ArrowUpRight}
-                country={receiverCountry}
-                setCountry={setReceiverCountry}
-                isSender={false}
-              />
-            </div>
-
-            <div>
+        <FormProvider {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col items-center gap-[7.5rem] justify-between w-full h-full"
+          >
+            <div className="space-y-4 max-w-[48.5rem] w-full">
               <div className="flex items-center gap-3">
-                <DropDownSelect
-                  name="paymentMethod"
-                  label="Select payment method"
-                  isImportant
-                  items={paymentMethods}
-                  // defaultValue={paymentMethods[0].value}
+                <CountryAmountSelect
+                  key="sender"
+                  title={"YOU ARE SENDING"}
+                  Icon={SendMoneyForm.AmountDetails.ArrowDownRight}
+                  country={senderCountry}
+                  setCountry={setSenderCountry}
+                  isSender
+                  control={form.control}
                 />
-                <DropDownSelect
-                  name="paymentMethod"
-                  label="Select delivery options"
-                  isImportant
-                  items={paymentMethods}
-                  // defaultValue={paymentMethods[0].value}
-                />
-              </div>
-              <div className="-mt-3 w-[49%]">
-                <DropDownSelect
-                  name="paymentMethod"
-                  label="Enter remarks"
-                  isImportant
-                  items={paymentMethods}
-                  // defaultValue={paymentMethods[0].value}
-                />
-              </div>
-            </div>
-          </div>
 
-          <div className="flex flex-col items-center w-full gap-14">
-            <div className="max-w-3xl w-full">
-              <div
-                id="platformFee"
-                className="select-none bg-[#EBEBF9] px-3 py-4 flex flex-col gap-2 relative"
-              >
-                <div
-                  id="feeInfo"
-                  className="flex justify-between items-center font-mukta text-[#1b1b1b] leading-5"
-                >
-                  <p className="uppercase">PLATFORM FEE</p>
-                  <p className="uppercase">0 AUD</p>
+                <CountryAmountSelect
+                  key="receiver"
+                  title={"THEY WILL RECEIVE"}
+                  Icon={SendMoneyForm.AmountDetails.ArrowUpRight}
+                  country={receiverCountry}
+                  setCountry={setReceiverCountry}
+                  isSender={false}
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center gap-3">
+                  <DropDownSelect
+                    name="paymentMethod"
+                    label="Select payment method"
+                    isImportant
+                    items={paymentMethods}
+                    control={form.control}
+                    defaultValue={paymentMethods[0].value}
+                    placeholder="Select payment method"
+                  />
+                  <DropDownSelect
+                    name="deliveryMethod"
+                    label="Select delivery options"
+                    placeholder="Select delivery options"
+                    isImportant
+                    control={form.control}
+                    items={deliveryMethods}
+                    defaultValue={deliveryMethods[0].value}
+                  />
                 </div>
-
-                <div className="bg-white size-3 rounded-full absolute -left-[5px]  top-[38px]" />
-                <div className="bg-white size-3 rounded-full absolute -right-[5px] top-[38px]" />
-
-                <div
-                  id="separator"
-                  className=" border border-black border-opacity-50 border-dashed"
-                />
-
-                <div
-                  id="receiverAmountInfo"
-                  className="flex justify-between items-center font-mukta font-medium"
-                >
-                  <p className="text-[#1b1b1b]">Receiver will receive</p>
-                  <p className="text-[#3333C1]">NPR 1800</p>
+                <div className="-mt-3 w-[49%]">
+                  <TextInput
+                    control={form.control}
+                    name="remarks"
+                    label="Enter remarks"
+                    isImportant
+                    placeholder="Enter remarks"
+                  />
                 </div>
               </div>
             </div>
 
-            <NavigationButtons
-              onBackClick={handleBack}
-              //   disabled={!form.formState.isValid}
-              type="submit"
-              onContinueClick={handleSubmit}
-            />
-          </div>
-        </form>
-        {/* <DevTool control={form.control} /> */}
-        {/* </FormProvider> */}
+            <div className="flex flex-col items-center w-full gap-14">
+              <div className="max-w-3xl w-full">
+                <div
+                  id="platformFee"
+                  className="select-none bg-[#EBEBF9] px-3 py-4 flex flex-col gap-2 relative"
+                >
+                  <div
+                    id="feeInfo"
+                    className="flex justify-between items-center font-mukta text-[#1b1b1b] leading-5"
+                  >
+                    <p className="uppercase">PLATFORM FEE</p>
+                    <p className="uppercase">0 AUD</p>
+                  </div>
+
+                  <div className="bg-white size-3 rounded-full absolute -left-[5px]  top-[38px]" />
+                  <div className="bg-white size-3 rounded-full absolute -right-[5px] top-[38px]" />
+
+                  <div
+                    id="separator"
+                    className=" border border-black border-opacity-50 border-dashed"
+                  />
+
+                  <div
+                    id="receiverAmountInfo"
+                    className="flex justify-between items-center font-mukta font-medium"
+                  >
+                    <p className="text-[#1b1b1b]">Receiver will receive</p>
+                    <p className="text-[#3333C1]">NPR 1800</p>
+                  </div>
+                </div>
+              </div>
+
+              <NavigationButtons
+                onBackClick={handleBack}
+                disabled={!form.formState.isValid}
+                type="submit"
+              />
+            </div>
+          </form>
+          <DevTool control={form.control} />
+        </FormProvider>
       </div>
     </section>
   );
