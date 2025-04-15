@@ -1,9 +1,10 @@
 import NavigationButtons from "@/components/complete-profile/NavigationButtons";
 import { SendMoneyForm } from "@/components/icons/Icons";
 import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
-import DropDownSelect from "@/components/ui/complete-profile-form/DropDownSelect";
-import TextInput from "@/components/ui/complete-profile-form/TextInput";
+
 import CheckBox from "@/components/ui/forms/CheckBox";
+import DropDownSelect from "@/components/ui/forms/DropDownSelect";
+import TextInput from "@/components/ui/forms/TextInput";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";

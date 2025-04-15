@@ -47,7 +47,9 @@ const DropDownSelect = ({
           {/* </FormControl> */}
           <SelectContent>
             {items.map(({ value, label }) => (
-              <SelectItem value={value}>{label}</SelectItem>
+              <SelectItem key={value} value={value}>
+                {label}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>

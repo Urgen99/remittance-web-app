@@ -1,21 +1,26 @@
 import { FormIcons } from "@/components/icons/Icons";
-import FormComponent from "@/components/shared/Generic/FormComponent";
-import { CreatePasswordSchema } from "@/lib/formSchema";
-import { createPasswordFields } from "@/lib/inputFields";
+import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import TextInput from "@/components/ui/forms/TextInput";
+import {
+  CreatePasswordSchema,
+  CreatePasswordSchemaType,
+} from "@/lib/schemas/user/createPassword";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 const CreatePassword = () => {
-  const form = useForm<z.infer<typeof CreatePasswordSchema>>({
+  const form = useForm<CreatePasswordSchemaType>({
     resolver: zodResolver(CreatePasswordSchema),
-    defaultValues: createPasswordFields.reduce((acc, field) => {
-      acc[field.name] = "";
-      return acc;
-    }, {} as Record<string, string>),
+    mode: "all",
+    defaultValues: {
+      newPassword: "",
+      confirmPassword: "",
+    },
   });
-  function onSubmit(data: z.infer<typeof CreatePasswordSchema>) {
+  function onSubmit(data: CreatePasswordSchemaType) {
     console.log("form is submitted", data);
 
     alert({
@@ -29,17 +34,64 @@ const CreatePassword = () => {
   }
 
   return (
-    <section className="mt-7">
-      <div className="flex  items-center justify-center">
-        <FormComponent
-          form={form}
-          fields={createPasswordFields}
-          onSubmit={onSubmit}
-          formDescription={formDescription}
-          info={formDescription.info}
-        />
-      </div>
-    </section>
+    <main className="mt-7">
+      <section className="flex items-center justify-center">
+        <div className="max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
+          {/* ---------- FORM DESCRIPTION ---------- */}
+          <FormHeadingDescription formDescription={formDescription} />
+
+          {/* ---------- FORM CONTAINER ---------- */}
+          <div className="space-y-[18px] w-full">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full flex flex-col"
+              >
+                <TextInput
+                  control={form.control}
+                  name="newPassword"
+                  label="New Password"
+                  isImportant
+                  placeholder="*********************"
+                  key="newPassword"
+                  type="password"
+                />
+
+                <TextInput
+                  control={form.control}
+                  name="confirmPassword"
+                  label="Confirm new Password"
+                  isImportant
+                  placeholder="*********************"
+                  key="confirmPassword"
+                  type="password"
+                />
+
+                <Button
+                  type="submit"
+                  className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full"
+                >
+                  Submit
+                </Button>
+              </form>
+            </Form>
+
+            <div className="text-[#3333C1] text-sm font-medium font-inter tracking-[-1%] ">
+              {formDescription.info && (
+                <div className="p-3 bg-[#EBEBF9] text-[13px] rounded-[8px] flex flex-col gap-4">
+                  {formDescription.info.map((item: string) => (
+                    <p key={item} className="flex gap-[5px] items-center">
+                      <FormIcons.InfoFilled />
+                      {item}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 };
 

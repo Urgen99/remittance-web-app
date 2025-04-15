@@ -1,35 +1,25 @@
 import { setFormData } from "@/features/complete-profile/slice";
 import { RootState } from "@/features/store";
-import { PersonalDetailSchema, UserFormSchema } from "@/lib/formSchema";
+import {
+  PersonalDetailSchema,
+  PersonalDetailSchemaType,
+} from "@/lib/schemas/user/completeProfile";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { z } from "zod";
 import { FormIcons } from "../icons/Icons";
 import FormHeadingDescription from "../shared/FormHeadingDescription";
-import DatePicker from "../ui/complete-profile-form/DatePicker";
-import DateSelector from "../ui/complete-profile-form/DateSelector";
-import DropDownSelect from "../ui/complete-profile-form/DropDownSelect";
-import TextInput from "../ui/complete-profile-form/TextInput";
 import NavigationButtons from "./NavigationButtons";
-
+import TextInput from "../ui/forms/TextInput";
+import DateSelector from "../ui/forms/DateSelector";
+import DropDownSelect from "../ui/forms/DropDownSelect";
+import DatePicker from "../ui/forms/DatePicker";
 interface PersonalDetailProps {
   handlePrev: () => void;
 }
-const personalDetailSchema = UserFormSchema.pick({
-  firstName: true,
-  middleName: true,
-  lastName: true,
-  documentType: true,
-  documentExpiry: true,
-  documentNumber: true,
-  addressLine: true,
-  city: true,
-  birthDate: true,
-});
 
 const formDescription: FormDescription = {
   Icon: FormIcons.UserAdd,
@@ -52,27 +42,29 @@ const documentItems = [
   },
 ];
 
-type PersonalDetailSchema = z.infer<typeof personalDetailSchema>;
-
 const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
   const { documentType, documentFront, documentBack } = useSelector(
     (state: RootState) => state.userForm
   );
 
   const dispatch = useDispatch();
-  const form = useForm<PersonalDetailSchema>({
+  const form = useForm<PersonalDetailSchemaType>({
     mode: "all",
-    resolver: zodResolver(personalDetailSchema),
+    resolver: zodResolver(PersonalDetailSchema),
     defaultValues: {
       firstName: "",
       middleName: "",
       lastName: "",
       birthDate: new Date(),
-      documentType,
-      documentExpiry: new Date(),
-      documentNumber: "",
-      city: "",
-      addressLine: "",
+      document: {
+        type: documentType,
+        expiry: new Date(),
+        number: "",
+      },
+      address: {
+        city: "",
+        addressLine: "",
+      },
     },
   });
 
@@ -82,19 +74,19 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
     }
   }, [documentBack, handlePrev]);
 
-  function onSubmit(data: PersonalDetailSchema) {
+  function onSubmit(data: PersonalDetailSchemaType) {
     const formData = {
       firstName: data.firstName,
       middleName: data.middleName,
       lastName: data.lastName,
       birthDate: data.birthDate,
-      documentType: data.documentType,
-      documentNumber: data.documentNumber,
-      documentExpiry: data.documentExpiry,
+      documentType: data.document.type,
+      documentNumber: data.document.number,
+      documentExpiry: data.document.expiry,
       documentFront,
       documentBack,
-      city: data.city,
-      addressLine: data.addressLine,
+      city: data.address.city,
+      addressLine: data.address.addressLine,
     };
     dispatch(setFormData(formData));
   }
@@ -147,7 +139,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
 
                 <div className="flex-1">
                   <DropDownSelect
-                    name="documentType"
+                    name="document.type"
                     label="Document Type"
                     control={form.control}
                     isImportant
@@ -160,7 +152,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
 
               <div className="w-full flex items-center gap-3">
                 <TextInput
-                  name="documentNumber"
+                  name="document.number"
                   label="Document Number"
                   isImportant
                   placeholder="Eg: 123456"
@@ -168,7 +160,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 />
 
                 <DatePicker
-                  name="documentExpiry"
+                  name="document.expiry"
                   label="Document Expiry Date"
                   control={form.control}
                   isImportant
@@ -177,7 +169,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
 
               <div className="w-full flex items-center gap-3">
                 <TextInput
-                  name="city"
+                  name="address.city"
                   label="Enter your city Name"
                   isImportant
                   placeholder="Eg: Kathmandu"
@@ -185,7 +177,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 />
 
                 <TextInput
-                  name="addressLine"
+                  name="address.addressLine"
                   label="Enter the address line"
                   isImportant
                   placeholder="Eg:Bhaktpur, Jadibuti"

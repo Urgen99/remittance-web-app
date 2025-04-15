@@ -1,32 +1,26 @@
 import { FormIcons } from "@/components/icons/Icons";
 import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import TextInput from "@/components/ui/forms/TextInput";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { LoginFormSchema } from "@/lib/formSchema";
-import { loginFields } from "@/lib/inputFields";
+  PasswordSchema,
+  PasswordSchemaType,
+} from "@/lib/schemas/user/password";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { z } from "zod";
 
 const Login = () => {
-  const form = useForm<z.infer<typeof LoginFormSchema>>({
-    resolver: zodResolver(LoginFormSchema),
-    defaultValues: loginFields.reduce((acc, field) => {
-      acc[field.name] = "";
-      return acc;
-    }, {} as Record<string, string>),
+  const form = useForm<PasswordSchemaType>({
+    mode: "all",
+    resolver: zodResolver(PasswordSchema),
+    defaultValues: {
+      password: "",
+    },
   });
-  function onSubmit(data: z.infer<typeof LoginFormSchema>) {
+  function onSubmit(data: PasswordSchemaType) {
     console.log("form is submitted", data);
 
     alert({
@@ -51,30 +45,16 @@ const Login = () => {
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="w-full flex flex-col gap-[18px]"
+                className="w-full flex flex-col"
               >
-                <FormField
-                  key="password"
+                <TextInput
                   control={form.control}
                   name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-inter font-[475] text-sm tracking-[-0.05px]">
-                        Password
-                        <span className="text-[#D32F2F]">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="*********************"
-                          {...field}
-                          className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83]"
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Password"
+                  isImportant
+                  placeholder="*********************"
+                  key="password"
+                  type="password"
                 />
 
                 <Button

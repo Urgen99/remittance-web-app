@@ -13,6 +13,7 @@ interface TextInputProps {
   isImportant: boolean;
   control: any;
   placeholder: string;
+  type?: string;
 }
 
 const TextInput = ({
@@ -21,6 +22,7 @@ const TextInput = ({
   isImportant,
   control,
   placeholder,
+  type,
 }: TextInputProps) => {
   return (
     <FormField
@@ -43,6 +45,7 @@ const TextInput = ({
           <div className="flex flex-col gap-2 min-h-20">
             <FormControl>
               <Input
+                type={type || "text"}
                 placeholder={placeholder}
                 className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
                 {...field}
