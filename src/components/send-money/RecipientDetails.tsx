@@ -21,56 +21,56 @@ const RecipientDetails = ({
 }: RecipientDetailsProps) => {
   const recipients = useMemo(
     () => [
-      {
-        name: "Ranjit Kumar Shrestha",
-        bankName: "Nepal Bank Limited",
-        accountNumber: "123456789XXXXXXX",
-      },
-      {
-        name: "Ranjit Kumar Shrestha",
-        bankName: "Nepal Bank Limited",
-        accountNumber: "123456789XXXXXXX",
-      },
-      {
-        name: "Ranjit Kumar Shrestha",
-        bankName: "Nepal Bank Limited",
-        accountNumber: "123456789XXXXXXX",
-      },
-      {
-        name: "Ranjit Kumar Shrestha",
-        bankName: "Nepal Bank Limited",
-        accountNumber: "123456789XXXXXXX",
-      },
-      {
-        name: "Ranjit Kumar Shrestha",
-        bankName: "Nepal Bank Limited",
-        accountNumber: "123456789XXXXXXX",
-      },
-      {
-        name: "Ranjit Kumar Shrestha",
-        bankName: "Nepal Bank Limited",
-        accountNumber: "123456789XXXXXXX",
-      },
-      {
-        name: "Ranjit Kumar Shrestha",
-        bankName: "Nepal Bank Limited",
-        accountNumber: "123456789XXXXXXX",
-      },
-      {
-        name: "Ranjit Kumar Shrestha",
-        bankName: "Nepal Bank Limited",
-        accountNumber: "123456789XXXXXXX",
-      },
-      {
-        name: "Ranjit Kumar Shrestha",
-        bankName: "Nepal Bank Limited",
-        accountNumber: "123456789XXXXXXX",
-      },
-      {
-        name: "Ranjit Kumar Shrestha",
-        bankName: "Nepal Bank Limited",
-        accountNumber: "123456789XXXXXXX",
-      },
+      // {
+      //   name: "Ranjit Kumar Shrestha",
+      //   bankName: "Nepal Bank Limited",
+      //   accountNumber: "123456789XXXXXXX",
+      // },
+      // {
+      //   name: "Ranjit Kumar Shrestha",
+      //   bankName: "Nepal Bank Limited",
+      //   accountNumber: "123456789XXXXXXX",
+      // },
+      // {
+      //   name: "Ranjit Kumar Shrestha",
+      //   bankName: "Nepal Bank Limited",
+      //   accountNumber: "123456789XXXXXXX",
+      // },
+      // {
+      //   name: "Ranjit Kumar Shrestha",
+      //   bankName: "Nepal Bank Limited",
+      //   accountNumber: "123456789XXXXXXX",
+      // },
+      // {
+      //   name: "Ranjit Kumar Shrestha",
+      //   bankName: "Nepal Bank Limited",
+      //   accountNumber: "123456789XXXXXXX",
+      // },
+      // {
+      //   name: "Ranjit Kumar Shrestha",
+      //   bankName: "Nepal Bank Limited",
+      //   accountNumber: "123456789XXXXXXX",
+      // },
+      // {
+      //   name: "Ranjit Kumar Shrestha",
+      //   bankName: "Nepal Bank Limited",
+      //   accountNumber: "123456789XXXXXXX",
+      // },
+      // {
+      //   name: "Ranjit Kumar Shrestha",
+      //   bankName: "Nepal Bank Limited",
+      //   accountNumber: "123456789XXXXXXX",
+      // },
+      // {
+      //   name: "Ranjit Kumar Shrestha",
+      //   bankName: "Nepal Bank Limited",
+      //   accountNumber: "123456789XXXXXXX",
+      // },
+      // {
+      //   name: "Ranjit Kumar Shrestha",
+      //   bankName: "Nepal Bank Limited",
+      //   accountNumber: "123456789XXXXXXX",
+      // },
     ],
     []
   );

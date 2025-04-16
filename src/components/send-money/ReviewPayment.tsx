@@ -6,6 +6,7 @@ import PaymentCountry from "./review-payment/PaymentCountry";
 import PaymentDetailTable from "./review-payment/PaymentDetailTable";
 import moment from "moment";
 import RecipientContainer from "./review-payment/RecipientContainer";
+import { maskAccountNumber } from "@/lib/utils";
 
 interface ReviewPaymentProps {
   handleNext: () => void;
@@ -39,14 +40,14 @@ const transactionDetails = {
     method: "bank transfer",
     name: "Bessie Cooper",
     bankName: "global ime bank",
-    accountNumber: "1234 5678 #### ####",
+    accountNumber: "1234567878901234",
   },
 
   // Receiver Details
   receiver: {
     name: "Jane Cooper",
     bankName: "prabhu bank limited",
-    accountNumber: "1234 5678 #### ####",
+    accountNumber: "1234567878901234",
   },
 
   // General Details
@@ -73,7 +74,7 @@ const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
     },
     {
       label: "Account number",
-      value: transactionDetails?.sender?.accountNumber,
+      value: maskAccountNumber(transactionDetails?.sender?.accountNumber),
     },
     {
       label: "Channel",
