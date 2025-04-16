@@ -66,7 +66,7 @@ const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
     },
     {
       label: "Payment initiated date",
-      value: moment(transactionDetails.date).format("l"),
+      value: moment(transactionDetails.date).format("YYYY-MM-DD"),
     },
     {
       label: "Payment Method",

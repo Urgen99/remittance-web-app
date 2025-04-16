@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import CountryDetails from "./components/CountryDetails";
 import DetailsTable from "./components/DetailsTable";
 import moment from "moment";
+import { maskAccountNumber } from "@/lib/utils";
 
 // import { useParams } from "react-router-dom";
 const transactionDetails = {
@@ -28,14 +29,14 @@ const transactionDetails = {
     method: "bank transfer",
     name: "Bessie Cooper",
     bankName: "global ime bank",
-    accountNumber: "1234 5678 #### ####",
+    accountNumber: "1234567812345678",
   },
 
   // Receiver Details
   receiver: {
     name: "Jane Cooper",
     bankName: "prabhu bank limited",
-    accountNumber: "1234 5678 #### ####",
+    accountNumber: "1234567812345678",
   },
 
   // General Details
@@ -72,7 +73,7 @@ const TransactionDetails = () => {
     },
     {
       label: "Account number",
-      value: transactionDetails?.sender?.accountNumber,
+      value: maskAccountNumber(transactionDetails?.sender?.accountNumber),
     },
   ];
 
@@ -87,14 +88,14 @@ const TransactionDetails = () => {
     },
     {
       label: "Account number",
-      value: transactionDetails?.receiver?.accountNumber,
+      value: maskAccountNumber(transactionDetails?.receiver?.accountNumber),
     },
   ];
 
   const generalDetailsRows = [
     {
       label: "Initiated on",
-      value: moment(transactionDetails.date).format("l"),
+      value: moment(transactionDetails.date).format("YYYY-MM-DD"),
     },
     {
       label: "Channel",

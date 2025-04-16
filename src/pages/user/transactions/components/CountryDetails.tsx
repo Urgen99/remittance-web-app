@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { currencyFormatter } from "@/lib/utils";
 import React from "react";
 
 type CountryDetailsProps = {
@@ -20,6 +21,8 @@ const CountryDetails: React.FC<CountryDetailsProps> = ({
   code,
   end = false,
 }) => {
+  const formattedAmount = currencyFormatter(amount);
+
   return (
     <div className={`flex flex-col gap-4 ${end ? "items-end" : ""}`}>
       <Avatar className="size-7">
@@ -36,7 +39,7 @@ const CountryDetails: React.FC<CountryDetailsProps> = ({
           {title}
         </h6>
         <h4 className="font-general-sans font-medium text-lg leading-[120%] tracking-[-2%]">
-          {currency} <span>{amount}</span>
+          {currency} <span>{formattedAmount}</span>
         </h4>
       </div>
     </div>
