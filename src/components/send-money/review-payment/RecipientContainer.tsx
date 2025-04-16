@@ -1,4 +1,5 @@
 import { SendMoneyForm } from "@/components/icons/Icons";
+import { maskAccountNumber } from "@/lib/utils";
 
 interface RecipientProps {
   name: string;
@@ -10,6 +11,10 @@ const RecipientContainer = ({
 }: {
   recipientDetails: RecipientProps;
 }) => {
+  const maskedAccountNumber = maskAccountNumber(
+    recipientDetails?.accountNumber
+  );
+
   return (
     <div
       className="bg-[#EBEBF9] p-2.5 rounded-[4px] bg-no-repeat"
@@ -24,18 +29,16 @@ const RecipientContainer = ({
         <div className="space-y-1">
           <div className="space-y-0.5">
             <h4 className="font-general-sans font-medium leading-5 tracking-[-1%] text-black">
-              {recipientDetails.name}
+              {recipientDetails?.name}
             </h4>
             <h6 className="capitalize font-roboto leading-6 tracking-[-1%] text-[#696969]">
-              {recipientDetails.bankName}
+              {recipientDetails?.bankName}
             </h6>
           </div>
 
           <p className="font-roboto text-sm leading-[18px] tracking-[-1%]">
             <span className="text-[#1B1B1B]">Acc no.</span>{" "}
-            <span className="text-[#696969]">
-              {recipientDetails.accountNumber}
-            </span>
+            <span className="text-[#696969]">{maskedAccountNumber}</span>
           </p>
         </div>
       </div>

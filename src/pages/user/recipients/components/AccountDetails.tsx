@@ -1,5 +1,6 @@
 import { TransactionIcons } from "@/components/icons/Icons";
 import IconTextContainer from "@/components/shared/IconTextContainer";
+import { maskAccountNumber } from "@/lib/utils";
 import moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -41,7 +42,7 @@ const AccountDetails = ({ user }: { user: any }) => {
 
   const rows = [
     { label: "Bank name", value: user?.bankName },
-    { label: "Account number", value: user?.accountNumber },
+    { label: "Account number", value: maskAccountNumber(user?.accountNumber) },
   ];
   return (
     <div className="flex flex-col gap-4 ">

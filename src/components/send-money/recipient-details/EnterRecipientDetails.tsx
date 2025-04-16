@@ -164,9 +164,8 @@ const EnterRecipientDetails = ({
           <div className="flex flex-col items-center w-full gap-14">
             <NavigationButtons
               onBackClick={handlePrev}
-              //   disabled={!form.formState.isValid}
+              disabled={!form.formState.isValid}
               type="submit"
-              // onContinueClick={handleSubmit}
             />
           </div>
         </form>
