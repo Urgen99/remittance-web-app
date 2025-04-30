@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { setFormData } from "@/features/complete-profile/slice";
 import { RootState } from "@/features/store";
 import {
@@ -5,6 +6,7 @@ import {
   DocumentBackSchemaType,
 } from "@/lib/schemas/user/completeProfile";
 import { FormDescription } from "@/lib/type";
+import { readFileAsBase64 } from "@/utils/readFile";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
@@ -41,15 +43,16 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
   const { documentFront, documentBack } = useSelector(
     (state: RootState) => state.userForm
   );
+  const dispatch = useDispatch();
   const [files, setFiles] = useState<File[] | null>(
-    documentBack ? [documentBack] : null
+    documentBack ? [documentBack] : []
   );
 
   const methods = useForm<DocumentBackSchemaType>({
     mode: "all",
     resolver: zodResolver(DocumentBackSchema),
     defaultValues: {
-      back: documentBack,
+      documentBack: undefined as unknown as File,
     },
   });
 
@@ -58,13 +61,12 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
     maxSize: 1024 * 1024 * 2,
     multiple: false,
   };
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (files?.length) {
-      methods.setValue("back", files[0]);
+      methods.setValue("documentBack", files[0]);
     } else {
-      methods.setValue("back", undefined as unknown as File);
+      methods.setValue("documentBack", undefined as unknown as File);
     }
   }, [files, methods]);
 
@@ -74,9 +76,20 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
     }
   }, [documentFront, handlePrev]);
 
-  function onSubmit(values: DocumentBackSchemaType) {
-    dispatch(setFormData({ documentBack: values.back }));
-    handleNext();
+  async function onSubmit(values: DocumentBackSchemaType) {
+    try {
+      const base64 = await readFileAsBase64(values.documentBack);
+      const documentBack = {
+        name: values.documentBack.name,
+        type: values.documentBack.type,
+        base64,
+      };
+
+      dispatch(setFormData({ documentBack } as any));
+      handleNext();
+    } catch (e) {
+      console.error("Error while reading file. Please try again.", e);
+    }
   }
 
   return (
@@ -111,7 +124,7 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
             <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
               <FormField
                 control={methods.control}
-                name="back"
+                name="documentBack"
                 render={() => {
                   return (
                     <FormItem>

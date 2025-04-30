@@ -1,5 +1,5 @@
 import { SendMoneyForm } from "@/components/icons/Icons";
-import { maskAccountNumber } from "@/lib/utils";
+import { maskAccountNumber } from "@/utils/maskAccountNumber";
 
 interface RecipientProps {
   name: string;

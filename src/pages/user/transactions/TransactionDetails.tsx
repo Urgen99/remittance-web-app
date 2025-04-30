@@ -1,10 +1,10 @@
 import { TransactionIcons } from "@/components/icons/Icons";
 import TextContainer from "@/components/shared/TextContainer";
 import { Button } from "@/components/ui/button";
+import { maskAccountNumber } from "@/utils/maskAccountNumber";
+import moment from "moment";
 import CountryDetails from "./components/CountryDetails";
 import DetailsTable from "./components/DetailsTable";
-import moment from "moment";
-import { maskAccountNumber } from "@/lib/utils";
 
 // import { useParams } from "react-router-dom";
 const transactionDetails = {

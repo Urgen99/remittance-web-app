@@ -56,15 +56,11 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
       middleName: "",
       lastName: "",
       birthDate: new Date(),
-      document: {
-        type: documentType,
-        expiry: new Date(),
-        number: "",
-      },
-      address: {
-        city: "",
-        addressLine: "",
-      },
+      documentType: documentType,
+      documentExpiry: new Date(),
+      documentNumber: "",
+      city: "",
+      addressLine: "",
     },
   });
 
@@ -80,13 +76,13 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
       middleName: data.middleName,
       lastName: data.lastName,
       birthDate: data.birthDate,
-      documentType: data.document.type,
-      documentNumber: data.document.number,
-      documentExpiry: data.document.expiry,
+      documentType: data.documentType,
+      documentNumber: data.documentNumber,
+      documentExpiry: data.documentExpiry,
       documentFront,
       documentBack,
-      city: data.address.city,
-      addressLine: data.address.addressLine,
+      city: data.city,
+      addressLine: data.addressLine,
     };
     dispatch(setFormData(formData));
   }
@@ -139,7 +135,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
 
                 <div className="flex-1">
                   <DropDownSelect
-                    name="document.type"
+                    name="documentType"
                     label="Document Type"
                     control={form.control}
                     isImportant
@@ -152,7 +148,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
 
               <div className="w-full flex items-center gap-3">
                 <TextInput
-                  name="document.number"
+                  name="documentNumber"
                   label="Document Number"
                   isImportant
                   placeholder="Eg: 123456"
@@ -160,7 +156,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 />
 
                 <DatePicker
-                  name="document.expiry"
+                  name="documentExpiry"
                   label="Document Expiry Date"
                   control={form.control}
                   isImportant
@@ -169,7 +165,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
 
               <div className="w-full flex items-center gap-3">
                 <TextInput
-                  name="address.city"
+                  name="city"
                   label="Enter your city Name"
                   isImportant
                   placeholder="Eg: Kathmandu"
@@ -177,7 +173,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 />
 
                 <TextInput
-                  name="address.addressLine"
+                  name="addressLine"
                   label="Enter the address line"
                   isImportant
                   placeholder="Eg:Bhaktpur, Jadibuti"

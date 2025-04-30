@@ -14,6 +14,7 @@ const DashboardHeader = () => {
         <div>
           <NotificationMenu notifications={user?.notifications} />
         </div>
+
         <div className="flex items-center gap-3">
           <Avatar className="!size-10">
             <AvatarImage src={user?.avatar} alt={user?.name + "- profile"} />

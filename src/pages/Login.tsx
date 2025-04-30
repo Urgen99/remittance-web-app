@@ -3,6 +3,8 @@ import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
+import { selectCurrentEmail, setCredentials } from "@/features/auth/auth.slice";
+import { useLoginMutation } from "@/features/auth/authApi.slice";
 import {
   PasswordSchema,
   PasswordSchemaType,
@@ -10,9 +12,14 @@ import {
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const Login = () => {
+  const email = useSelector(selectCurrentEmail);
+  console.log("Email:", email);
+
   const form = useForm<PasswordSchemaType>({
     mode: "all",
     resolver: zodResolver(PasswordSchema),
@@ -20,23 +27,37 @@ const Login = () => {
       password: "",
     },
   });
-  function onSubmit(data: PasswordSchemaType) {
-    console.log("form is submitted", data);
+  const [login, { isLoading }] = useLoginMutation();
 
-    alert({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  const dispatch = useDispatch();
+
+  async function onSubmit(data: PasswordSchemaType) {
+    try {
+      const response = await login({ email, password: data.password });
+
+      console.log(JSON.stringify(response));
+      toast.success("Successfully Logged in", {
+        description: "You are logged in now",
+      });
+    } catch (e: any) {
+      if (!e.status) {
+        console.log("No server response error: ", e);
+
+        toast.error("No Server Response");
+      } else if (e.status === 400) {
+        toast.error("Invalid Credentials");
+      } else if (e.status === 401) {
+        toast.error("Unauthorized");
+      } else {
+        toast.error("Login Failed");
+      }
+    }
   }
 
   return (
-    <main className="mt-7">
+    <section className="mt-7">
       <section className="flex items-center justify-center">
-        <div className="max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
+        <div className="px-3 sm:px-4 sm:max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
 
@@ -59,19 +80,21 @@ const Login = () => {
 
                 <Button
                   type="submit"
-                  className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full"
+                  className="cursor-pointer text-xs sm:text-sm font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full"
                 >
                   Submit
                 </Button>
               </form>
             </Form>
 
-            <div className="flex flex-col gap-3 font-inter font-medium text-sm leading-5 tracking-[-0.02px] text-[#0A090B]">
+            <div className="flex flex-col gap-3 font-inter font-medium leading-5 tracking-[-0.02px] text-[#0A090B]">
               <Button variant="outline" className="">
-                <FormIcons.Google /> <span>Sign in with Google</span>
+                <FormIcons.Google />{" "}
+                <p className="text-xs sm:text-sm">Sign in with Google</p>
               </Button>
               <Button variant="outline" className="">
-                <FormIcons.Apple /> <span>Sign in with Apple</span>
+                <FormIcons.Apple />{" "}
+                <p className="text-xs sm:text-sm">Sign in with Apple</p>
               </Button>
             </div>
 
@@ -84,7 +107,7 @@ const Login = () => {
           </div>
         </div>
       </section>
-    </main>
+    </section>
   );
 };
 
