@@ -1,21 +1,40 @@
-import { UserFormSchemaType } from "@/lib/formSchema";
+import { CompleteProfileSchemaType } from "@/lib/schemas/user/completeProfile";
+import { base64ToFile } from "@/utils/readFile";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const getStoredForm = (): Partial<UserFormSchemaType> => {
+const getStoredForm = (): Partial<CompleteProfileSchemaType> => {
   const storedState = localStorage.getItem("userForm");
 
-  if (storedState) {
-    try {
-      return JSON.parse(storedState);
-    } catch (error) {
-      console.error("Error parsing user form. Error: ", error);
-    }
-  }
+  if (!storedState) return {};
 
-  return {};
+  try {
+    const data = JSON.parse(storedState);
+    const { documentFront, documentBack, ...rest } = data;
+
+    return {
+      ...rest,
+      documentFront: documentFront
+        ? base64ToFile(
+            documentFront.base64,
+            documentFront.name,
+            documentFront.type
+          )
+        : undefined,
+      documentBack: documentBack
+        ? base64ToFile(
+            documentBack.base64,
+            documentBack.name,
+            documentBack.type
+          )
+        : undefined,
+    };
+  } catch (error) {
+    console.error("Error parsing user form. Error: ", error);
+    return {};
+  }
 };
 
-const initialState: Partial<UserFormSchemaType> = {
+const initialState: Partial<CompleteProfileSchemaType> = {
   firstName: "",
   middleName: "",
   lastName: "",
@@ -36,7 +55,7 @@ const userFormSlice = createSlice({
     //  set form data
     setFormData: (
       state,
-      action: PayloadAction<Partial<UserFormSchemaType>>
+      action: PayloadAction<Partial<CompleteProfileSchemaType>>
     ) => {
       const newState = { ...state, ...action.payload };
       localStorage.setItem("userForm", JSON.stringify(newState));

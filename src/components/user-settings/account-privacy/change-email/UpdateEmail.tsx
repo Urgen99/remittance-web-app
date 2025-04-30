@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DialogSettingsIcons } from "@/components/icons/Icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,10 +13,7 @@ import {
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
-const UpdateEmail: React.FC<AccountPrivacyProps> = ({
-  handleNext,
-  handlePrev,
-}) => {
+const UpdateEmail: React.FC<AccountPrivacyProps> = ({ handlePrev }) => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   return (

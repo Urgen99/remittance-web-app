@@ -1,6 +1,6 @@
 import { TransactionIcons } from "@/components/icons/Icons";
 import IconTextContainer from "@/components/shared/IconTextContainer";
-import { maskAccountNumber } from "@/lib/utils";
+import { maskAccountNumber } from "@/utils/maskAccountNumber";
 import moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";

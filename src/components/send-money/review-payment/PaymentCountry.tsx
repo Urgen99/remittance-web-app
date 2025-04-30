@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { currencyFormatter } from "@/lib/utils";
+import { formatDecimal } from "@/utils/formatDecimals";
 import React from "react";
 
 interface TransactionDetails {
@@ -68,7 +68,7 @@ const CountryDetails: React.FC<CountryDetailsProps> = ({
   code,
   end = false,
 }) => {
-  const formattedAmount = currencyFormatter(amount);
+  const formattedAmount = formatDecimal(amount);
   console.log(formattedAmount);
 
   return (

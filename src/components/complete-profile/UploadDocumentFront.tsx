@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { setFormData } from "@/features/complete-profile/slice";
 import { RootState } from "@/features/store";
 import {
@@ -5,6 +6,7 @@ import {
   DocumentFrontSchemaType,
 } from "@/lib/schemas/user/completeProfile";
 import { FormDescription } from "@/lib/type";
+import { readFileAsBase64 } from "@/utils/readFile";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
@@ -51,7 +53,7 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
     mode: "all",
     resolver: zodResolver(DocumentFrontSchema),
     defaultValues: {
-      front: documentFront,
+      documentFront: documentFront,
     },
   });
 
@@ -64,9 +66,9 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
 
   useEffect(() => {
     if (files?.length) {
-      methods.setValue("front", files[0]);
+      methods.setValue("documentFront", files[0]);
     } else {
-      methods.setValue("front", undefined as unknown as File);
+      methods.setValue("documentFront", undefined as unknown as File);
     }
   }, [files, methods]);
 
@@ -76,9 +78,20 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
     }
   }, [documentType, handlePrev]);
 
-  function onSubmit(values: DocumentFrontSchemaType) {
-    dispatch(setFormData({ documentFront: values.front }));
-    handleNext();
+  async function onSubmit(values: DocumentFrontSchemaType) {
+    try {
+      const base64 = await readFileAsBase64(values.documentFront);
+      const documentFront = {
+        name: values.documentFront.name,
+        type: values.documentFront.type,
+        base64,
+      };
+
+      dispatch(setFormData({ documentFront } as any));
+      handleNext();
+    } catch (e) {
+      console.error("Error while reading file. Please try again.", e);
+    }
   }
 
   return (
@@ -113,7 +126,7 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
             <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
               <FormField
                 control={methods.control}
-                name="front"
+                name="documentFront"
                 render={() => {
                   return (
                     <FormItem>

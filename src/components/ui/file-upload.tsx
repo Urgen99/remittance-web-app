@@ -1,5 +1,7 @@
+import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { Trash2 as RemoveIcon } from "lucide-react";
 import {
   Dispatch,
   SetStateAction,
@@ -12,14 +14,12 @@ import {
   useState,
 } from "react";
 import {
-  useDropzone,
+  DropzoneOptions,
   DropzoneState,
   FileRejection,
-  DropzoneOptions,
+  useDropzone,
 } from "react-dropzone";
 import { toast } from "sonner";
-import { Trash2 as RemoveIcon } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
 import { FormIcons } from "../icons/Icons";
 
 type DirectionOptions = "rtl" | "ltr" | undefined;
@@ -52,10 +52,6 @@ type FileUploaderProps = {
   dropzoneOptions: DropzoneOptions;
   orientation?: "horizontal" | "vertical";
 };
-
-/**
- * File upload Docs: {@link: https://localhost:3000/docs/file-upload}
- */
 
 export const FileUploader = forwardRef<
   HTMLDivElement,

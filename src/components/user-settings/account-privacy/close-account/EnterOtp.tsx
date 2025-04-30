@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DialogSettingsIcons } from "@/components/icons/Icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -56,7 +57,7 @@ const EnterOtp: React.FC<AccountPrivacyProps> = ({
         <div className="flex items-start gap-3">
           <Checkbox
             id="terms1"
-            onCheckedChange={(e) => setCheck(e)}
+            onCheckedChange={(e: any) => setCheck(e)}
             value={check.toString()}
             className="size-[22px] mt-1.5 border border-black  data-[state=checked]:bg-[#3333c1]"
           />

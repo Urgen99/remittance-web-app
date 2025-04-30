@@ -49,7 +49,7 @@ const SavedPayments = ({
     setSelectedMethod(user);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleNext();
   };

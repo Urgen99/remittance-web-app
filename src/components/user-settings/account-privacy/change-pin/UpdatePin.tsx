@@ -2,10 +2,7 @@ import React from "react";
 import { AccountPrivacyProps } from "../AccountPrivacy";
 import TextContainer from "../TextContainer";
 
-const UpdatePin: React.FC<AccountPrivacyProps> = ({
-  handleNext,
-  handlePrev,
-}) => {
+const UpdatePin: React.FC<AccountPrivacyProps> = ({ handlePrev }) => {
   return (
     <div className="h-full pt-4 pr-7">
       <div className="flex flex-col gap-3">

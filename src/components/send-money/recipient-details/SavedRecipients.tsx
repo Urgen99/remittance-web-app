@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import NavigationButtons from "@/components/complete-profile/NavigationButtons";
 import { SendMoneyForm } from "@/components/icons/Icons";
 import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { FormDescription } from "@/lib/type";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Recipient, RecipientStep } from "../RecipientDetails";
 
 const formDescription: FormDescription = {
@@ -32,7 +33,7 @@ const SavedRecipients = ({
     setSelectedUser(user);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleNext();
   };

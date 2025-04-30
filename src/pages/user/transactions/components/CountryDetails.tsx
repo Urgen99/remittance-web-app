@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { currencyFormatter } from "@/lib/utils";
+import { formatDecimal } from "@/utils/formatDecimals";
 import React from "react";
 
 type CountryDetailsProps = {
@@ -21,7 +21,7 @@ const CountryDetails: React.FC<CountryDetailsProps> = ({
   code,
   end = false,
 }) => {
-  const formattedAmount = currencyFormatter(amount);
+  const formattedAmount = formatDecimal(amount);
 
   return (
     <div className={`flex flex-col gap-4 ${end ? "items-end" : ""}`}>

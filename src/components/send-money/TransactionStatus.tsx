@@ -1,12 +1,12 @@
+import { getStatusColor, getTextColor } from "@/lib/getColors";
 import { FormDescription } from "@/lib/type";
+import { maskAccountNumber } from "@/utils/maskAccountNumber";
 import moment from "moment";
 import NavigationButtons from "../complete-profile/NavigationButtons";
 import { SendMoneyForm } from "../icons/Icons";
 import FormHeadingDescription from "../shared/FormHeadingDescription";
 import PaymentCountry from "./review-payment/PaymentCountry";
 import PaymentDetailTable from "./review-payment/PaymentDetailTable";
-import { getStatusColor, getTextColor } from "@/lib/getColors";
-import { maskAccountNumber } from "@/lib/utils";
 
 interface TransactionStatusProps {
   handleNext: () => void;

@@ -2,13 +2,14 @@ import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import DashboardLayout from "./components/layouts/DashboardLayout";
 import DefaultLayout from "./components/layouts/DefaultLayout";
 import TailwindIndicator from "./components/shared/TailwindIndicator";
+import { Toaster } from "./components/ui/sonner";
 import useScrollToTop from "./hooks/scrollToTop";
 import CompleteProfile from "./pages/CompleteProfile";
 import CreatePassword from "./pages/CreatePassword";
 import DocumentExpired from "./pages/DocumentExpired";
 import ForgotPassword from "./pages/ForgotPassword";
+import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import SendMoney from "./pages/SendMoney";
 import VerifyOtp from "./pages/VerifyOtp";
@@ -22,6 +23,7 @@ const App = () => {
     <Router>
       <AppContent />
 
+      <Toaster />
       <TailwindIndicator />
     </Router>
   );
@@ -34,8 +36,10 @@ const AppContent = () => {
 
   return (
     <Routes>
+      <Route path="/" element={<TestPaths />} />
+
       <Route element={<DefaultLayout />}>
-        <Route path="/" element={<Register />} />
+        <Route path="/register" element={<Home />} />
         <Route path="/create-password" element={<CreatePassword />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -57,18 +61,14 @@ const AppContent = () => {
         <Route path="/recipients" element={<Recipients />} />
         <Route path="/recipient-details/:id" element={<RecipientDetails />} />
       </Route>
-
-      <Route path="/test" element={<TestPaths />} />
     </Routes>
   );
 };
 
 const TestPaths = () => {
   const paths = [
-    {
-      title: "Register",
-      to: "/",
-    },
+    { title: "Home", to: "/" },
+    { title: "Register", to: "/register" },
     { title: "Login", to: "/login" },
     { title: "Create Password", to: "/create-password" },
     { title: "Forgot Password", to: "/forgot-password" },
@@ -85,10 +85,37 @@ const TestPaths = () => {
   ];
 
   return (
-    <main className="h-[50vh] flex border border-red-500 items-center">
+    <main className="w-full flex flex-col gap-8 items-center">
+      <div className="space-y-8 mx-auto p-6">
+        <h1 className="text-4xl font-bold text-red-600 mb-4">
+          🚧 Under Construction - Development Preview 🚧
+        </h1>
+
+        <p className="text-lg text-gray-700 mb-4">
+          Welcome to our early development preview! This is a{" "}
+          <strong>test environment only</strong>
+          and not a live application. Please note:
+        </p>
+
+        <div className="bg-yellow-100 p-4 rounded-lg border border-yellow-400">
+          <p className="text-red-600 font-semibold">
+            ⚠️ DO NOT submit any real personal information ⚠️
+          </p>
+          <p className="mt-2 text-gray-600">
+            All data in this system will be periodically wiped and is not
+            secure. This preview is meant for layout testing and user flow
+            validation only.
+          </p>
+        </div>
+
+        <p className="text-blue-700 font-medium">
+          Explore our current page prototypes below ↓
+        </p>
+      </div>
+
       <div className="w-full flex flex-wrap gap-4 justify-center items-center h-fit">
         {paths.map(({ title, to }) => (
-          <Link to={to} className="bg-black text-white px-4 py-3">
+          <Link key={to} to={to} className="bg-black text-white px-4 py-3">
             {title}
           </Link>
         ))}

@@ -31,7 +31,7 @@ const TextInput = ({
       render={({ field }) => (
         <FormItem className="flex-1">
           <FormLabel
-            className={`font-inter font-[475] text-sm tracking-[-0.05px] ${
+            className={`font-inter font-[475] text-xs sm:text-sm tracking-[-0.05px] ${
               !isImportant ? "flex justify-between" : ""
             }`}
           >
@@ -42,16 +42,16 @@ const TextInput = ({
               {isImportant ? "*" : "Optional"}
             </span>
           </FormLabel>
-          <div className="flex flex-col gap-2 min-h-20">
+          <div className="flex flex-col gap-1 sm:gap-2 min-h-16 sm:min-h-20">
             <FormControl>
               <Input
                 type={type || "text"}
                 placeholder={placeholder}
-                className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12"
+                className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-10 sm:h-12"
                 {...field}
               />
             </FormControl>
-            <FormMessage />
+            <FormMessage className="text-xs sm:text-sm" />
           </div>
         </FormItem>
       )}

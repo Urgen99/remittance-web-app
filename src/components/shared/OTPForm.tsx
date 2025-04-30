@@ -5,7 +5,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { OTPSchema } from "@/lib/formSchema";
+import { OTPSchema } from "@/lib/schemas/user/verifyOtp";
 import { Control } from "react-hook-form";
 import { z } from "zod";
 

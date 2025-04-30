@@ -1,12 +1,12 @@
 import { FormDescription } from "@/lib/type";
+import { maskAccountNumber } from "@/utils/maskAccountNumber";
+import moment from "moment";
 import NavigationButtons from "../complete-profile/NavigationButtons";
-import FormHeadingDescription from "../shared/FormHeadingDescription";
 import { SendMoneyForm } from "../icons/Icons";
+import FormHeadingDescription from "../shared/FormHeadingDescription";
 import PaymentCountry from "./review-payment/PaymentCountry";
 import PaymentDetailTable from "./review-payment/PaymentDetailTable";
-import moment from "moment";
 import RecipientContainer from "./review-payment/RecipientContainer";
-import { maskAccountNumber } from "@/lib/utils";
 
 interface ReviewPaymentProps {
   handleNext: () => void;

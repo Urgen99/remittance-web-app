@@ -51,7 +51,7 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
     mode: "all",
     resolver: zodResolver(DocumentSelectSchema),
     defaultValues: {
-      type: "passport",
+      documentType: "passport",
     },
   });
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
   };
 
   const onSubmit = (data: DocumentSelectSchemaType) => {
-    dispatch(setFormData({ documentType: data.type }));
+    dispatch(setFormData({ documentType: data.documentType }));
     handleNext();
   };
 
@@ -80,7 +80,7 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
             className="max-w-[50rem] w-full flex flex-col items-center gap-5"
           >
             <FormField
-              name="type"
+              name="documentType"
               render={({ field: { value, onChange } }) => {
                 return (
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
