@@ -1,4 +1,8 @@
-export const BASE_URL = import.meta.env.VITE_SERVER;
+const BASE_URL = import.meta.env.VITE_SERVER;
+const SESSION = {
+  key: import.meta.env.VITE_SESSION_KEY,
+  age: import.meta.env.VITE_MAX_SESSION_AGE,
+};
 
 export const user = {
   name: "Amanda Smith",
@@ -299,3 +303,4 @@ export type Terms = {
   }[];
   conclusion?: string;
 };
+export { BASE_URL, SESSION };
