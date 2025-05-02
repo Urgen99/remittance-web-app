@@ -11,7 +11,7 @@ import { RootState } from "../store";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
-  credentials: "include",
+  // credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState)?.auth?.token;
 
@@ -33,16 +33,29 @@ const baseQueryWithReAuth: BaseQueryFn<
 
   if (result?.error?.status === 403) {
     console.log("sending refresh token"); // remove later
+    const refreshToken = (store.getState() as RootState).auth.refreshToken;
+
+    if (!refreshToken) {
+      store.dispatch(logOut());
+      return result;
+    }
 
     // send the refresh token to get new accessToken
-    const refreshResult = await baseQuery("/user/refresh", store, extraOptions);
+    const refreshResult = await baseQuery(
+      {
+        url: `/User/RefreshToken?refreshToken=${refreshToken}`,
+        method: "POST",
+      },
+      store,
+      extraOptions
+    );
     console.log("Refresh the result", refreshResult); // remove later
 
     if (refreshResult?.data) {
       const user = (store.getState() as RootState).auth.user;
 
       // store the new token
-      store.dispatch(setCredentials({ ...refreshResult.data, user }));
+      store.dispatch(setCredentials({ ...(refreshResult.data as any), user }));
 
       // retry the original query with new accessToken
       result = await baseQuery(args, store, extraOptions);

@@ -31,7 +31,7 @@ const Home = () => {
   return (
     <main className="mt-7">
       <section className="flex items-center justify-center">
-        <div className="px-3 sm:px-4 sm:max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
+        <div className="px-3 sm:px-4 w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
 
@@ -65,8 +65,8 @@ const Home = () => {
               <div className="p-3 bg-[#EBEBF9] text-[13px] rounded-[8px] flex flex-col gap-4">
                 <p className="flex gap-[5px] items-center text-sm sm:text-base">
                   <FormIcons.InfoFilled />
-                  If you have an account , you will be prompted to login in the
-                  next step
+                  If you have an account, you will be prompted to login in the
+                  next step.
                 </p>
               </div>
             </div>

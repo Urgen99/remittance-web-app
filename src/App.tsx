@@ -1,8 +1,14 @@
+import { useSelector } from "react-redux";
 import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import DashboardLayout from "./components/layouts/DashboardLayout";
 import DefaultLayout from "./components/layouts/DefaultLayout";
+import ProtectedRoute from "./components/protected-route/ProtectedRoute";
 import TailwindIndicator from "./components/shared/TailwindIndicator";
 import { Toaster } from "./components/ui/sonner";
+import {
+  selectCurrentToken,
+  selectCurrentUser,
+} from "./features/auth/auth.slice";
 import useScrollToTop from "./hooks/scrollToTop";
 import CompleteProfile from "./pages/CompleteProfile";
 import CreatePassword from "./pages/CreatePassword";
@@ -60,6 +66,10 @@ const AppContent = () => {
         />
         <Route path="/recipients" element={<Recipients />} />
         <Route path="/recipient-details/:id" element={<RecipientDetails />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/test-protected" element={<TestRoute />} />
+        </Route>
       </Route>
     </Routes>
   );
@@ -121,5 +131,26 @@ const TestPaths = () => {
         ))}
       </div>
     </main>
+  );
+};
+
+const TestRoute = () => {
+  const token = useSelector(selectCurrentToken);
+  const user = useSelector(selectCurrentUser);
+
+  return (
+    <div className="min-h-screen flex flex-col gap-6">
+      <h1 className="text-2xl">Protected Route</h1>
+
+      <div className="max-w-96 w-full p-6 border border-gray-300 shadow-sm rounded-lg flex flex-col gap-4">
+        <p>
+          <span className="font-semibold">User: </span> {JSON.stringify(user)}
+        </p>
+        <p>
+          <span className="font-semibold">Token:</span>
+          {token?.slice(0, 20)}...
+        </p>
+      </div>
+    </div>
   );
 };

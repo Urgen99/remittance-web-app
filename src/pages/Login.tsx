@@ -33,7 +33,10 @@ const Login = () => {
 
   async function onSubmit(data: PasswordSchemaType) {
     try {
-      const response = await login({ email, password: data.password });
+      const response = await login({
+        username: email,
+        password: data.password,
+      });
 
       console.log(JSON.stringify(response));
       toast.success("Successfully Logged in", {
