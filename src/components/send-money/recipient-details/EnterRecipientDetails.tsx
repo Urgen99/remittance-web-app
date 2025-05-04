@@ -5,11 +5,14 @@ import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import CheckBox from "@/components/ui/forms/CheckBox";
 import DropDownSelect from "@/components/ui/forms/DropDownSelect";
 import TextInput from "@/components/ui/forms/TextInput";
+import {
+  ReceiverDetailsSchema,
+  ReceiverDetailsSchemaType,
+} from "@/lib/schemas/send-money/amountDetails";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
-import { z } from "zod";
 
 interface RecipientDetailsProps {
   handleNext: () => void;
@@ -22,18 +25,18 @@ const formDescription: FormDescription = {
     "Enter the receiver details in the form below , make sure they are correct",
 };
 
-const ReceiverDetailsSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  middleName: z.optional(z.string()),
-  lastName: z.string().min(1, "Last name is required"),
-  addressLine: z.string().min(1, "Address line is required"),
-  bankName: z.string().min(1, "Please select a bank"),
-  accountNumber: z.string().min(1, "Account number is required"),
-  phoneNumber: z.string().min(1, "Phone number is required"),
-  isSaved: z.optional(z.boolean()),
-});
+// const ReceiverDetailsSchema = z.object({
+//   firstName: z.string().min(1, "First name is required"),
+//   middleName: z.optional(z.string()),
+//   lastName: z.string().min(1, "Last name is required"),
+//   addressLine: z.string().min(1, "Address line is required"),
+//   bankName: z.string().min(1, "Please select a bank"),
+//   accountNumber: z.string().min(1, "Account number is required"),
+//   phoneNumber: z.string().min(1, "Phone number is required"),
+//   isSaved: z.optional(z.boolean()),
+// });
 
-export type ReceiverDetailsSchema = z.infer<typeof ReceiverDetailsSchema>;
+// export type ReceiverDetailsSchema = z.infer<typeof ReceiverDetailsSchema>;
 
 const banks = [
   { label: "Nepal Bank Limited", value: "nepal-bank-limited" },
@@ -45,22 +48,22 @@ const EnterRecipientDetails = ({
   handleNext,
   handlePrev,
 }: RecipientDetailsProps) => {
-  const form = useForm<ReceiverDetailsSchema>({
+  const form = useForm<ReceiverDetailsSchemaType>({
     mode: "all",
     resolver: zodResolver(ReceiverDetailsSchema),
     defaultValues: {
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      accountNumber: "",
-      bankName: "",
-      phoneNumber: "",
-      addressLine: "",
-      isSaved: false,
+      BankName: "",
+      AccountNumber: "",
+      FirstName: "",
+      MiddleName: "",
+      LastName: "",
+      PhoneNumber: "",
+      AddressLine: "",
+      SaveReceiverInfo: false,
     },
   });
 
-  function onSubmit(data: ReceiverDetailsSchema) {
+  function onSubmit(data: ReceiverDetailsSchemaType) {
     alert(data);
     handleNext();
   }
@@ -84,17 +87,17 @@ const EnterRecipientDetails = ({
                 <div className="w-full flex items-center gap-3">
                   <div className="flex-1">
                     <DropDownSelect
-                      name="bankName"
+                      name="BankName"
                       label="Select a bank"
                       control={form.control}
                       isImportant
-                      defaultValue={form.getValues("bankName")}
+                      defaultValue={form.getValues("BankName")}
                       items={banks}
                       placeholder="Select a bank"
                     />
                   </div>
                   <TextInput
-                    name="accountNumber"
+                    name="AccountNumber"
                     label="Account number"
                     isImportant
                     placeholder="Eg:2025-12-11"
@@ -104,14 +107,14 @@ const EnterRecipientDetails = ({
 
                 <div className="w-full flex items-center gap-3">
                   <TextInput
-                    name="firstName"
+                    name="FirstName"
                     label="First Name"
                     isImportant
                     placeholder="Enter your first name"
                     control={form.control}
                   />
                   <TextInput
-                    name="middleName"
+                    name="MiddleName"
                     label="Middle Name"
                     isImportant={false}
                     placeholder="Enter your middle name"
@@ -119,7 +122,7 @@ const EnterRecipientDetails = ({
                   />
 
                   <TextInput
-                    name="lastName"
+                    name="LastName"
                     label="Last Name"
                     isImportant
                     placeholder="Enter your last name"
@@ -134,7 +137,7 @@ const EnterRecipientDetails = ({
 
               <div className="w-full flex items-center gap-3">
                 <TextInput
-                  name="phoneNumber"
+                  name="PhoneNumber"
                   label="Phone Number"
                   isImportant={false}
                   placeholder="Eg:12345"
@@ -142,7 +145,7 @@ const EnterRecipientDetails = ({
                 />
 
                 <TextInput
-                  name="addressLine"
+                  name="AddressLine"
                   label="Address Line"
                   isImportant
                   placeholder="Eg:12345"
@@ -153,7 +156,7 @@ const EnterRecipientDetails = ({
 
             <div>
               <CheckBox
-                name="isSaved"
+                name="SaveReceiverInfo"
                 label="Save this info for easier transfer"
                 isImportant={false}
                 control={form.control}

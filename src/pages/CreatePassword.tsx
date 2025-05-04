@@ -3,6 +3,8 @@ import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
+import { useRegisterMutation } from "@/features/auth/authApi.slice";
+import { selectCurrentEmail } from "@/features/users/users.slice";
 import {
   CreatePasswordSchema,
   CreatePasswordSchemaType,
@@ -10,8 +12,12 @@ import {
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const CreatePassword = () => {
+  const email = useSelector(selectCurrentEmail);
   const form = useForm<CreatePasswordSchemaType>({
     resolver: zodResolver(CreatePasswordSchema),
     mode: "all",
@@ -20,17 +26,30 @@ const CreatePassword = () => {
       confirmPassword: "",
     },
   });
-  function onSubmit(data: CreatePasswordSchemaType) {
-    console.log("form is submitted", data);
 
-    alert({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  const [register, { isLoading }] = useRegisterMutation();
+  const navigate = useNavigate();
+  async function onSubmit(data: CreatePasswordSchemaType) {
+    try {
+      const tempData = {
+        username: email,
+        emailAddress: email,
+        mobileNumber: "9876543210",
+        password: data.newPassword,
+        userType: 0,
+      };
+
+      const response = await register(tempData).unwrap();
+
+      if (response?.message) {
+        toast.success("User Created", {
+          description: `${response?.message}`,
+        });
+        navigate("/register");
+      }
+    } catch (e) {
+      console.error("Error: ", e);
+    }
   }
 
   return (
@@ -80,7 +99,10 @@ const CreatePassword = () => {
               {formDescription.info && (
                 <div className="p-3 bg-[#EBEBF9] text-[13px] rounded-[8px] flex flex-col gap-4">
                   {formDescription.info.map((item: string) => (
-                    <p key={item} className="flex gap-[5px] items-center">
+                    <p
+                      key={Math.random()}
+                      className="flex gap-[5px] items-center"
+                    >
                       <FormIcons.InfoFilled />
                       {item}
                     </p>

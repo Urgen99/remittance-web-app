@@ -3,11 +3,16 @@ import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/api.slice";
 import authReducer from "./auth/auth.slice";
 import userFormReducer from "./complete-profile/slice";
+import sendMoneyReducer from "./send-money/sendMoney.slice";
+import usersReducer from "./users/users.slice";
+
 export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
     userForm: userFormReducer,
+    sendMoney: sendMoneyReducer,
+    users: usersReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(

@@ -1,6 +1,6 @@
+import { clearAuthState, loadAuthState } from "@/lib/storage";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { clearAuthState, loadAuthState } from "@/lib/storage";
 interface AuthPayload {
   userName: string;
   token: string;
@@ -14,10 +14,6 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setEmail: (state, action: PayloadAction<string>) => {
-      state.email = action.payload;
-    },
-
     setCredentials: (state, action: PayloadAction<AuthPayload>) => {
       const { userName, token, refreshToken, expiration } = action.payload;
       state.user = userName;
@@ -37,12 +33,12 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logOut, setEmail } = authSlice.actions;
+export const { setCredentials, logOut } = authSlice.actions;
 
 const selectCurrentUser = (state: RootState) => state.auth.user;
 const selectCurrentToken = (state: RootState) => state.auth.token;
-const selectCurrentEmail = (state: RootState) => state.auth.email;
+const selectCurrentRefreshToken = (state: RootState) => state.auth.refreshToken;
 
-export { selectCurrentEmail, selectCurrentToken, selectCurrentUser };
+export { selectCurrentRefreshToken, selectCurrentToken, selectCurrentUser };
 
 export default authSlice.reducer;
