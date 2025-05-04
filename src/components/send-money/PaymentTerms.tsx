@@ -1,8 +1,11 @@
 import { terms, Terms } from "@/lib/constant";
+import {
+  TermsSchema,
+  TermsSchemaType,
+} from "@/lib/schemas/send-money/amountDetails";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
-import { z } from "zod";
 import NavigationButtons from "../complete-profile/NavigationButtons";
 import { SendMoneyForm } from "../icons/Icons";
 import FormHeadingDescription from "../shared/FormHeadingDescription";
@@ -19,21 +22,16 @@ const formDescription: FormDescription = {
     "Please carefully read terms and condition and accept after reading",
 };
 
-const TermsConditionsSchema = z.object({
-  terms: z.optional(z.boolean()), // add required later
-});
-export type TermsConditionsSchema = z.infer<typeof TermsConditionsSchema>;
-
 const PaymentTerms = ({ handleNext, handlePrev }: PaymentTermsProps) => {
-  const form = useForm<TermsConditionsSchema>({
+  const form = useForm<TermsSchemaType>({
     mode: "all",
-    resolver: zodResolver(TermsConditionsSchema),
+    resolver: zodResolver(TermsSchema),
     defaultValues: {
-      terms: false,
+      TermsAccepted: false,
     },
   });
 
-  function onSubmit(data: TermsConditionsSchema) {
+  function onSubmit(data: TermsSchemaType) {
     alert(data);
     handleNext();
   }

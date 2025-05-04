@@ -3,7 +3,8 @@ import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
-import { setEmail } from "@/features/auth/auth.slice";
+import { useLazyGetUserByEmailQuery } from "@/features/users/userApi.slice";
+import { setUserEmail } from "@/features/users/users.slice";
 import { EmailSchema, EmailSchemaType } from "@/lib/schemas/user/email";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,9 +24,19 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function onSubmit(data: EmailSchemaType) {
-    dispatch(setEmail(data.email));
-    navigate("/login");
+  const [getUserByEmail, { isLoading }] = useLazyGetUserByEmailQuery();
+  async function onSubmit(data: EmailSchemaType) {
+    try {
+      const response = await getUserByEmail(data.email).unwrap();
+      dispatch(setUserEmail(response?.data?.email));
+      navigate("/login");
+    } catch (e: any) {
+      console.error("Error: ", e?.data?.message);
+      if (e?.status === 404 && e?.data?.message === "Record not found.") {
+        dispatch(setUserEmail(data.email));
+        navigate("/create-password");
+      }
+    }
   }
 
   return (

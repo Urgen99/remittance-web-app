@@ -39,7 +39,7 @@ const CountryAmountSelect = ({
         {isSender ? (
           <FormField
             control={control}
-            name="amount"
+            name="SendingAmount"
             render={({ field }) => (
               <Input
                 className="px-0 outline-0 ring-0 border-0 font-general-sans font-medium text-[#000000]"

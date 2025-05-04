@@ -24,6 +24,7 @@ import RecipientDetails from "./pages/user/recipients/RecipientDetails";
 import Recipients from "./pages/user/recipients/Recipients";
 import TransactionDetails from "./pages/user/transactions/TransactionDetails";
 import TransactionHistory from "./pages/user/transactions/TransactionHistory";
+import { useFetchReferencesQuery } from "./features/auth/authApi.slice";
 const App = () => {
   return (
     <Router>
@@ -53,22 +54,24 @@ const AppContent = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
         <Route path="/document-expired" element={<DocumentExpired />} />
-        <Route path="/send-money" element={<SendMoney />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/send-money" element={<SendMoney />} />
+        </Route>
       </Route>
 
       {/* ---------- PROTECTED ROUTES Add (Authentication later) ---------- */}
       <Route element={<DashboardLayout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/transactions" element={<TransactionHistory />} />
-        <Route
-          path="/transaction-details/:id"
-          element={<TransactionDetails />}
-        />
-        <Route path="/recipients" element={<Recipients />} />
-        <Route path="/recipient-details/:id" element={<RecipientDetails />} />
-
         <Route element={<ProtectedRoute />}>
           <Route path="/test-protected" element={<TestRoute />} />
+
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/transactions" element={<TransactionHistory />} />
+          <Route
+            path="/transaction-details/:id"
+            element={<TransactionDetails />}
+          />
+          <Route path="/recipients" element={<Recipients />} />
+          <Route path="/recipient-details/:id" element={<RecipientDetails />} />
         </Route>
       </Route>
     </Routes>
@@ -137,6 +140,7 @@ const TestPaths = () => {
 const TestRoute = () => {
   const token = useSelector(selectCurrentToken);
   const user = useSelector(selectCurrentUser);
+  const { data } = useFetchReferencesQuery(undefined, { skip: !token });
 
   return (
     <div className="min-h-screen flex flex-col gap-6">
@@ -150,6 +154,8 @@ const TestRoute = () => {
           <span className="font-semibold">Token:</span>
           {token?.slice(0, 20)}...
         </p>
+
+        <div>{JSON.stringify(data)}</div>
       </div>
     </div>
   );

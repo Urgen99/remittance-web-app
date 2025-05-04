@@ -3,11 +3,14 @@ import { SendMoneyForm } from "@/components/icons/Icons";
 import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import CheckBox from "@/components/ui/forms/CheckBox";
 import TextInput from "@/components/ui/forms/TextInput";
+import {
+  CardDetailsSchema,
+  CardDetailsSchemaType,
+} from "@/lib/schemas/send-money/amountDetails";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
-import { z } from "zod";
 
 interface PaymentDetailsProps {
   handleNext: () => void;
@@ -21,32 +24,32 @@ const formDescription: FormDescription = {
     "Enter the card details of the from which you will be paying the amount",
 };
 
-const PaymentDetailsSchema = z.object({
-  cardName: z.string().min(1, "Please enter card holder's name"),
-  cardNumber: z.string().min(1, "Please enter card number"),
-  expiryDate: z.string().min(1, "Please enter expiry date"),
-  csv: z.string().min(1, "Please enter csv"),
-  isSaved: z.optional(z.boolean()),
-});
+// const PaymentDetailsSchema = z.object({
+//   cardName: z.string().min(1, "Please enter card holder's name"),
+//   cardNumber: z.string().min(1, "Please enter card number"),
+//   expiryDate: z.string().min(1, "Please enter expiry date"),
+//   csv: z.string().min(1, "Please enter csv"),
+//   isSaved: z.optional(z.boolean()),
+// });
 
-export type PaymentDetailsSchema = z.infer<typeof PaymentDetailsSchema>;
+// export type PaymentDetailsSchema = z.infer<typeof PaymentDetailsSchema>;
 
 const EnterPaymentDetails = ({
   handleNext,
   handlePrev,
 }: PaymentDetailsProps) => {
-  const form = useForm<PaymentDetailsSchema>({
+  const form = useForm<CardDetailsSchemaType>({
     mode: "all",
-    resolver: zodResolver(PaymentDetailsSchema),
+    resolver: zodResolver(CardDetailsSchema),
     defaultValues: {
-      cardName: "",
-      cardNumber: "",
-      expiryDate: "",
-      csv: "",
-      isSaved: false,
+      CardHolderName: "",
+      CardNumber: "",
+      CardExpiry: "",
+      CardCsv: "",
+      SavePaymentInfo: false,
     },
   });
-  function onSubmit(data: PaymentDetailsSchema) {
+  function onSubmit(data: CardDetailsSchemaType) {
     alert(data);
     handleNext();
   }
@@ -66,14 +69,14 @@ const EnterPaymentDetails = ({
           <div className="w-full">
             <div className="w-full flex items-center gap-3">
               <TextInput
-                name="cardName"
+                name="CardHolderName"
                 label="Card holder's name"
                 isImportant
                 placeholder="Enter card holder's name"
                 control={form.control}
               />
               <TextInput
-                name="cardNumber"
+                name="CardNumber"
                 label="Card number"
                 isImportant
                 placeholder="123456789XXXXXX"
@@ -83,14 +86,14 @@ const EnterPaymentDetails = ({
 
             <div className="w-full flex items-center gap-3">
               <TextInput
-                name="expiryDate"
+                name="CardExpiry"
                 label="Expiry date"
                 isImportant
                 placeholder="Eg:2025-12-11"
                 control={form.control}
               />
               <TextInput
-                name="csv"
+                name="CardCsv"
                 label="Csv"
                 isImportant
                 placeholder="123"
@@ -100,7 +103,7 @@ const EnterPaymentDetails = ({
 
             <div>
               <CheckBox
-                name="isSaved"
+                name="SavePaymentInfo"
                 label="Save this info for easier transfer"
                 isImportant={false}
                 control={form.control}

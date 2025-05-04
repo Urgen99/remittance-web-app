@@ -3,6 +3,14 @@ import { apiSlice } from "../api/api.slice";
 export const authApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
+    // register endpoint
+    register: builder.mutation({
+      query: (credentials) => ({
+        url: "/User",
+        method: "POST",
+        body: credentials,
+      }),
+    }),
     // login endpoint
     login: builder.mutation({
       query: (credentials) => ({
@@ -11,7 +19,18 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: credentials,
       }),
     }),
+
+    // refresh token
+    fetchReferences: builder.query({
+      query: () => ({
+        url: "/ReferenceData",
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation } = authApiSlice;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useFetchReferencesQuery,
+} = authApiSlice;

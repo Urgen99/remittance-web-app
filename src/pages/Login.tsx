@@ -3,8 +3,9 @@ import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
-import { selectCurrentEmail, setCredentials } from "@/features/auth/auth.slice";
+import { setCredentials } from "@/features/auth/auth.slice";
 import { useLoginMutation } from "@/features/auth/authApi.slice";
+import { selectCurrentEmail } from "@/features/users/users.slice";
 import {
   PasswordSchema,
   PasswordSchemaType,
@@ -13,12 +14,11 @@ import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Login = () => {
   const email = useSelector(selectCurrentEmail);
-  console.log("Email:", email);
 
   const form = useForm<PasswordSchemaType>({
     mode: "all",
@@ -30,22 +30,27 @@ const Login = () => {
   const [login, { isLoading }] = useLoginMutation();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   async function onSubmit(data: PasswordSchemaType) {
     try {
       const response = await login({
         username: email,
         password: data.password,
-      });
+      }).unwrap();
 
-      console.log(JSON.stringify(response));
-      toast.success("Successfully Logged in", {
-        description: "You are logged in now",
-      });
+      if (response.data) {
+        dispatch(setCredentials({ ...response.data }));
+
+        console.log(JSON.stringify(response));
+        navigate("/test-protected");
+        toast.success("Successfully Logged in", {
+          description: "You are logged in now",
+        });
+      }
     } catch (e: any) {
       if (!e.status) {
         console.log("No server response error: ", e);
-
         toast.error("No Server Response");
       } else if (e.status === 400) {
         toast.error("Invalid Credentials");

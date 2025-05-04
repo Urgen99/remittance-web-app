@@ -78,12 +78,14 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
     mode: "all",
     resolver: zodResolver(AmountDetailSchema),
     defaultValues: {
-      senderCountry: "AUD",
-      receiverCountry: "NPR",
-      amount: "0.00",
-      paymentMethod: "card",
-      deliveryMethod: "pickup",
-      remarks: "",
+      SendingCountry: "Australia",
+      SendingCurrency: "AUD",
+      ReceivingCountry: "Nepal",
+      ReceivingCurrency: "NPR",
+      SendingAmount: "",
+      PaymentType: "card",
+      DeliveryType: "delivery",
+      Remarks: "",
     },
   });
 
@@ -94,8 +96,10 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
   function onSubmit(data: AmountDetailSchemaType) {
     const formData = {
       ...data,
-      senderCountry: senderCountry.code,
-      receiverCountry: receiverCountry.code,
+      SendingCountry: senderCountry.name,
+      SendingCurrency: senderCountry.code,
+      ReceivingCountry: receiverCountry.name,
+      ReceivingCurrency: receiverCountry.code,
     };
 
     console.log(formData);
@@ -141,7 +145,7 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
               <div>
                 <div className="flex items-center gap-3">
                   <DropDownSelect
-                    name="paymentMethod"
+                    name="PaymentType"
                     label="Select payment method"
                     isImportant
                     items={paymentMethods}
@@ -150,7 +154,7 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
                     placeholder="Select payment method"
                   />
                   <DropDownSelect
-                    name="deliveryMethod"
+                    name="DeliveryType"
                     label="Select delivery options"
                     placeholder="Select delivery options"
                     isImportant
@@ -162,7 +166,7 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
                 <div className="-mt-3 w-[49%]">
                   <TextInput
                     control={form.control}
-                    name="remarks"
+                    name="Remarks"
                     label="Enter remarks"
                     isImportant
                     placeholder="Enter remarks"
