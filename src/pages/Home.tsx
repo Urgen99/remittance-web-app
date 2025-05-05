@@ -27,15 +27,16 @@ const Home = () => {
   const [getUserByEmail, { isLoading }] = useLazyGetUserByEmailQuery();
   async function onSubmit(data: EmailSchemaType) {
     try {
-      const response = await getUserByEmail(data.email).unwrap();
-      dispatch(setUserEmail(response?.data?.email));
+      // const response = await getUserByEmail(data.email).unwrap();
+      // dispatch(setUserEmail(response?.data?.email))
+      dispatch(setUserEmail(data.email));
       navigate("/login");
     } catch (e: any) {
       console.error("Error: ", e?.data?.message);
-      if (e?.status === 404 && e?.data?.message === "Record not found.") {
-        dispatch(setUserEmail(data.email));
-        navigate("/create-password");
-      }
+      // if (e?.status === 404 && e?.data?.message === "Record not found.") {
+      //   dispatch(setUserEmail(data.email));
+      //   navigate("/create-password");
+      // }
     }
   }
 
