@@ -23,13 +23,19 @@ const countries = [
     flag: "/images/nepal.svg",
   },
   {
+    name: "India",
+    code: "INR",
+    currency: "Indian Rupee",
+    flag: "/images/australia.svg",
+  },
+  {
     name: "Australia",
     code: "AUD",
     currency: "Australian Dollar",
     flag: "/images/australia.svg",
   },
   {
-    name: "United States of America",
+    name: "United States",
     code: "USD",
     currency: "United States Dollar",
     flag: "/images/australia.svg",

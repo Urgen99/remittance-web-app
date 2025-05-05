@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/api.slice";
 import authReducer from "./auth/auth.slice";
 import userFormReducer from "./complete-profile/slice";
+import exchangeRateReducer from "./exchange-rate/exchange.slice";
 import sendMoneyReducer from "./send-money/sendMoney.slice";
 import usersReducer from "./users/users.slice";
 
@@ -13,6 +14,7 @@ export const store = configureStore({
     userForm: userFormReducer,
     sendMoney: sendMoneyReducer,
     users: usersReducer,
+    exchangeRate: exchangeRateReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(

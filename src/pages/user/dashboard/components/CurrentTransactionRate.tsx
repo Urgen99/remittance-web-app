@@ -1,6 +1,9 @@
 import IconTextContainer from "@/components/shared/IconTextContainer";
 import { Card, CardContent } from "@/components/ui/card";
+import { selectCurrentToken } from "@/features/auth/auth.slice";
+import { useGetExchangeRatesQuery } from "@/features/exchange-rate/exchangeApi.slice";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import DropDownCountries from "./DropDownCountries";
 import ExchangeRate from "./ExchangeRate";
 export interface Country {
@@ -11,22 +14,36 @@ export interface Country {
 }
 
 const defaultSender = {
-  name: "Australia",
-  currency: "Australian Dollar",
-  flag: "/images/australia.svg",
-  code: "AUD",
-};
-
-const defaultReceiver = {
   name: "Nepal",
   currency: "Nepalese Rupee",
   flag: "/images/nepal.svg",
   code: "NPR",
 };
+
+const defaultReceiver = {
+  name: "India",
+  currency: "Indian Rupee",
+  flag: "/images/australia.svg",
+  code: "INR",
+};
 const CurrentTransactionRate = () => {
+  const token = useSelector(selectCurrentToken);
   const [senderCountry, setSenderCountry] = useState<Country>(defaultSender);
   const [receiverCountry, setReceiverCountry] =
     useState<Country>(defaultReceiver);
+
+  const { data, isLoading, isError, error } = useGetExchangeRatesQuery(
+    {
+      SendingCountry: senderCountry.name,
+      SendingCurrency: senderCountry.code,
+      ReceivingCountry: receiverCountry.name,
+      ReceivingCurrency: receiverCountry.code,
+    },
+    { skip: !token && (!senderCountry || !receiverCountry) }
+  );
+  const exchangeRate =
+    data?.data?.map(({ rate }: { rate: number }) => rate) ?? [];
+  const exchangeRateValue = exchangeRate.length > 0 ? exchangeRate[0] : 1;
 
   return (
     <>
@@ -54,7 +71,7 @@ const CurrentTransactionRate = () => {
                 />
                 <ExchangeRate
                   currency={receiverCountry.currency}
-                  amount={1 * 87.5}
+                  amount={1 * exchangeRateValue}
                   code={receiverCountry.code}
                 />
               </div>
