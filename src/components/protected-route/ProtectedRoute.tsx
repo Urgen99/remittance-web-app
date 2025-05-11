@@ -10,7 +10,7 @@ const ProtectedRoute = () => {
 
   useEffect(() => {
     if (!isAuthChecking && !token) {
-      navigate("/", { replace: true });
+      navigate("/register", { replace: true });
     }
   }, [token, isAuthChecking, navigate]);
 

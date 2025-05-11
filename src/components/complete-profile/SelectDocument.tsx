@@ -66,7 +66,7 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
   };
 
   return (
-    <main className="mt-7">
+    <main className="md:mt-7 px-5">
       <section className="flex flex-col gap-6 items-center justify-center">
         <div className="max-w-[40.35rem] w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
@@ -83,38 +83,38 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
               name="documentType"
               render={({ field: { value, onChange } }) => {
                 return (
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                  <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                     {documents.map(
                       ({ Icon, title, subtitle, documentType }) => (
-                        <div
+                        <article
                           key={documentType}
-                          className={`cursor-pointer p-4 bg-[url('/images/upload.png')] lg:max-w-[16rem] w-full h-[10.5rem] bg-no-repeat bg-top rounded-[8px] border border-[#00000008] hover:border-[#3333C1] hover:bg-[#EBEBF9] flex justify-end relative ${
+                          className={`cursor-pointer p-4 bg-[url('/images/upload.png')] md:max-w-[16rem] w-full h-[5.5rem] md:h-[10.5rem] bg-cover md:bg-auto bg-no-repeat bg-top rounded-[8px] border border-[#00000008] hover:border-[#3333C1] hover:bg-[#EBEBF9] flex md:justify-end relative ${
                             value === documentType &&
                             "border-[#3333C1] bg-[#EBEBF9]"
                           }`}
                           onClick={() => onChange(documentType)}
                         >
                           {value === documentType && (
-                            <div className="absolute">
+                            <div className="absolute right-4 md:right-auto">
                               <FormIcons.CheckIcon />
                             </div>
                           )}
 
-                          <div className="h-full flex flex-col justify-between">
+                          <div className="h-[38px] md:h-full flex md:flex-col md:justify-between gap-5 md:gap-0">
                             <div className="w-fit p-2 flex justify-center items-center bg-[#EBEBF9] rounded-full">
                               <Icon />
                             </div>
 
-                            <div className="select-none flex flex-col gap-3">
-                              <h4 className="font-general-sans font-medium text-base leading-[20.8px] tracking-[-1%] text-[#1b1b1b]">
+                            <div className="select-none flex flex-col gap-1.5 md:gap-3">
+                              <h4 className="font-general-sans font-medium text-sm md:text-base leading-[20.8px] tracking-[-1%] text-[#1b1b1b]">
                                 {title}
                               </h4>
-                              <p className="font-roboto text-sm tracking-[-1%] text-[#696969] leading-[18px]">
+                              <p className="font-roboto text-xs md:text-sm tracking-[-1%] text-[#696969] leading-[18px]">
                                 {subtitle}
                               </p>
                             </div>
                           </div>
-                        </div>
+                        </article>
                       )
                     )}
                   </div>

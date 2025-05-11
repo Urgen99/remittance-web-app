@@ -19,12 +19,12 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
   type = "button",
 }) => {
   return (
-    <div className="flex justify-between items-center w-full">
+    <div className="flex flex-col-reverse md:flex-row justify-between items-center w-full gap-4">
       <Button
         type="button"
         onClick={onBackClick}
         variant="outline"
-        className={`${classNames} border-[#5F5F5F] text-[#5F5F5F]`}
+        className={`${classNames} border-[#5F5F5F] text-[#5F5F5F] w-full md:w-auto`}
       >
         <MoveLeft className="text-[#5F5F5F]" />
         Go Back
@@ -34,7 +34,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
         type={type}
         disabled={disabled}
         onClick={onContinueClick}
-        className={`${classNames} w-full max-w-[15.5rem] hover:bg-[#3333c1e0] bg-[#3333C1] disabled:bg-[#696969] text-white`}
+        className={`${classNames} w-full md:max-w-[15.5rem] hover:bg-[#3333c1e0] bg-[#3333C1] disabled:bg-[#696969] text-white`}
       >
         Continue
       </Button>

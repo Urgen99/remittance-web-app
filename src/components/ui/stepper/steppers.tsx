@@ -14,18 +14,44 @@ const Steppers: React.FC<SteppersProps> = ({
   activeStep,
 }) => {
   const stepRef: any = useRef<Array<HTMLDivElement | null>>([]);
-
+  const observerRef = useRef<ResizeObserver | null>(null); // Reference to the ResizeObserver instance>
   const [margins, setMargins] = useState({ left: 0, right: 0 });
 
   useEffect(() => {
-    if (stepRef.current.length > 0 && stepRef.current[0]) {
-      setMargins({
-        left: stepRef.current[0]?.offsetWidth / 2,
-        right: stepRef.current[steps.length - 1]?.offsetWidth / 2,
-      });
-    }
-  }, [steps.length, stepRef]);
+    const updateMargins = () => {
+      const firstStep = stepRef.current[0];
+      const lastStep = stepRef.current[steps.length - 1];
 
+      if (firstStep && lastStep) {
+        const leftMargin = firstStep.offsetWidth / 2;
+        const rightMargin = lastStep.offsetWidth / 2;
+
+        setMargins({ left: leftMargin, right: rightMargin });
+      }
+    };
+
+    //  Initialize ResizeObserver
+    observerRef.current = new ResizeObserver(updateMargins);
+
+    // observe each step element
+    stepRef.current.forEach((stepEl) => {
+      if (stepEl) observerRef.current?.observe(stepEl);
+    });
+
+    // Initial margin calculation
+    updateMargins();
+
+    // cleanup
+    return () => {
+      if (observerRef.current) {
+        stepRef.current.forEach((stepEl) => {
+          if (stepEl) observerRef.current?.unobserve(stepEl);
+        });
+
+        observerRef.current.disconnect();
+      }
+    };
+  }, [steps.length]);
   return (
     <div className="w-full flex justify-between items-center relative">
       <div className="flex justify-between w-full relative">
