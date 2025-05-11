@@ -93,7 +93,7 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
   }
 
   return (
-    <main className="mt-7">
+    <main className="md:mt-7 px-5">
       <section className="flex flex-col gap-6 items-center justify-center">
         <div className="max-w-[40.75rem] w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
@@ -146,7 +146,7 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
 
                               <div className="flex flex-col gap-1 items-center">
                                 <p className="mb-1 text-sm text-[#0A090B] font-[475] font-inter dark:text-gray-400 tracking-[-0.05px]">
-                                  <span className="font-semibold ">
+                                  <span className="font-semibold text-sm md:text-base">
                                     Drag & drop files or
                                   </span>
                                   <span className="text-[#1751D0]">

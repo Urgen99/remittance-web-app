@@ -17,6 +17,7 @@ import TextInput from "../ui/forms/TextInput";
 import DateSelector from "../ui/forms/DateSelector";
 import DropDownSelect from "../ui/forms/DropDownSelect";
 import DatePicker from "../ui/forms/DatePicker";
+import { useCompleteProfileMutation } from "@/features/complete-profile/complete-profile.apiSlice";
 interface PersonalDetailProps {
   handlePrev: () => void;
 }
@@ -64,33 +65,86 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
     },
   });
 
+  const [completeProfile, { isLoading }] = useCompleteProfileMutation();
+
   useEffect(() => {
     if (!documentBack) {
       handlePrev();
     }
   }, [documentBack, handlePrev]);
 
-  function onSubmit(data: PersonalDetailSchemaType) {
-    const formData = {
-      firstName: data.firstName,
-      middleName: data.middleName,
-      lastName: data.lastName,
-      birthDate: data.birthDate,
-      documentType: data.documentType,
-      documentNumber: data.documentNumber,
-      documentExpiry: data.documentExpiry,
-      documentFront,
-      documentBack,
-      city: data.city,
-      addressLine: data.addressLine,
-    };
-    dispatch(setFormData(formData));
+  async function onSubmit(data: PersonalDetailSchemaType) {
+    try {
+      const formData = {
+        firstName: data.firstName,
+        middleName: data.middleName,
+        lastName: data.lastName,
+        birthDate: data.birthDate,
+        documentType: data.documentType,
+        documentNumber: data.documentNumber,
+        documentExpiry: data.documentExpiry,
+        documentFront,
+        documentBack,
+        city: data.city,
+        addressLine: data.addressLine,
+      };
+      dispatch(setFormData(formData));
+
+      const dataForm = {
+        firstName: data.firstName,
+        middleName: data.middleName,
+        lastName: data.lastName,
+        dateOfBirth: data.birthDate,
+        mobileNumber: "9876543210",
+        permanentAddress: {
+          countryId: 0,
+          postCode: "12345",
+          unit: "test",
+          street: data.addressLine,
+          city: data.city,
+          state: "test state",
+          address: data.addressLine,
+        },
+        temporaryAddress: {
+          countryId: 0,
+          postCode: "12345",
+          unit: "test",
+          street: data.addressLine,
+          city: data.city,
+          state: "test state",
+          address: data.addressLine,
+        },
+        identityTypeId: 0,
+        identityNo: data.documentNumber,
+        identityIssuedDate: data.birthDate,
+        identityIssuedBy: data.firstName,
+        identityExpiryDate: data.documentExpiry,
+        identityIssuedCountryId: 0,
+        birthCountryId: 0,
+        documents: [
+          {
+            documentTypeId: 0,
+            documentUpload: JSON.stringify(documentFront),
+          },
+          {
+            documentTypeId: 0,
+            documentUpload: JSON.stringify(documentBack),
+          },
+        ],
+      };
+      console.log(JSON.stringify(dataForm));
+      const res = await completeProfile(JSON.stringify(dataForm)).unwrap();
+
+      console.log("This is the response:", res);
+    } catch (e) {
+      console.error("Error: ", e);
+    }
   }
 
   return (
-    <main className="mt-7">
+    <main className="md:mt-7 px-5">
       <section className="flex  items-center justify-center">
-        <div className="max-w-[50rem] w-full flex flex-col gap-14 items-center">
+        <div className="md:max-w-[50rem] w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
 
@@ -100,7 +154,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
               className="w-full flex flex-col items-center"
               onSubmit={form.handleSubmit(onSubmit)}
             >
-              <div className="w-full flex items-center gap-3">
+              <div className="w-full flex flex-col md:flex-row md:items-center gap-3">
                 <TextInput
                   name="firstName"
                   label="First Name"
@@ -125,7 +179,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 />
               </div>
 
-              <div className="w-full flex items-center gap-3">
+              <div className="w-full flex flex-col md:flex-row md:items-center gap-3">
                 <DateSelector
                   name="birthDate"
                   label="Select your birth date"
@@ -146,7 +200,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 </div>
               </div>
 
-              <div className="w-full flex items-center gap-3">
+              <div className="w-full flex flex-col md:flex-row md:items-center gap-3">
                 <TextInput
                   name="documentNumber"
                   label="Document Number"
@@ -163,7 +217,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 />
               </div>
 
-              <div className="w-full flex items-center gap-3">
+              <div className="w-full flex flex-col md:flex-row md:items-center gap-3">
                 <TextInput
                   name="city"
                   label="Enter your city Name"
@@ -187,7 +241,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 disabled={!form.formState.isValid}
               />
             </form>
-            <DevTool control={form.control} />
+            {/* <DevTool control={form.control} /> */}
           </FormProvider>
         </div>
       </section>
