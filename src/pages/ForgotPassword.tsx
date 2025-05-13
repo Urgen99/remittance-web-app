@@ -31,8 +31,8 @@ const ForgotPassword = () => {
   }
 
   return (
-    <main className="mt-7">
-      <section className="flex items-center justify-center">
+    <section className="mt-7 px-5">
+      <div className="flex items-center justify-center">
         <div className="max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
@@ -71,8 +71,8 @@ const ForgotPassword = () => {
             </Link>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 };
 

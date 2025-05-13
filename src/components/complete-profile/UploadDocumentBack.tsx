@@ -93,8 +93,8 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
   }
 
   return (
-    <main className="md:mt-7 px-5">
-      <section className="flex flex-col gap-6 items-center justify-center">
+    <section className="md:mt-7 px-5">
+      <div className="flex flex-col gap-6 items-center justify-center">
         <div className="max-w-[40.75rem] w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
@@ -187,8 +187,8 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
             <DevTool control={methods.control} />
           </div>
         </FormProvider>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 };
 

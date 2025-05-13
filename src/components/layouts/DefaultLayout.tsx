@@ -4,9 +4,9 @@ import Header from "../shared/Header/Header";
 
 const DefaultLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col gap-7">
       <Header />
-      <main className="flex-grow flex items-center justify-center">
+      <main className="flex-grow flex md:items-center justify-center">
         <Outlet />
       </main>
       <Footer />

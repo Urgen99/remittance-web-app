@@ -7,7 +7,9 @@ const FormHeadingDescription = ({
 }) => {
   return (
     <div className="flex flex-col gap-4 sm:gap-6 items-center">
-      <div className="border border-[#E2E2FF] bg-gradient-to-br from-[#FFFF] to-[#E2E2FF] size-10 sm:size-[3.37rem] rounded-[12px] shadow-sm shadow-[#07073A0D] flex items-center justify-center">
+      <div
+        className={`border border-[#E2E2FF] bg-gradient-to-br from-[#FFFF] to-[#E2E2FF] size-10 sm:size-[3.37rem] rounded-[12px] shadow-sm shadow-[#07073A0D] flex items-center justify-center ${formDescription.iconContainerClassName}`}
+      >
         <formDescription.Icon />
       </div>
       <div className="flex flex-col gap-2 sm:gap-3">
