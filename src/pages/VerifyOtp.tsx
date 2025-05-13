@@ -33,9 +33,9 @@ const VerifyOtp = () => {
   }
 
   return (
-    <section className="mt-7">
-      <div className="flex  items-center justify-center">
-        <div className="max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
+    <section className="mt-7 px-5">
+      <div className="flex items-center justify-center">
+        <div className="sm:max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
 
@@ -43,7 +43,7 @@ const VerifyOtp = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full flex flex-col gap-[18px]"
+              className="sm:w-full flex flex-col items-center gap-[18px]"
             >
               <FormField
                 control={form.control}
@@ -67,7 +67,7 @@ const VerifyOtp = () => {
                 )}
               />
               <Button
-                className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full"
+                className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] max-w-[29rem] w-full h-11 text-white"
                 type="submit"
               >
                 Submit

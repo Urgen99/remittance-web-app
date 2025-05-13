@@ -21,4 +21,5 @@ export type FormDescription = {
     to: string;
   };
   info?: string[];
+  iconContainerClassName?: string;
 };

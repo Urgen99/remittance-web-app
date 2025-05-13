@@ -1,5 +1,5 @@
 import { Steps } from "@/lib/interface";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Progress } from "../progress";
 
 interface SteppersProps {
@@ -8,13 +8,9 @@ interface SteppersProps {
   activeStep: number;
 }
 
-const Steppers: React.FC<SteppersProps> = ({
-  progressValue,
-  steps,
-  activeStep,
-}) => {
-  const stepRef: any = useRef<Array<HTMLDivElement | null>>([]);
-  const observerRef = useRef<ResizeObserver | null>(null); // Reference to the ResizeObserver instance>
+const Steppers = ({ progressValue, steps, activeStep }: SteppersProps) => {
+  const stepRef = useRef<Array<HTMLDivElement | null>>([]);
+  const observerRef = useRef<ResizeObserver | null>(null);
   const [margins, setMargins] = useState({ left: 0, right: 0 });
 
   useEffect(() => {
@@ -67,7 +63,7 @@ const Steppers: React.FC<SteppersProps> = ({
               <Icon fill={activeStep >= step ? "#3333C1" : "#696969"} />
             </div>
             <h6
-              className={`font-roboto ${
+              className={`text-sm lg:text-base font-roboto ${
                 activeStep >= step ? "text-[#3333C1]" : "text-[#696969]"
               }`}
             >

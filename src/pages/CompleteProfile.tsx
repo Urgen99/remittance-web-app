@@ -54,7 +54,7 @@ const CompleteProfile = () => {
 
   return (
     <section className="flex flex-col justify-between items-center ">
-      <div className="fixed top-2 z-10 flex flex-col justify-center items-center w-full max-w-xl">
+      <div className="md:fixed top-3.5 md:z-10 hidden md:flex flex-col justify-center items-center w-full max-w-md lg:max-w-xl">
         <Steppers
           progressValue={progressValue}
           steps={steps as Steps[]}

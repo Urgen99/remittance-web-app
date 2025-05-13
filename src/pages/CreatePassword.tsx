@@ -53,14 +53,14 @@ const CreatePassword = () => {
   }
 
   return (
-    <main className="mt-7">
-      <section className="flex items-center justify-center">
+    <section className="mt-7 px-5">
+      <div className="flex items-center justify-center">
         <div className="max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
 
           {/* ---------- FORM CONTAINER ---------- */}
-          <div className="space-y-[18px] w-full">
+          <div className="flex flex-col gap-[18px] w-full">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -88,7 +88,7 @@ const CreatePassword = () => {
 
                 <Button
                   type="submit"
-                  className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full"
+                  className="h-11 text-white cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full"
                 >
                   Submit
                 </Button>
@@ -97,23 +97,22 @@ const CreatePassword = () => {
 
             <div className="text-[#3333C1] text-sm font-medium font-inter tracking-[-1%] ">
               {formDescription.info && (
-                <div className="p-3 bg-[#EBEBF9] text-[13px] rounded-[8px] flex flex-col gap-4">
+                <ul className="p-3 bg-[#EBEBF9] text-[13px] rounded-[8px] flex flex-col gap-4">
                   {formDescription.info.map((item: string) => (
-                    <p
-                      key={Math.random()}
-                      className="flex gap-[5px] items-center"
-                    >
-                      <FormIcons.InfoFilled />
-                      {item}
-                    </p>
+                    <li key={Math.random()}>
+                      <p className="flex gap-1 sm:gap-[5px] text-xs sm:text-base">
+                        <FormIcons.InfoFilled className="sm:mt-1" />
+                        {item}
+                      </p>
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
             </div>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 };
 

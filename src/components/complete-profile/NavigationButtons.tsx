@@ -10,7 +10,7 @@ interface NavigationButtonsProps {
 }
 
 const classNames =
-  "flex items-center justify-center gap-2 font-inter font-[475] tracking-[-0.18px] cursor-pointer px-4 h-11 rounded-[6px]";
+  "flex items-center justify-center gap-2 font-inter font-[475] tracking-[-0.18px] cursor-pointer px-4 h-11 rounded-[6px] transition-all ease-in-out duration-300";
 
 const NavigationButtons: React.FC<NavigationButtonsProps> = ({
   onBackClick,
@@ -19,7 +19,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
   type = "button",
 }) => {
   return (
-    <div className="flex flex-col-reverse md:flex-row justify-between items-center w-full gap-4">
+    <section className="flex flex-col-reverse md:flex-row justify-between items-center w-full gap-4 transition-all ease-in-out duration-300">
       <Button
         type="button"
         onClick={onBackClick}
@@ -38,7 +38,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
       >
         Continue
       </Button>
-    </div>
+    </section>
   );
 };
 

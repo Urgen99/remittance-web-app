@@ -142,8 +142,8 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
   }
 
   return (
-    <main className="md:mt-7 px-5">
-      <section className="flex  items-center justify-center">
+    <section className="md:mt-7 px-5">
+      <div className="flex items-center justify-center">
         <div className="md:max-w-[50rem] w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
@@ -244,8 +244,8 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
             {/* <DevTool control={form.control} /> */}
           </FormProvider>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 };
 

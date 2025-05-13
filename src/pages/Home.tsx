@@ -12,6 +12,12 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+const formDescription: FormDescription = {
+  Icon: FormIcons.Upload,
+  title: "Welcome to SwiftSend",
+  subtitle:
+    "Enjoy a seamless, hassle-free way to send money to Nepal with ease!",
+};
 const Home = () => {
   const form = useForm<EmailSchemaType>({
     resolver: zodResolver(EmailSchema),
@@ -48,11 +54,11 @@ const Home = () => {
           <FormHeadingDescription formDescription={formDescription} />
 
           {/* ---------- FORM CONTAINER ---------- */}
-          <div className="space-y-[18px] w-full">
+          <div className="flex flex-col gap-[18px] w-full">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="w-full flex flex-col gap-1"
+                className="w-full flex flex-col"
               >
                 <TextInput
                   control={form.control}
@@ -66,7 +72,7 @@ const Home = () => {
 
                 <Button
                   type="submit"
-                  className="text-xs sm:text-sm cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full"
+                  className="text-xs sm:text-sm cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full h-11 text-white"
                 >
                   Submit
                 </Button>
@@ -74,13 +80,15 @@ const Home = () => {
             </Form>
 
             <div className="text-[#3333C1] text-sm font-medium font-inter tracking-[-1%] ">
-              <div className="p-3 bg-[#EBEBF9] text-[13px] rounded-[8px] flex flex-col gap-4">
-                <p className="flex gap-[5px] items-center text-sm sm:text-base">
-                  <FormIcons.InfoFilled />
-                  If you have an account, you will be prompted to login in the
-                  next step.
-                </p>
-              </div>
+              <ul className="p-3 bg-[#EBEBF9] text-[13px] rounded-[8px] flex flex-col gap-4">
+                <li>
+                  <p className="flex gap-1 sm:gap-[5px] text-xs sm:text-base">
+                    <FormIcons.InfoFilled className="sm:mt-1" />
+                    If you have an account, you will be prompted to login in the
+                    next step.
+                  </p>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -90,10 +98,3 @@ const Home = () => {
 };
 
 export default Home;
-
-const formDescription: FormDescription = {
-  Icon: FormIcons.Upload,
-  title: "Welcome to SwiftSend",
-  subtitle:
-    "Enjoy a seamless, hassle-free way to send money to Nepal with ease!",
-};

@@ -66,8 +66,8 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
   };
 
   return (
-    <main className="md:mt-7 px-5">
-      <section className="flex flex-col gap-6 items-center justify-center">
+    <section className="md:mt-7 px-5">
+      <div className="flex flex-col gap-6 items-center justify-center">
         <div className="max-w-[40.35rem] w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
@@ -130,8 +130,8 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
           </form>
           <DevTool control={form.control} />
         </FormProvider>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 };
 

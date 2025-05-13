@@ -70,7 +70,7 @@ const Login = () => {
           <FormHeadingDescription formDescription={formDescription} />
 
           {/* ---------- FORM CONTAINER ---------- */}
-          <div className="space-y-[18px] w-full">
+          <div className="flex flex-col gap-[18px] w-full">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -88,7 +88,7 @@ const Login = () => {
 
                 <Button
                   type="submit"
-                  className="cursor-pointer text-xs sm:text-sm font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full"
+                  className="cursor-pointer text-xs sm:text-sm font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full h-11 text-white"
                 >
                   Submit
                 </Button>
@@ -96,11 +96,11 @@ const Login = () => {
             </Form>
 
             <div className="flex flex-col gap-3 font-inter font-medium leading-5 tracking-[-0.02px] text-[#0A090B]">
-              <Button variant="outline" className="">
+              <Button variant="outline" className="h-10">
                 <FormIcons.Google />{" "}
                 <p className="text-xs sm:text-sm">Sign in with Google</p>
               </Button>
-              <Button variant="outline" className="">
+              <Button variant="outline" className="h-10">
                 <FormIcons.Apple />{" "}
                 <p className="text-xs sm:text-sm">Sign in with Apple</p>
               </Button>

@@ -83,7 +83,7 @@ const DateSelector = ({
                         aria-expanded={open === type}
                         variant="outline"
                         className={cn(
-                          "w-[120px] justify-between border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12 ",
+                          "w-[108px] md:w-[120px] justify-between border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12",
                           !selectedDate[type] && "text-muted-foreground"
                         )}
                       >
