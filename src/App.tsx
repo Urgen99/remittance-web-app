@@ -54,9 +54,9 @@ const AppContent = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
         <Route path="/document-expired" element={<DocumentExpired />} />
-        <Route element={<ProtectedRoute />}>
-          <Route path="/send-money" element={<SendMoney />} />
-        </Route>
+        {/* <Route element={<ProtectedRoute />}> */}
+        <Route path="/send-money" element={<SendMoney />} />
+        {/* </Route> */}
       </Route>
 
       {/* ---------- PROTECTED ROUTES Add (Authentication later) ---------- */}

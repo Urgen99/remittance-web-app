@@ -68,8 +68,8 @@ const SendMoney = () => {
 
   const error = false;
   return (
-    <section className="flex flex-col justify-between items-center">
-      <div className="fixed top-2 z-10 flex flex-col justify-center items-center w-full max-w-4xl ">
+    <section className="flex flex-col justify-between items-center w-full">
+      <div className="lg:fixed top-3.5 lg:z-10 hidden lg:flex flex-col justify-center items-center w-full lg:max-w-xl xl:max-w-3xl ">
         <Steppers
           progressValue={progressValue}
           steps={steps as Steps[]}
@@ -84,6 +84,7 @@ const SendMoney = () => {
             initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="w-full"
           >
             {error ? (
               <SendMoneyError />

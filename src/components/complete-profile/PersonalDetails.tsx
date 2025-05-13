@@ -154,7 +154,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
               className="w-full flex flex-col items-center"
               onSubmit={form.handleSubmit(onSubmit)}
             >
-              <div className="w-full flex flex-col md:flex-row md:items-center gap-3">
+              <div className="w-full flex flex-col md:flex-row md:items-center gap-3 transition-all ease-in-out duration-300">
                 <TextInput
                   name="firstName"
                   label="First Name"
@@ -179,7 +179,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 />
               </div>
 
-              <div className="w-full flex flex-col md:flex-row md:items-center gap-3">
+              <div className="w-full flex flex-col md:flex-row md:items-center gap-3 transition-all ease-in-out duration-300">
                 <DateSelector
                   name="birthDate"
                   label="Select your birth date"
@@ -200,7 +200,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 </div>
               </div>
 
-              <div className="w-full flex flex-col md:flex-row md:items-center gap-3">
+              <div className="w-full flex flex-col md:flex-row md:items-center gap-3 transition-all ease-in-out duration-300">
                 <TextInput
                   name="documentNumber"
                   label="Document Number"
@@ -217,7 +217,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 />
               </div>
 
-              <div className="w-full flex flex-col md:flex-row md:items-center gap-3">
+              <div className="w-full flex flex-col md:flex-row md:items-center gap-3 transition-all ease-in-out duration-300">
                 <TextInput
                   name="city"
                   label="Enter your city Name"
