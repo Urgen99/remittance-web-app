@@ -20,7 +20,7 @@ const CountryAmountSelect = ({
   control,
 }: CountryAmountSelect) => {
   return (
-    <div className="space-y-2 w-full">
+    <div className="flex flex-col gap-2 w-full">
       <div className="h-6 flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           <div className="bg-[#2FD366] size-6 rounded-full ">

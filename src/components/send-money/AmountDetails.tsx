@@ -107,8 +107,8 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
   }
 
   return (
-    <section className="mt-7 ">
-      <div className="flex flex-col gap-6 items-center justify-center w-[50rem]">
+    <section className="mt-7 px-5 w-full flex justify-center items-center ">
+      <div className="flex flex-col gap-6 items-center justify-center max-w-[50rem] w-full border-red-500 border">
         <div className="flex flex-col gap-14 items-center w-full">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
@@ -118,10 +118,10 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col items-center gap-[7.5rem] justify-between w-full h-full"
+            className="flex flex-col items-center gap-8 md:gap-[7.5rem] justify-between w-full h-full"
           >
-            <div className="space-y-4 max-w-[48.5rem] w-full">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-4 md:max-w-[48.5rem] w-full">
+              <div className="flex flex-col md:flex-row md:items-center gap-3 transition-all ease-in-out duration-300">
                 <CountryAmountSelect
                   key="sender"
                   title={"YOU ARE SENDING"}
@@ -143,7 +143,7 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
               </div>
 
               <div>
-                <div className="flex items-center gap-3">
+                <div className="flex flex-col md:flex-row md:items-center gap-3 transition-all ease-in-out duration-300">
                   <DropDownSelect
                     name="PaymentType"
                     label="Select payment method"
@@ -163,7 +163,7 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
                     defaultValue={deliveryMethods[0].value}
                   />
                 </div>
-                <div className="-mt-3 w-[49%]">
+                <div className="-mt-3 md:w-[49%]">
                   <TextInput
                     control={form.control}
                     name="Remarks"
@@ -189,12 +189,12 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
                     <p className="uppercase">0 AUD</p>
                   </div>
 
-                  <div className="bg-white size-3 rounded-full absolute -left-[5px]  top-[38px]" />
+                  <div className="bg-white size-3 rounded-full absolute -left-[5px] top-[38px]" />
                   <div className="bg-white size-3 rounded-full absolute -right-[5px] top-[38px]" />
 
                   <div
                     id="separator"
-                    className=" border border-black border-opacity-50 border-dashed"
+                    className="border border-black border-opacity-50 border-dashed"
                   />
 
                   <div
