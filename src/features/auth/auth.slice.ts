@@ -22,6 +22,15 @@ const authSlice = createSlice({
       state.expiresAt = expiration;
     },
 
+    setAuthDetails: (
+      state,
+      action: PayloadAction<Partial<{ email?: string; password?: string }>>
+    ) => {
+      const { email, password } = action.payload;
+      if (email !== undefined) state.email = email;
+      if (password !== undefined) state.password = password;
+    },
+
     logOut: (state) => {
       state.user = null;
       state.token = null;
@@ -33,12 +42,20 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logOut } = authSlice.actions;
+export const { setCredentials, logOut, setAuthDetails } = authSlice.actions;
 
 const selectCurrentUser = (state: RootState) => state.auth.user;
 const selectCurrentToken = (state: RootState) => state.auth.token;
 const selectCurrentRefreshToken = (state: RootState) => state.auth.refreshToken;
+const selectAuthEmail = (state: RootState) => state.auth.email;
+const selectAuthPassword = (state: RootState) => state.auth.password;
 
-export { selectCurrentRefreshToken, selectCurrentToken, selectCurrentUser };
+export {
+  selectAuthEmail,
+  selectAuthPassword,
+  selectCurrentRefreshToken,
+  selectCurrentToken,
+  selectCurrentUser,
+};
 
 export default authSlice.reducer;

@@ -6,6 +6,7 @@ export interface AuthState {
   email: string | null;
   refreshToken: string | null;
   expiresAt: string | null;
+  password: string | null;
 }
 
 const loadAuthState = (): AuthState => {
@@ -15,6 +16,7 @@ const loadAuthState = (): AuthState => {
     email: null,
     refreshToken: null,
     expiresAt: null,
+    password: null,
   };
 
   try {

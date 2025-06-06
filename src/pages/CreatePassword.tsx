@@ -31,21 +31,19 @@ const CreatePassword = () => {
   const navigate = useNavigate();
   async function onSubmit(data: CreatePasswordSchemaType) {
     try {
-      const tempData = {
-        username: email,
+      const credentials = {
         emailAddress: email,
-        mobileNumber: "9876543210",
         password: data.newPassword,
         userType: 0,
       };
 
-      const response = await register(tempData).unwrap();
+      const response = await register(credentials).unwrap();
 
       if (response?.message) {
         toast.success("User Created", {
           description: `${response?.message}`,
         });
-        navigate("/register");
+        navigate("/verify-otp");
       }
     } catch (e) {
       console.error("Error: ", e);
@@ -89,6 +87,7 @@ const CreatePassword = () => {
                 <Button
                   type="submit"
                   className="h-11 text-white cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full"
+                  disabled={isLoading}
                 >
                   Submit
                 </Button>

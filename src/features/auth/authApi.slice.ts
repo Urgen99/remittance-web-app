@@ -20,7 +20,33 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    // refresh token
+    // verify if email exists
+    emailExists: builder.query({
+      query: (email) => ({
+        url: `/User/exists?email=${email}`,
+        method: "GET",
+      }),
+    }),
+
+    // verify otp code
+    verifyOTP: builder.mutation({
+      query: (credentials) => ({
+        url: "User/ConfirmOtp",
+        method: "POST",
+        body: credentials,
+      }),
+    }),
+
+    // resend otp confirmation code
+    resendOTP: builder.mutation({
+      query: (credentials) => ({
+        url: "User/ResendConfirmation",
+        method: "POST",
+        body: credentials,
+      }),
+    }),
+
+    // reference data remove later - todo
     fetchReferences: builder.query({
       query: () => ({
         url: "/ReferenceData",
@@ -33,4 +59,7 @@ export const {
   useRegisterMutation,
   useLoginMutation,
   useFetchReferencesQuery,
+  useLazyEmailExistsQuery,
+  useVerifyOTPMutation,
+  useResendOTPMutation,
 } = authApiSlice;

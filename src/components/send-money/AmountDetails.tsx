@@ -1,20 +1,20 @@
-import { FormDescription } from "@/lib/type";
-import { Country } from "@/pages/user/dashboard/components/CurrentTransactionRate";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import NavigationButtons from "../complete-profile/NavigationButtons";
-import { SendMoneyForm } from "../icons/Icons";
-import FormHeadingDescription from "../shared/FormHeadingDescription";
-import CountryAmountSelect from "../ui/send-money/CountryAmountSelect";
-import TextInput from "../ui/forms/TextInput";
-import { FormProvider, useForm } from "react-hook-form";
 import {
   AmountDetailSchema,
   AmountDetailSchemaType,
 } from "@/lib/schemas/send-money/amountDetails";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { FormDescription } from "@/lib/type";
+import { Country } from "@/pages/user/dashboard/components/CurrentTransactionRate";
 import { DevTool } from "@hookform/devtools";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import NavigationButtons from "../complete-profile/NavigationButtons";
+import { SendMoneyForm } from "../icons/Icons";
+import FormHeadingDescription from "../shared/FormHeadingDescription";
 import DropDownSelect from "../ui/forms/DropDownSelect";
+import TextInput from "../ui/forms/TextInput";
+import CountryAmountSelect from "../ui/send-money/CountryAmountSelect";
 interface AmountDetailProps {
   handleNext: () => void;
 }
@@ -108,7 +108,7 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
 
   return (
     <section className="mt-7 px-5 w-full flex justify-center items-center ">
-      <div className="flex flex-col gap-6 items-center justify-center max-w-[50rem] w-full border-red-500 border">
+      <div className="flex flex-col gap-6 items-center justify-center max-w-[50rem] w-full">
         <div className="flex flex-col gap-14 items-center w-full">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />

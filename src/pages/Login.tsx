@@ -19,7 +19,7 @@ import { toast } from "sonner";
 
 const Login = () => {
   const email = useSelector(selectCurrentEmail);
-
+  console.log("Current email is here", email);
   const form = useForm<PasswordSchemaType>({
     mode: "all",
     resolver: zodResolver(PasswordSchema),

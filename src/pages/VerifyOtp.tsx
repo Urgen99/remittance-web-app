@@ -8,28 +8,90 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { setCredentials } from "@/features/auth/auth.slice";
+import {
+  useResendOTPMutation,
+  useVerifyOTPMutation,
+} from "@/features/auth/authApi.slice";
+import { selectCurrentEmail } from "@/features/users/users.slice";
 import { OTPSchema, OTPSchemaType } from "@/lib/schemas/user/verifyOtp";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const VerifyOtp = () => {
+  const email = useSelector(selectCurrentEmail);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const form = useForm<OTPSchemaType>({
     resolver: zodResolver(OTPSchema),
     mode: "all",
     defaultValues: { otp: "" },
   });
-  function onSubmit(data: OTPSchemaType) {
-    console.log("form is submitted", data);
 
-    alert({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  const [verifyOTP, { isLoading: otpLoading }] = useVerifyOTPMutation();
+  const [resendOTP, { isLoading: resendOtpLoading }] = useResendOTPMutation();
+
+  async function onSubmit(data: OTPSchemaType) {
+    try {
+      const credentials = {
+        emailAddress: "admin@yopmail.com",
+        otpCode: data.otp,
+        password: "Admin@123",
+      };
+
+      const response = await verifyOTP(credentials).unwrap();
+
+      if (response) {
+        toast.success("Verification Successful", {
+          description: "You are being redirected to the dashboard page.",
+        });
+
+        if (response?.data) {
+          dispatch(setCredentials({ ...response?.data }));
+          navigate("/test-protected");
+        }
+      }
+    } catch (e: any) {
+      console.error("error here", e);
+
+      if (e?.status === 400 || e?.status === 401) {
+        toast.error("Invalid OTP", {
+          description: "Please enter a valid OTP.",
+        });
+      } else {
+        toast.error("Verification Failed", {
+          description: "Please try again later.",
+        });
+      }
+    }
+  }
+
+  async function handleResendOTP() {
+    try {
+      const credentials = {
+        emailAddress: email,
+      };
+      const response = await resendOTP(credentials).unwrap();
+
+      if (response?.message) {
+        toast.success("OTP sent successfully", {
+          description: "Please check your email.",
+        });
+      }
+    } catch (e: any) {
+      console.error("Error from handle resend otp: ", e);
+
+      if (e?.status === 400) {
+        toast.error("Invalid Email", {
+          description: "Please enter a valid email address.",
+        });
+      }
+    }
   }
 
   return (
@@ -39,41 +101,55 @@ const VerifyOtp = () => {
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
 
-          {/* ---------- FORM CONTAINER ---------- */}
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="sm:w-full flex flex-col items-center gap-[18px]"
-            >
-              <FormField
-                control={form.control}
-                name="otp"
-                render={({ field }) => (
-                  <FormItem>
-                    <InputOTP maxLength={6} {...field}>
-                      <InputOTPGroup>
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                      </InputOTPGroup>
-                      <InputOTPSeparator />
-                      <InputOTPGroup>
-                        <InputOTPSlot index={3} />
-                        <InputOTPSlot index={4} />
-                        <InputOTPSlot index={5} />
-                      </InputOTPGroup>
-                    </InputOTP>
-                  </FormItem>
-                )}
-              />
-              <Button
-                className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] max-w-[29rem] w-full h-11 text-white"
-                type="submit"
+          <div className="flex flex-col gap-5 items-center">
+            {/* ---------- FORM CONTAINER ---------- */}
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="sm:w-full flex flex-col items-center gap-[18px]"
               >
-                Submit
+                <FormField
+                  control={form.control}
+                  name="otp"
+                  render={({ field }) => (
+                    <FormItem>
+                      <InputOTP maxLength={6} {...field}>
+                        <InputOTPGroup>
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                          <InputOTPSlot index={2} />
+                        </InputOTPGroup>
+                        <InputOTPSeparator />
+                        <InputOTPGroup>
+                          <InputOTPSlot index={3} />
+                          <InputOTPSlot index={4} />
+                          <InputOTPSlot index={5} />
+                        </InputOTPGroup>
+                      </InputOTP>
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] max-w-[29rem] w-full h-11 text-white"
+                  type="submit"
+                  disabled={otpLoading || resendOtpLoading}
+                >
+                  Submit
+                </Button>
+              </form>
+            </Form>
+
+            <div className="flex flex-col gap-4 justify-between w-full">
+              <Button
+                variant="link"
+                className="w-fit text-[#3333C1] font-inter font-[475] text-sm leading-[22px] tracking-[-0.18px] p-0"
+                onClick={handleResendOTP}
+                disabled={resendOtpLoading || otpLoading}
+              >
+                Resend OTP
               </Button>
-            </form>
-          </Form>
+            </div>
+          </div>
         </div>
       </div>
     </section>
