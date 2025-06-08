@@ -10,7 +10,7 @@ const ConfirmDeletion: React.FC<{ handlePrev: (args: string) => void }> = ({
     <div className="h-full pb-6 pt-4 pr-7 flex flex-col justify-between">
       <div className="flex flex-col gap-5">
         <TextContainer
-          handlePrev={handlePrev}
+          handlePrev={() => handlePrev("enter-otp")}
           link="account-privacy"
           title="Account deletion request sent"
           subtitle="We've received your account deletion request. Please review your email for additional request"

@@ -8,12 +8,16 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { setCredentials } from "@/features/auth/auth.slice";
+import {
+  selectAuthEmail,
+  selectAuthPassword,
+  setCredentials,
+} from "@/features/auth/auth.slice";
 import {
   useResendOTPMutation,
   useVerifyOTPMutation,
 } from "@/features/auth/authApi.slice";
-import { selectCurrentEmail } from "@/features/users/users.slice";
+import useRouteGuard from "@/hooks/use-route-guard";
 import { OTPSchema, OTPSchemaType } from "@/lib/schemas/user/verifyOtp";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,7 +27,15 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const VerifyOtp = () => {
-  const email = useSelector(selectCurrentEmail);
+  const email = useSelector(selectAuthEmail);
+  const password = useSelector(selectAuthPassword);
+
+  useRouteGuard({
+    primaryCondition: email,
+    secondaryCondition: password,
+    navigateTo: "/register",
+  });
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,9 +51,9 @@ const VerifyOtp = () => {
   async function onSubmit(data: OTPSchemaType) {
     try {
       const credentials = {
-        emailAddress: "admin@yopmail.com",
+        emailAddress: email,
         otpCode: data.otp,
-        password: "Admin@123",
+        password,
       };
 
       const response = await verifyOTP(credentials).unwrap();
@@ -68,6 +80,8 @@ const VerifyOtp = () => {
           description: "Please try again later.",
         });
       }
+    } finally {
+      toast.dismiss();
     }
   }
 
@@ -99,8 +113,11 @@ const VerifyOtp = () => {
       <div className="flex items-center justify-center">
         <div className="sm:max-w-[31.35rem] w-full flex flex-col gap-14 items-center">
           {/* ---------- FORM DESCRIPTION ---------- */}
+
           <FormHeadingDescription formDescription={formDescription} />
 
+          {email}
+          {password}
           <div className="flex flex-col gap-5 items-center">
             {/* ---------- FORM CONTAINER ---------- */}
             <Form {...form}>

@@ -17,17 +17,8 @@ const ForgotPassword = () => {
       email: "",
     },
   });
-  function onSubmit(data: EmailSchemaType) {
-    console.log("form is submitted", data);
-
-    alert({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  function onSubmit(formData: EmailSchemaType) {
+    console.log("form is submitted", formData);
   }
 
   return (
@@ -38,11 +29,11 @@ const ForgotPassword = () => {
           <FormHeadingDescription formDescription={formDescription} />
 
           {/* ---------- FORM CONTAINER ---------- */}
-          <div className="space-y-[18px] w-full">
+          <div className="flex flex-col w-full gap-[18px]">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="w-full flex flex-col gap-[18px]"
+                className="w-full flex flex-col"
               >
                 <TextInput
                   control={form.control}
@@ -56,7 +47,7 @@ const ForgotPassword = () => {
 
                 <Button
                   type="submit"
-                  className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full"
+                  className="cursor-pointer text-xs sm:text-sm font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full h-11 text-white"
                 >
                   Submit
                 </Button>

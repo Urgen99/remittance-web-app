@@ -3,8 +3,8 @@ import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
+import { setAuthDetails } from "@/features/auth/auth.slice";
 import { useLazyEmailExistsQuery } from "@/features/auth/authApi.slice";
-import { setUserEmail } from "@/features/users/users.slice";
 import { EmailSchema, EmailSchemaType } from "@/lib/schemas/user/email";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,8 +36,13 @@ const Home = () => {
       const response = await emailExists(formData.email).unwrap();
 
       if (response?.emailExits?.data) {
-        dispatch(setUserEmail(formData.email));
-
+        dispatch(
+          setAuthDetails({
+            email: formData.email,
+            isVerified: response?.emailExists?.data?.isVerified,
+            isKycCompleted: response?.emailExists?.data?.isKycCompleted,
+          })
+        );
         if (response?.emailExits?.data?.exists) {
           navigate("/login");
         } else {

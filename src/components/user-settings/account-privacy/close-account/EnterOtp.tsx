@@ -23,7 +23,7 @@ const EnterOtp: React.FC<AccountPrivacyProps> = ({
     <div className="h-full pb-6 pt-4 pr-7 flex flex-col justify-between">
       <div className="flex flex-col gap-5">
         <TextContainer
-          handlePrev={handlePrev}
+          handlePrev={() => handlePrev("close-account")}
           link="close-account"
           title="Enter otp before deletion"
           subtitle="We have sent a 6 digit otp in your email , enter that otp before account deletion"

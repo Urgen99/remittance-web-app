@@ -3,20 +3,16 @@ import { SESSION } from "./constant";
 export interface AuthState {
   user: string | null;
   token: string | null;
-  email: string | null;
   refreshToken: string | null;
   expiresAt: string | null;
-  password: string | null;
 }
 
 const loadAuthState = (): AuthState => {
   const defaultAuthState: AuthState = {
     user: null,
     token: null,
-    email: null,
     refreshToken: null,
     expiresAt: null,
-    password: null,
   };
 
   try {

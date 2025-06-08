@@ -3,8 +3,9 @@ import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
+import { selectAuthEmail, setAuthDetails } from "@/features/auth/auth.slice";
 import { useRegisterMutation } from "@/features/auth/authApi.slice";
-import { selectCurrentEmail } from "@/features/users/users.slice";
+import useRouteGuard from "@/hooks/use-route-guard";
 import {
   CreatePasswordSchema,
   CreatePasswordSchemaType,
@@ -12,12 +13,14 @@ import {
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const CreatePassword = () => {
-  const email = useSelector(selectCurrentEmail);
+  const email = useSelector(selectAuthEmail);
+  useRouteGuard({ primaryCondition: email, navigateTo: "/register" });
+
   const form = useForm<CreatePasswordSchemaType>({
     resolver: zodResolver(CreatePasswordSchema),
     mode: "all",
@@ -29,6 +32,8 @@ const CreatePassword = () => {
 
   const [register, { isLoading }] = useRegisterMutation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   async function onSubmit(data: CreatePasswordSchemaType) {
     try {
       const credentials = {
@@ -43,10 +48,13 @@ const CreatePassword = () => {
         toast.success("User Created", {
           description: `${response?.message}`,
         });
+        dispatch(setAuthDetails({ password: data.newPassword }));
         navigate("/verify-otp");
       }
     } catch (e) {
       console.error("Error: ", e);
+    } finally {
+      toast.dismiss();
     }
   }
 
