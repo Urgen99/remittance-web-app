@@ -5,7 +5,6 @@ import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
 import {
   selectAuthEmail,
-  selectIsAuthKycCompleted,
   selectIsAuthVerified,
   setAuthDetails,
   setCredentials,
@@ -25,7 +24,7 @@ import { toast } from "sonner";
 
 const Login = () => {
   const email = useSelector(selectAuthEmail);
-  const isKycCompleted = useSelector(selectIsAuthKycCompleted);
+  // const isKycCompleted = useSelector(selectIsAuthKycCompleted);
   const isAccountVerified = useSelector(selectIsAuthVerified);
 
   useRouteGuard({ primaryCondition: email, navigateTo: "/register" });
@@ -54,9 +53,11 @@ const Login = () => {
 
         if (!isAccountVerified) {
           navigate("/verify-otp");
-        } else if (!isKycCompleted) {
-          navigate("/document-expired"); // later change to complete-profile
-        } else {
+        }
+        // else if (!isKycCompleted) {
+        //   navigate("/document-expired"); // later change to complete-profile
+        // }
+        else {
           dispatch(setCredentials({ ...response.data }));
           console.log(JSON.stringify(response));
           navigate("/test-protected");

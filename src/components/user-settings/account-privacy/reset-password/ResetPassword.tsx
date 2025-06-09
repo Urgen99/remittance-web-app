@@ -1,5 +1,10 @@
-import { DialogSettingsIcons } from "@/components/icons/Icons";
-import { Button } from "@/components/ui/button";
+import {
+  CreatePasswordSchema,
+  CreatePasswordSchemaType,
+} from "@/lib/schemas/user/createPassword";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import TextContainer from "../TextContainer";
 import {
   Form,
   FormControl,
@@ -9,23 +14,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PasswordInput } from "@/components/ui/password-input";
-import { selectCurrentUser } from "@/features/auth/auth.slice";
-import { useUpdatePasswordMutation } from "@/features/users/userApi.slice";
-import {
-  CreatePasswordSchema,
-  CreatePasswordSchemaType,
-} from "@/lib/schemas/user/createPassword";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
-import TextContainer from "../TextContainer";
+import { Button } from "@/components/ui/button";
+import { DialogSettingsIcons } from "@/components/icons/Icons";
 
-const CreateNewPassword = ({
+const ResetPassword = ({
   handlePrev,
 }: {
   handlePrev: (args: string) => void;
 }) => {
-  const user = useSelector(selectCurrentUser);
   const form = useForm<CreatePasswordSchemaType>({
     resolver: zodResolver(CreatePasswordSchema),
     mode: "all",
@@ -35,25 +31,8 @@ const CreateNewPassword = ({
     },
   });
 
-  const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
-
   async function onSubmit(formData: CreatePasswordSchemaType) {
-    try {
-      const credentials = {
-        username: user,
-        password: formData.newPassword,
-      };
-
-      const response = await updatePassword(credentials).unwrap();
-
-      if (response) {
-        console.log(response);
-        // add later success toaster
-        handlePrev("account-privacy");
-      }
-    } catch (error) {
-      console.error("Error while updating password: ", error);
-    }
+    console.log("form is submitted", formData);
   }
 
   return (
@@ -66,8 +45,8 @@ const CreateNewPassword = ({
           <TextContainer
             handlePrev={handlePrev}
             link="update-password"
-            title="Create new password"
-            subtitle="To change your password, first you need to provide your old password and then only you can create new one"
+            title="Reset password"
+            subtitle="Otp verified , please reset your password below , make sure you follow the password guideline"
           />
 
           <div className="max-w-[31.25rem] w-full">
@@ -128,7 +107,7 @@ const CreateNewPassword = ({
         </div>
         <div className="pl-1">
           <Button
-            disabled={isLoading}
+            // disabled={isLoading}
             className="font-mukta font-medium leading-7 w-fit h-10 rounded-[4px] bg-[#3333c1] hover:bg-[#3333c1] !px-5 !py-3"
           >
             Continue <DialogSettingsIcons.ChevronRight fill="#fff" />
@@ -139,4 +118,4 @@ const CreateNewPassword = ({
   );
 };
 
-export default CreateNewPassword;
+export default ResetPassword;

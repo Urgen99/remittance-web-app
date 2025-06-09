@@ -34,13 +34,12 @@ const Home = () => {
   async function onSubmit(formData: EmailSchemaType) {
     try {
       const response = await emailExists(formData.email).unwrap();
-
       if (response?.emailExits?.data) {
         dispatch(
           setAuthDetails({
             email: formData.email,
-            isVerified: response?.emailExists?.data?.isVerified,
-            isKycCompleted: response?.emailExists?.data?.isKycCompleted,
+            isVerified: response?.emailExits?.data?.isVerified,
+            isKycCompleted: response?.emailExits?.data?.isKycCompleted,
           })
         );
         if (response?.emailExits?.data?.exists) {

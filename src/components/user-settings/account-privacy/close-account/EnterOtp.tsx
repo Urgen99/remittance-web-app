@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DialogSettingsIcons } from "@/components/icons/Icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -7,15 +6,13 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { CheckedState } from "@radix-ui/react-checkbox";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
-import React, { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { AccountPrivacyProps } from "../AccountPrivacy";
 import TextContainer from "../TextContainer";
 
-const EnterOtp: React.FC<AccountPrivacyProps> = ({
-  handleNext,
-  handlePrev,
-}) => {
+const EnterOtp = ({ handleNext, handlePrev }: AccountPrivacyProps) => {
   const [otp, setOtp] = useState("");
   const [check, setCheck] = useState(false);
 
@@ -23,7 +20,7 @@ const EnterOtp: React.FC<AccountPrivacyProps> = ({
     <div className="h-full pb-6 pt-4 pr-7 flex flex-col justify-between">
       <div className="flex flex-col gap-5">
         <TextContainer
-          handlePrev={() => handlePrev("close-account")}
+          handlePrev={handlePrev}
           link="close-account"
           title="Enter otp before deletion"
           subtitle="We have sent a 6 digit otp in your email , enter that otp before account deletion"
@@ -35,7 +32,7 @@ const EnterOtp: React.FC<AccountPrivacyProps> = ({
           </h6>
           <InputOTP
             value={otp}
-            onChange={(e: any) => setOtp(e)}
+            onChange={(e: SetStateAction<string>) => setOtp(e)}
             maxLength={6}
             pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
             className="text-[#7F7D83] font-inter font-normal text-sm leading-5 tracking-[-0.05px]"
@@ -57,7 +54,7 @@ const EnterOtp: React.FC<AccountPrivacyProps> = ({
         <div className="flex items-start gap-3">
           <Checkbox
             id="terms1"
-            onCheckedChange={(e: any) => setCheck(e)}
+            onCheckedChange={(e: CheckedState) => setCheck(e as boolean)}
             value={check.toString()}
             className="size-[22px] mt-1.5 border border-black  data-[state=checked]:bg-[#3333c1]"
           />
