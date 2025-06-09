@@ -14,7 +14,7 @@ function getUserInitials(name: string): string {
 function getRandomColor(name: string, colorPalette: string[]) {
   if (!name) return { bg: "#2080F6", text: "white" };
 
-  // Stable hash calculation
+  // hash calculation
   const hash = Array.from(name).reduce(
     (acc, char) => char.charCodeAt(0) + ((acc << 5) - acc),
     0
@@ -22,7 +22,7 @@ function getRandomColor(name: string, colorPalette: string[]) {
 
   const bgColor = colorPalette[Math.abs(hash) % colorPalette.length];
 
-  // Calculate relative luminance for contrast
+  // hex to rgb
   const hex = bgColor.replace("#", "");
   const [r, g, b] = hex.match(/.{2}/g)!.map((v) => parseInt(v, 16));
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;

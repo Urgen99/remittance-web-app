@@ -1,9 +1,9 @@
 import { DialogSettingsIcons } from "@/components/icons/Icons";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import React from "react";
+import { JSX } from "react";
 type SettingsLists = {
-  Icon: React.FC;
+  Icon: () => JSX.Element;
   title: string;
   isSwitch?: boolean;
   id: string;
@@ -37,8 +37,10 @@ const settingsLists: SettingsLists[] = [
     id: "close-account",
   },
 ];
-const InitialSettings: React.FC<{ handleNext: (args: string) => void }> = ({
+const InitialSettings = ({
   handleNext,
+}: {
+  handleNext: (args: string) => void;
 }) => {
   return (
     <div className="h-full pt-4 pr-7">

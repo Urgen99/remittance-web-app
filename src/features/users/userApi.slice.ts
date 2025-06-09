@@ -3,13 +3,18 @@ import { apiSlice } from "../api/api.slice";
 export const usersApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getUserByEmail: builder.query({
-      query: (email) => ({
-        url: `/User/getByEmail/${email}`,
-        method: "GET",
+    // @DESC: [Update Password]
+    // @Route: [PUT: /User/UpdatePassword]
+    // Access Private
+    // Headers: [Bearer token]
+    updatePassword: builder.mutation({
+      query: (credentials) => ({
+        url: "/User/UpdatePassword",
+        method: "PUT",
+        body: credentials,
       }),
     }),
   }),
 });
 
-export const { useLazyGetUserByEmailQuery } = usersApiSlice;
+export const { useUpdatePasswordMutation } = usersApiSlice;

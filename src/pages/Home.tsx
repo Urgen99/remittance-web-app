@@ -3,8 +3,8 @@ import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
-import { useLazyGetUserByEmailQuery } from "@/features/users/userApi.slice";
-import { setUserEmail } from "@/features/users/users.slice";
+import { setAuthDetails } from "@/features/auth/auth.slice";
+import { useLazyEmailExistsQuery } from "@/features/auth/authApi.slice";
 import { EmailSchema, EmailSchemaType } from "@/lib/schemas/user/email";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,19 +30,27 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [getUserByEmail, { isLoading }] = useLazyGetUserByEmailQuery();
-  async function onSubmit(data: EmailSchemaType) {
+  const [emailExists, { isLoading }] = useLazyEmailExistsQuery();
+  async function onSubmit(formData: EmailSchemaType) {
     try {
-      // const response = await getUserByEmail(data.email).unwrap();
-      // dispatch(setUserEmail(response?.data?.email))
-      dispatch(setUserEmail(data.email));
-      navigate("/login");
+      const response = await emailExists(formData.email).unwrap();
+      if (response?.emailExits?.data) {
+        dispatch(
+          setAuthDetails({
+            email: formData.email,
+            isVerified: response?.emailExits?.data?.isVerified,
+            isKycCompleted: response?.emailExits?.data?.isKycCompleted,
+          })
+        );
+        if (response?.emailExits?.data?.exists) {
+          navigate("/login");
+        } else {
+          navigate("/create-password");
+        }
+      }
     } catch (e: any) {
       console.error("Error: ", e?.data?.message);
-      // if (e?.status === 404 && e?.data?.message === "Record not found.") {
-      //   dispatch(setUserEmail(data.email));
-      //   navigate("/create-password");
-      // }
+      // add alert later
     }
   }
 
@@ -73,6 +81,7 @@ const Home = () => {
                 <Button
                   type="submit"
                   className="text-xs sm:text-sm cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full h-11 text-white"
+                  disabled={isLoading}
                 >
                   Submit
                 </Button>

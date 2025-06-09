@@ -2,14 +2,11 @@ import { DialogSettingsIcons } from "@/components/icons/Icons";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
-import React, { useState } from "react";
+import { useState } from "react";
 import { AccountPrivacyProps } from "../AccountPrivacy";
 import TextContainer from "../TextContainer";
 
-const ChangePassword: React.FC<AccountPrivacyProps> = ({
-  handleNext,
-  handlePrev,
-}) => {
+const ChangePassword = ({ handleNext, handlePrev }: AccountPrivacyProps) => {
   const [password, setPassword] = useState("");
   return (
     <div className="h-full pt-4 pr-7 pb-6 flex flex-col justify-between">
@@ -37,10 +34,16 @@ const ChangePassword: React.FC<AccountPrivacyProps> = ({
               />
             </div>
 
-            <p className="font-roboto font-normal text-[15px] leading-[22px] tracking-[-1%] text-[#1B1B1B]">
-              Forgot current password?{" "}
-              <span className="text-[#3333C1] underline">reset</span>
-            </p>
+            <div className="flex gap-0.5 items-center font-roboto font-normal text-[15px] leading-[22px] tracking-[-1%]">
+              <p className=" text-[#1B1B1B]">Forgot current password? </p>
+              <Button
+                onClick={() => handleNext("reset-password-otp")}
+                variant="link"
+                className="text-[#3333C1] underline p-0"
+              >
+                reset
+              </Button>
+            </div>
           </div>
         </div>
       </div>

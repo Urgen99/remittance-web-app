@@ -1,14 +1,102 @@
 import { DashboardIcons } from "@/components/icons/Icons";
-import SettingsDialog from "@/components/user-settings/settings-dialog/SettingsDialog";
+import { Button } from "@/components/ui/button";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+// import SettingsDialog from "@/components/user-settings/settings-dialog/SettingsDialog";
 import { Link, useLocation } from "react-router-dom";
+
+// const DashboardSideBar = () => {
+//   const { pathname } = useLocation();
+
+//   return (
+//     <div className="flex flex-col gap-[1px] w-full h-full">
+//       {/* ---------- LOGO ---------- */}
+//       <div className="w-full border-r border-white border-b h-14 px-[22px] py-[13px]">
+//         <Link to="/">
+//           <img
+//             src="/images/logo.svg"
+//             alt="swift send logo"
+//             className="w-32 h-8 transition-all ease-in-out duration-300"
+//           />
+//         </Link>
+//       </div>
+
+//       {/* ---------- SIDEBAR CONTENT ---------- */}
+//       <div className="p-6 h-full border-r border-white">
+//         <div className="flex flex-col justify-between items-center h-full">
+//           <div className="w-full flex flex-col gap-3">
+//             <Link
+//               to="/send-money"
+//               className="px-4 py-2 w-full rounded-[6px] bg-[#3333C1] text-center text-white font-inter font-[475] text-sm tracking-[-0.05px]"
+//             >
+//               Send Money
+//             </Link>
+
+//             <div className="flex flex-col gap-1.5">
+//               <span className="text-[#4F4D55] uppercase font-inter font-[475] text-[10px] leading-[12px] tracking-[5%]">
+//                 Primary Operations
+//               </span>
+//               <div className="flex flex-col gap-1">
+//                 {items.map((item) => (
+//                   <Link
+//                     key={item.title}
+//                     to={item.url}
+//                     className={`flex items-center gap-2 font-inter font-[475] text-sm tracking-[-0.05px] px-1.5 py-2 hover:bg-white rounded-[8px] ${
+//                       pathname === item.url
+//                         ? "bg-white text-[#3333C1]"
+//                         : "text-[#696969]"
+//                     }`}
+//                   >
+//                     <item.icon
+//                       fill={`${pathname === item.url ? "#3333C1" : "#696969"}`}
+//                     />
+//                     <span
+//                       className={`${pathname === item.url && "text-[#3333C1]"}`}
+//                     >
+//                       {item.title}
+//                     </span>
+//                   </Link>
+//                 ))}
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* USER SETTINGS */}
+//           <div className="flex flex-col w-full gap-2">
+//             <span className="text-[#4F4D55] uppercase font-inter px-3 font-[475] text-[10px] leading-[12px] tracking-[5%]">
+//               Settings and Profile
+//             </span>
+
+//             <SettingsDialog />
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 const DashboardSideBar = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className="flex flex-col gap-[1px] w-full h-full">
-      {/* ---------- LOGO ---------- */}
-      <div className="w-full border-r border-white border-b h-14 px-[22px] py-[13px]">
+    <Sidebar
+      aria-label="Sidebar"
+      className="border-r border-white w-full max-w-[19.25rem]"
+    >
+      <SidebarHeader
+        aria-label="Sidebar header"
+        aria-orientation="vertical"
+        className="border-b border-white h-14 px-6 py-2 justify-center"
+      >
         <Link to="/">
           <img
             src="/images/logo.svg"
@@ -16,59 +104,73 @@ const DashboardSideBar = () => {
             className="w-32 h-8 transition-all ease-in-out duration-300"
           />
         </Link>
-      </div>
+      </SidebarHeader>
 
-      {/* ---------- SIDEBAR CONTENT ---------- */}
-      <div className="p-6 h-full border-r border-white">
-        <div className="flex flex-col justify-between items-center h-full">
-          <div className="w-full flex flex-col gap-3">
-            <Link
-              to="/send-money"
-              className="px-4 py-2 w-full rounded-[6px] bg-[#3333C1] text-center text-white font-inter font-[475] text-sm tracking-[-0.05px]"
-            >
-              Send Money
-            </Link>
-
-            <div className="flex flex-col gap-1.5">
-              <span className="text-[#4F4D55] uppercase font-inter font-[475] text-[10px] leading-[12px] tracking-[5%]">
-                Primary Operations
-              </span>
-              <div className="flex flex-col gap-1">
-                {items.map((item) => (
-                  <Link
-                    key={item.title}
-                    to={item.url}
-                    className={`flex items-center gap-2 font-inter font-[475] text-sm tracking-[-0.05px] px-1.5 py-2 hover:bg-white rounded-[8px] ${
-                      pathname === item.url
-                        ? "bg-white text-[#3333C1]"
-                        : "text-[#696969]"
-                    }`}
-                  >
-                    <item.icon
-                      fill={`${pathname === item.url ? "#3333C1" : "#696969"}`}
-                    />
-                    <span
-                      className={`${pathname === item.url && "text-[#3333C1]"}`}
+      <SidebarContent className="gap-5 w-full justify-between px-6 pt-6">
+        <div className="flex w-full flex-col gap-3 items-center">
+          <Link
+            to="/send-money"
+            className="px-4 py-2 w-full rounded-[6px] bg-[#3333C1] text-center text-white font-inter font-[475] text-sm tracking-[-0.05px] h-9"
+          >
+            Send Money
+          </Link>
+          <SidebarGroup className="w-full p-0">
+            <SidebarGroupLabel className="uppercase text-[#4F4D55] font-inter font-[475] text-[10px] leading-[12px] tracking-[5%] select-none ">
+              primary operations
+            </SidebarGroupLabel>
+            <SidebarGroupContent className="flex items-center">
+              <SidebarMenu>
+                {items.map(({ title, url, Icon }) => (
+                  <SidebarMenuItem key={title}>
+                    <SidebarMenuButton
+                      asChild
+                      className={`h-10 font-inter font-[475] text-sm tracking-[-0.05px] px-1.5 py-2 hover:bg-white rounded-[8px] ${
+                        pathname === url
+                          ? "bg-white text-[#3333C1]"
+                          : "text-[#696969]"
+                      }`}
                     >
-                      {item.title}
-                    </span>
-                  </Link>
+                      <Link to={url} className={`flex items-center gap-2 `}>
+                        <Icon
+                          fill={`${pathname === url ? "#3333C1" : "#696969"}`}
+                        />
+                        <span>{title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                 ))}
-              </div>
-            </div>
-          </div>
-
-          {/* USER SETTINGS */}
-          <div className="flex flex-col w-full gap-2">
-            <span className="text-[#4F4D55] uppercase font-inter px-3 font-[475] text-[10px] leading-[12px] tracking-[5%]">
-              Settings and Profile
-            </span>
-
-            <SettingsDialog />
-          </div>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
         </div>
-      </div>
-    </div>
+
+        <SidebarGroup key="Settings Group">
+          <SidebarGroupLabel className="uppercase font-inter font-[475] text-[10px] leading-3 tracking-[5%] text-[#4F4D55] select-none">
+            settings and profile
+          </SidebarGroupLabel>
+          <SidebarGroupContent className="flex items-center">
+            <SidebarMenu>
+              <SidebarMenuItem key="profile">
+                <SidebarMenuButton
+                  asChild
+                  className="hover:text-[#1751D0] text-[#4F4D55] hover:bg-white px-1.5 py-2 h-10 "
+                >
+                  <Button
+                    variant="link"
+                    className="flex items-center justify-start gap-2"
+                  >
+                    <DashboardIcons.Settings />
+                    <span className="capitalize font-inter font-[475] text-sm leading-5 tracking-[-0.05px]">
+                      Settings and Profile
+                    </span>
+                  </Button>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
   );
 };
 
@@ -79,16 +181,16 @@ const items = [
   {
     title: "Home",
     url: "/dashboard",
-    icon: DashboardIcons.Home,
+    Icon: DashboardIcons.Home,
   },
   {
     title: "Transaction History",
     url: "/transactions",
-    icon: DashboardIcons.TransactionHistory,
+    Icon: DashboardIcons.TransactionHistory,
   },
   {
     title: "Recipients",
     url: "/recipients",
-    icon: DashboardIcons.Recipients,
+    Icon: DashboardIcons.Recipients,
   },
 ];

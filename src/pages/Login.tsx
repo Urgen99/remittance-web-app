@@ -3,9 +3,14 @@ import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
-import { setCredentials } from "@/features/auth/auth.slice";
+import {
+  selectAuthEmail,
+  selectIsAuthVerified,
+  setAuthDetails,
+  setCredentials,
+} from "@/features/auth/auth.slice";
 import { useLoginMutation } from "@/features/auth/authApi.slice";
-import { selectCurrentEmail } from "@/features/users/users.slice";
+import useRouteGuard from "@/hooks/use-route-guard";
 import {
   PasswordSchema,
   PasswordSchemaType,
@@ -18,7 +23,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Login = () => {
-  const email = useSelector(selectCurrentEmail);
+  const email = useSelector(selectAuthEmail);
+  // const isKycCompleted = useSelector(selectIsAuthKycCompleted);
+  const isAccountVerified = useSelector(selectIsAuthVerified);
+
+  useRouteGuard({ primaryCondition: email, navigateTo: "/register" });
 
   const form = useForm<PasswordSchemaType>({
     mode: "all",
@@ -27,7 +36,7 @@ const Login = () => {
       password: "",
     },
   });
-  const [login, { isLoading }] = useLoginMutation();
+  const [login, { isLoading: loginLoading }] = useLoginMutation();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,13 +49,22 @@ const Login = () => {
       }).unwrap();
 
       if (response.data) {
-        dispatch(setCredentials({ ...response.data }));
+        dispatch(setAuthDetails({ password: data.password }));
 
-        console.log(JSON.stringify(response));
-        navigate("/test-protected");
-        toast.success("Successfully Logged in", {
-          description: "You are logged in now",
-        });
+        if (!isAccountVerified) {
+          navigate("/verify-otp");
+        }
+        // else if (!isKycCompleted) {
+        //   navigate("/document-expired"); // later change to complete-profile
+        // }
+        else {
+          dispatch(setCredentials({ ...response.data }));
+          console.log(JSON.stringify(response));
+          navigate("/test-protected");
+          toast.success("Successfully Logged in", {
+            description: "You are logged in now",
+          });
+        }
       }
     } catch (e: any) {
       if (!e.status) {
@@ -59,6 +77,8 @@ const Login = () => {
       } else {
         toast.error("Login Failed");
       }
+    } finally {
+      toast.dismiss();
     }
   }
 
@@ -88,6 +108,7 @@ const Login = () => {
 
                 <Button
                   type="submit"
+                  disabled={loginLoading}
                   className="cursor-pointer text-xs sm:text-sm font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full h-11 text-white"
                 >
                   Submit
@@ -96,11 +117,19 @@ const Login = () => {
             </Form>
 
             <div className="flex flex-col gap-3 font-inter font-medium leading-5 tracking-[-0.02px] text-[#0A090B]">
-              <Button variant="outline" className="h-10">
+              <Button
+                variant="outline"
+                className="h-10"
+                disabled={loginLoading}
+              >
                 <FormIcons.Google />{" "}
                 <p className="text-xs sm:text-sm">Sign in with Google</p>
               </Button>
-              <Button variant="outline" className="h-10">
+              <Button
+                variant="outline"
+                className="h-10"
+                disabled={loginLoading}
+              >
                 <FormIcons.Apple />{" "}
                 <p className="text-xs sm:text-sm">Sign in with Apple</p>
               </Button>
