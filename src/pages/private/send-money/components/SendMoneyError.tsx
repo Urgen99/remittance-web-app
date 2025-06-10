@@ -1,5 +1,5 @@
-import { SendMoneyStepper } from "../icons/Icons";
-import { Button } from "../ui/button";
+import { SendMoneyStepper } from "../../../../components/icons/Icons";
+import { Button } from "../../../../components/ui/button";
 
 const SendMoneyError = () => {
   return (

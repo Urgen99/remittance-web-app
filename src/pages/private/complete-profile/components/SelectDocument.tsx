@@ -10,9 +10,9 @@ import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { FormIcons } from "../icons/Icons";
-import FormHeadingDescription from "../shared/FormHeadingDescription";
-import { FormField } from "../ui/form";
+import { FormIcons } from "../../../../components/icons/Icons";
+import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
+import { FormField } from "../../../../components/ui/form";
 import NavigationButtons from "./NavigationButtons";
 interface SelectDocumentProps {
   handleNext: () => void;

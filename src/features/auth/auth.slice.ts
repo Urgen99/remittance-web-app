@@ -1,4 +1,5 @@
-import { clearAuthState, loadAuthState } from "@/lib/storage";
+import { clearAuthState, loadAuthState, saveAuthState } from "@/lib/storage";
+import { AuthResponse } from "@/lib/type";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 interface AuthPayload {
@@ -31,12 +32,16 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<AuthPayload>) => {
+    setCredentials: (state, action: PayloadAction<AuthResponse>) => {
       const { userName, token, refreshToken, expiration } = action.payload;
+      const expiresAt = Date.now() + parseInt(expiration) * 1000;
+
       state.user = userName;
       state.token = token;
       state.refreshToken = refreshToken;
-      state.expiresAt = expiration;
+      state.expiresAt = expiresAt;
+
+      saveAuthState({ ...state, expiresAt });
     },
 
     setAuthDetails: (
@@ -73,6 +78,12 @@ export const { setCredentials, logOut, setAuthDetails } = authSlice.actions;
 const selectCurrentUser = (state: RootState) => state.auth.user;
 const selectCurrentToken = (state: RootState) => state.auth.token;
 const selectCurrentRefreshToken = (state: RootState) => state.auth.refreshToken;
+const selectTokenExpiration = (state: RootState) => state.auth.expiresAt;
+const selectIsAuthenticated = (state: RootState) => {
+  const { token, expiresAt } = state.auth;
+  return !!token && !!expiresAt && expiresAt > Date.now();
+};
+
 const selectAuthEmail = (state: RootState) => state.auth.email;
 const selectAuthPassword = (state: RootState) => state.auth.password;
 const selectIsAuthVerified = (state: RootState) => state.auth.isVerified;
@@ -85,7 +96,9 @@ export {
   selectCurrentRefreshToken,
   selectCurrentToken,
   selectCurrentUser,
+  selectIsAuthenticated,
   selectIsAuthKycCompleted,
   selectIsAuthVerified,
+  selectTokenExpiration,
 };
 export default authSlice.reducer;

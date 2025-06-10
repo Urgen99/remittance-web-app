@@ -1,3 +1,4 @@
+import DataNotFound from "@/components/shared/DataNotFound";
 import {
   ListItemBody,
   ListItemCard,
@@ -7,17 +8,15 @@ import {
 import PeopleCard from "@/components/shared/Generic/PeopleCard";
 import IconTextContainer from "@/components/shared/IconTextContainer";
 import TextContainer from "@/components/shared/TextContainer";
-import { user } from "@/lib/constant";
-import { InfoIcon } from "lucide-react";
-import { Link } from "react-router-dom";
-
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
 } from "@/components/ui/carousel";
-import DataNotFound from "@/components/shared/DataNotFound";
+import { user } from "@/lib/constant";
+import { InfoIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const colorPalettes = [
   "#EAF1FA",
@@ -49,7 +48,6 @@ const Recipients = () => {
                         patternUrl="/icons/contactPattern.svg"
                       />
                     </CarouselItem>
-                    // <FrequentPeopleCard key={user.id} user={user} />
                   ))}
                 </CarouselContent>
                 <CarouselNext className="absolute -right-3" />
@@ -75,7 +73,7 @@ const Recipients = () => {
                   </div>
                   <ListItemFooter>
                     <Link
-                      to={`/recipient-details/${id}`}
+                      to={`/recipients/${id}`}
                       className="flex items-center justify-center p-3 bg-[#EBEBF9] rounded-full"
                     >
                       <InfoIcon className="size-6" strokeWidth={2} />

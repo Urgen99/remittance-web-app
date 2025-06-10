@@ -6,10 +6,10 @@ import {
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
-import NavigationButtons from "../complete-profile/NavigationButtons";
-import { SendMoneyForm } from "../icons/Icons";
-import FormHeadingDescription from "../shared/FormHeadingDescription";
-import CheckBox from "../ui/forms/CheckBox";
+import NavigationButtons from "../../complete-profile/components/NavigationButtons";
+import { SendMoneyForm } from "../../../../components/icons/Icons";
+import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
+import CheckBox from "../../../../components/ui/forms/CheckBox";
 
 interface PaymentTermsProps {
   handleNext: () => void;

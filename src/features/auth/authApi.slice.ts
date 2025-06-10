@@ -1,3 +1,4 @@
+import { AuthResponse } from "@/lib/type";
 import { apiSlice } from "../api/api.slice";
 
 export const authApiSlice = apiSlice.injectEndpoints({
@@ -17,11 +18,24 @@ export const authApiSlice = apiSlice.injectEndpoints({
     // @DESC: [Login user]
     // @Route: [POST: /User/LoginUser]
     // Access Public
-    login: builder.mutation({
+    login: builder.mutation<
+      { data: AuthResponse },
+      { username: string; password: string }
+    >({
       query: (credentials) => ({
         url: "/User/LoginUser",
         method: "POST",
         body: credentials,
+      }),
+    }),
+
+    // @DESC: [Refresh token]
+    // @Route: [POST: /User/RefreshToken]
+    // Access Public
+    refreshToken: builder.mutation<AuthResponse, { refreshToken: string }>({
+      query: (credentials) => ({
+        url: `/User/RefreshToken?refreshToken=${credentials.refreshToken}`,
+        method: "POST",
       }),
     }),
 

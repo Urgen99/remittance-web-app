@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import NavigationButtons from "@/components/complete-profile/NavigationButtons";
+import NavigationButtons from "@/pages/private/complete-profile/components/NavigationButtons";
 import { SendMoneyForm } from "@/components/icons/Icons";
 import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";

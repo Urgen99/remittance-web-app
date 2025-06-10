@@ -1,11 +1,11 @@
 import { SendMoneyStepper } from "@/components/icons/Icons";
-import AmountDetails from "@/components/send-money/AmountDetails";
-import PaymentInformation from "@/components/send-money/PaymentInformation";
-import PaymentTerms from "@/components/send-money/PaymentTerms";
-import RecipientDetails from "@/components/send-money/RecipientDetails";
-import ReviewPayment from "@/components/send-money/ReviewPayment";
-import SendMoneyError from "@/components/send-money/SendMoneyError";
-import TransactionStatus from "@/components/send-money/TransactionStatus";
+import AmountDetails from "@/pages/private/send-money/components/AmountDetails";
+import PaymentInformation from "@/pages/private/send-money/components/PaymentInformation";
+import PaymentTerms from "@/pages/private/send-money/components/PaymentTerms";
+import RecipientDetails from "@/pages/private/send-money/components/RecipientDetails";
+import ReviewPayment from "@/pages/private/send-money/components/ReviewPayment";
+import SendMoneyError from "@/pages/private/send-money/components/SendMoneyError";
+import TransactionStatus from "@/pages/private/send-money/components/TransactionStatus";
 import Steppers from "@/components/ui/stepper/steppers";
 import { Steps } from "@/lib/interface";
 import { AnimatePresence, motion } from "framer-motion";

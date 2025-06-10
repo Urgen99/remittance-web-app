@@ -133,7 +133,7 @@ const TransactionsTable = () => {
         <div className="w-full flex items-center justify-center">
           <Link
             title="View Transaction"
-            to={`/transaction-details/${id}`}
+            to={`/transactions/${id}`}
             className="cursor-pointer flex items-center justify-center max-w-16 w-full h-8 p-1.5 rounded border border-[#E6E6E6] shadow-sm"
           >
             <EyeIcon className="size-5" />

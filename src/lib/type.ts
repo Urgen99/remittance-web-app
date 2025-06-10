@@ -23,3 +23,21 @@ export type FormDescription = {
   info?: string[];
   iconContainerClassName?: string;
 };
+
+/* -------------------- AUTH TYPES --------------------  */
+export interface AuthState {
+  user: string | null;
+  token: string | null;
+  refreshToken: string | null;
+  expiresAt: number | null;
+}
+
+export interface AuthResponse {
+  userName: string;
+  token: string;
+  refreshToken: string;
+  expiration: string;
+}
+
+// eslint-disable-next-line
+export interface RefreshTokenResponse extends AuthResponse {}

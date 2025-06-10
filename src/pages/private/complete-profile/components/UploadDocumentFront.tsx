@@ -2,8 +2,8 @@
 import { setFormData } from "@/features/complete-profile/slice";
 import { RootState } from "@/features/store";
 import {
-  DocumentBackSchema,
-  DocumentBackSchemaType,
+  DocumentFrontSchema,
+  DocumentFrontSchemaType,
 } from "@/lib/schemas/user/completeProfile";
 import { FormDescription } from "@/lib/type";
 import { readFileAsBase64 } from "@/utils/readFile";
@@ -12,47 +12,53 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { FormIcons } from "../icons/Icons";
-import FormHeadingDescription from "../shared/FormHeadingDescription";
+import { FormIcons } from "../../../../components/icons/Icons";
+import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
 import {
   FileInput,
   FileUploader,
   FileUploaderContent,
   FileUploaderItem,
-} from "../ui/file-upload";
-import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
-import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
+} from "../../../../components/ui/file-upload";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../../../../components/ui/form";
+import { Tabs, TabsList, TabsTrigger } from "../../../../components/ui/tabs";
 import NavigationButtons from "./NavigationButtons";
 
-interface UploadDocumentBackProps {
+interface UploadDocumentFrontProps {
   handleNext: () => void;
   handlePrev: () => void;
 }
 
 const formDescription: FormDescription = {
   Icon: FormIcons.Folder,
-  title: `Upload back side of document`,
+  title: "Upload front side of document",
   subtitle:
     "To comply with Australian government regulations and verify your status, you are required to submit an approved form of identification. Please select one from the options below.",
 };
 
-const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
+const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
   handleNext,
   handlePrev,
 }) => {
-  const { documentFront, documentBack } = useSelector(
+  const { documentType, documentFront } = useSelector(
     (state: RootState) => state.userForm
   );
-  const dispatch = useDispatch();
   const [files, setFiles] = useState<File[] | null>(
-    documentBack ? [documentBack] : []
+    documentFront ? [documentFront] : null
   );
 
-  const methods = useForm<DocumentBackSchemaType>({
+  console.log(files);
+
+  const methods = useForm<DocumentFrontSchemaType>({
     mode: "all",
-    resolver: zodResolver(DocumentBackSchema),
+    resolver: zodResolver(DocumentFrontSchema),
     defaultValues: {
-      documentBack: undefined as unknown as File,
+      documentFront: documentFront,
     },
   });
 
@@ -61,31 +67,32 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
     maxSize: 1024 * 1024 * 2,
     multiple: false,
   };
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (files?.length) {
-      methods.setValue("documentBack", files[0]);
+      methods.setValue("documentFront", files[0]);
     } else {
-      methods.setValue("documentBack", undefined as unknown as File);
+      methods.setValue("documentFront", undefined as unknown as File);
     }
   }, [files, methods]);
 
   useEffect(() => {
-    if (!documentFront) {
+    if (!documentType) {
       handlePrev();
     }
-  }, [documentFront, handlePrev]);
+  }, [documentType, handlePrev]);
 
-  async function onSubmit(values: DocumentBackSchemaType) {
+  async function onSubmit(values: DocumentFrontSchemaType) {
     try {
-      const base64 = await readFileAsBase64(values.documentBack);
-      const documentBack = {
-        name: values.documentBack.name,
-        type: values.documentBack.type,
+      const base64 = await readFileAsBase64(values.documentFront);
+      const documentFront = {
+        name: values.documentFront.name,
+        type: values.documentFront.type,
         base64,
       };
 
-      dispatch(setFormData({ documentBack } as any));
+      dispatch(setFormData({ documentFront } as any));
       handleNext();
     } catch (e) {
       console.error("Error while reading file. Please try again.", e);
@@ -104,7 +111,7 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
         <FormProvider {...methods}>
           <div className="max-w-[36.55rem] w-full flex justify-center flex-col gap-4">
             <Tabs
-              defaultValue="back"
+              defaultValue="front"
               className="flex flex-col items-center gap-5 w-full"
             >
               <TabsList className="!w-fit rounded-full px-1 py-4 grid grid-cols-2 place-content-center !bg-white shadow-sm gap-2.5">
@@ -124,7 +131,7 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
             <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
               <FormField
                 control={methods.control}
-                name="documentBack"
+                name="documentFront"
                 render={() => {
                   return (
                     <FormItem>
@@ -136,7 +143,7 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
                           className="relative bg-background rounded-lg p-2"
                         >
                           <FileInput
-                            id="documentBack"
+                            id="documentFront"
                             className="outline-dashed outline-1 outline-slate-500 h-[11rem] flex items-center justify-center"
                           >
                             <div className="flex items-center justify-center flex-col p-8 w-full gap-2">
@@ -146,7 +153,7 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
 
                               <div className="flex flex-col gap-1 items-center">
                                 <p className="mb-1 text-sm text-[#0A090B] font-[475] font-inter dark:text-gray-400 tracking-[-0.05px]">
-                                  <span className="font-semibold text-sm md:text-base">
+                                  <span className="font-semibold">
                                     Drag & drop files or
                                   </span>
                                   <span className="text-[#1751D0]">
@@ -192,7 +199,7 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
   );
 };
 
-export default UploadDocumentBack;
+export default UploadDocumentFront;
 
 const tabs = [
   {

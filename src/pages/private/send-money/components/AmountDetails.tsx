@@ -3,18 +3,18 @@ import {
   AmountDetailSchemaType,
 } from "@/lib/schemas/send-money/amountDetails";
 import { FormDescription } from "@/lib/type";
-import { Country } from "@/pages/user/dashboard/components/CurrentTransactionRate";
+import { Country } from "@/pages/private/dashboard/components/CurrentTransactionRate";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import NavigationButtons from "../complete-profile/NavigationButtons";
-import { SendMoneyForm } from "../icons/Icons";
-import FormHeadingDescription from "../shared/FormHeadingDescription";
-import DropDownSelect from "../ui/forms/DropDownSelect";
-import TextInput from "../ui/forms/TextInput";
-import CountryAmountSelect from "../ui/send-money/CountryAmountSelect";
+import NavigationButtons from "../../complete-profile/components/NavigationButtons";
+import { SendMoneyForm } from "../../../../components/icons/Icons";
+import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
+import DropDownSelect from "../../../../components/ui/forms/DropDownSelect";
+import TextInput from "../../../../components/ui/forms/TextInput";
+import CountryAmountSelect from "../../../../components/ui/send-money/CountryAmountSelect";
 interface AmountDetailProps {
   handleNext: () => void;
 }
