@@ -34,15 +34,15 @@ const Home = () => {
   async function onSubmit(formData: EmailSchemaType) {
     try {
       const response = await emailExists(formData.email).unwrap();
-      if (response?.emailExits?.data) {
+      if (response?.emailExists?.data) {
         dispatch(
           setAuthDetails({
             email: formData.email,
-            isVerified: response?.emailExits?.data?.isVerified,
-            isKycCompleted: response?.emailExits?.data?.isKycCompleted,
+            // isVerified: response?.emailExists?.data?.isVerified,
+            // isKycCompleted: response?.emailExists?.data?.isKycCompleted,
           })
         );
-        if (response?.emailExits?.data?.exists) {
+        if (response?.emailExists?.data?.exists) {
           navigate("/login");
         } else {
           navigate("/create-password");

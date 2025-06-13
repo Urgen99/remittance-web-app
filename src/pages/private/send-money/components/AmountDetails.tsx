@@ -107,7 +107,7 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
   }
 
   return (
-    <section className="mt-7 px-5 w-full flex justify-center items-center ">
+    <section className="mt-7 px-5 w-full flex justify-center items-center">
       <div className="flex flex-col gap-6 items-center justify-center max-w-[50rem] w-full">
         <div className="flex flex-col gap-14 items-center w-full">
           {/* ---------- FORM DESCRIPTION ---------- */}

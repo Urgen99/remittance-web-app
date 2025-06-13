@@ -32,11 +32,10 @@ const baseQueryWithReAuth: BaseQueryFn<
   //  if status is 401/403 and refresh token exists then try to refresh
   if (result?.error?.status === 401 || result?.error?.status === 403) {
     console.log("sending refresh token"); // remove later
-    // const refreshToken = (store.getState() as RootState).auth.refreshToken;
-    const { refreshToken, expiresAt } = (api.getState() as RootState).auth;
+    const { refreshToken } = (api.getState() as RootState).auth;
 
-    // check if refresh token exists and isn't expired
-    if (!refreshToken || (expiresAt && expiresAt < Date.now())) {
+    // check if refresh token exists and token exists and isn't expired
+    if (!refreshToken) {
       api.dispatch(logOut());
       return result;
     }
@@ -53,10 +52,14 @@ const baseQueryWithReAuth: BaseQueryFn<
     console.log("Refresh the result", refreshResult); // remove later
 
     if (refreshResult?.data) {
-      // const user = (api.getState() as RootState).auth.user;
-      api.dispatch(setCredentials(refreshResult.data as AuthResponse));
+      const user = (api.getState() as RootState).auth.user;
       // store the new token
-      // store.dispatch(setCredentials({ ...(refreshResult.data as any), user }));
+      api.dispatch(
+        setCredentials({
+          ...(refreshResult.data as AuthResponse),
+          userName: user as string,
+        })
+      );
 
       // retry the original query with new accessToken
       result = await baseQuery(args, api, extraOptions);

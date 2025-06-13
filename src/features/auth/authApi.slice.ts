@@ -4,9 +4,11 @@ import { apiSlice } from "../api/api.slice";
 export const authApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    // @DESC: [Register new user]
-    // @Route: [POST: /User]
-    // Access Public
+    /**
+     * @DESC: [Register new user]
+     * @Route: [POST: /User]
+     * Access Public
+     */
     register: builder.mutation({
       query: (credentials) => ({
         url: "/User",
@@ -15,9 +17,12 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    // @DESC: [Login user]
-    // @Route: [POST: /User/LoginUser]
-    // Access Public
+    /**
+     * @DESC: [Login user]
+     * @Route: [POST: /User/LoginUser]
+     * Access Public
+     */
+
     login: builder.mutation<
       { data: AuthResponse },
       { username: string; password: string }
@@ -32,16 +37,22 @@ export const authApiSlice = apiSlice.injectEndpoints({
     // @DESC: [Refresh token]
     // @Route: [POST: /User/RefreshToken]
     // Access Public
-    refreshToken: builder.mutation<AuthResponse, { refreshToken: string }>({
-      query: (credentials) => ({
-        url: `/User/RefreshToken?refreshToken=${credentials.refreshToken}`,
-        method: "POST",
-      }),
-    }),
+    // sendRefreshToken: builder.mutation<
+    //   { data: AuthResponse },
+    //   { refreshToken: string }
+    // >({
+    //   query: (credentials) => ({
+    //     url: `/User/RefreshToken?refreshToken=${credentials.refreshToken}`,
+    //     method: "POST",
+    //   }),
+    // }),
 
-    // @DESC: [Check if email exists]
-    // @Route: [GET: /User/exists?email="user@email.com"]
-    // Access Public
+    /**
+     * @DESC: [Check if email exists]
+     * @Route: [GET: /User/exists?email="user@email.com"]
+     * Access Public
+     */
+
     emailExists: builder.query({
       query: (email) => ({
         url: `/User/exists?email=${email}`,
@@ -49,9 +60,12 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    // @DESC: [Verify OTP code]
-    // @Route: [POST: /User/ConfirmOtp]
-    // Access Public
+    /**
+     * @DESC: [Verify OTP code]
+     * @Route: [POST: /User/ConfirmOtp]
+     * Access Public
+     */
+
     verifyOTP: builder.mutation({
       query: (credentials) => ({
         url: "User/ConfirmOtp",
@@ -60,12 +74,40 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    // @DESC: [Resend OTP code]
-    // @Route: [POST: /User/ResendConfirmation]
-    // Access Public
+    /**
+     * @DESC: [Resend OTP code]
+     * @Route: [POST: /User/ResendConfirmation]
+     * Access Public
+     */
+
     resendOTP: builder.mutation({
       query: (credentials) => ({
         url: "User/ResendConfirmation",
+        method: "POST",
+        body: credentials,
+      }),
+    }),
+
+    /**
+     * @DESC: [Forgot Password]
+     * @Route: [POST: /User/ResetPassword?email=test@gmail.com]
+     * Access Public
+     */
+    forgotPassword: builder.mutation({
+      query: (email) => ({
+        url: `/User/ResetPassword?email=${email}`,
+        method: "POST",
+      }),
+    }),
+
+    /**
+     * @DESC: [Reset Password]
+     * @Route: [POST: /User/SetNewPassword]
+     * Access Public
+     */
+    resetPassword: builder.mutation({
+      query: (credentials) => ({
+        url: "/User/SetNewPassword",
         method: "POST",
         body: credentials,
       }),
@@ -88,4 +130,5 @@ export const {
   useLazyEmailExistsQuery,
   useVerifyOTPMutation,
   useResendOTPMutation,
+  // useSendRefreshTokenMutation,
 } = authApiSlice;

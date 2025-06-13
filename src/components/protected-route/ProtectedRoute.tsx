@@ -1,48 +1,33 @@
-// import { selectCurrentToken } from "@/features/auth/auth.slice";
-// import { useEffect } from "react";
-// import { useSelector } from "react-redux";
-// import { Navigate, Outlet, useNavigate } from "react-router-dom";
-
-import useAuth from "@/hooks/useAuth";
+import {
+  logOut,
+  selectCurrentExpiry,
+  selectCurrentToken,
+} from "@/features/auth/auth.slice";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-// const ProtectedRoute = () => {
-//   const navigate = useNavigate();
-//   const token = useSelector(selectCurrentToken);
-//   const isAuthChecking = typeof token === "undefined";
-
-//   useEffect(() => {
-//     if (!isAuthChecking && !token) {
-//       navigate("/register", { replace: true });
-//     }
-//   }, [token, isAuthChecking, navigate]);
-
-//   if (isAuthChecking) {
-//     return (
-//       <section className="min-h-screen flex items-center justify-center">
-//         <h1 className="text-2xl font-semibold">Loading...</h1>
-//       </section>
-//     );
-//   }
-
-//   return token ? <Outlet /> : <Navigate to="/" replace />;
-// };
-
-// export default ProtectedRoute;
-
 const ProtectedRoute = () => {
-  const { isAuthenticated } = useAuth();
   const location = useLocation();
+  const token = useSelector(selectCurrentToken);
+  const expiresAt = useSelector(selectCurrentExpiry);
+  const dispatch = useDispatch();
 
-  if (isAuthenticated === undefined) {
-    return <h1>Loading</h1>;
+  useEffect(() => {
+    if (
+      !token ||
+      !expiresAt ||
+      (token && expiresAt && expiresAt < Date.now())
+    ) {
+      dispatch(logOut());
+    }
+  }, [token, expiresAt, dispatch]);
+
+  if (!token || !expiresAt || (token && expiresAt && expiresAt < Date.now())) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  return isAuthenticated ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
-  );
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

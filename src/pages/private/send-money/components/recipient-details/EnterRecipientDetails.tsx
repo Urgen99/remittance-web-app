@@ -69,7 +69,7 @@ const EnterRecipientDetails = ({
   }
 
   return (
-    <section className="flex flex-col gap-6 items-center justify-center w-[50rem]">
+    <section className="flex flex-col gap-6 items-center justify-center">
       <div className="max-w-[33.5rem] flex flex-col gap-14 items-center w-full">
         {/* ---------- FORM DESCRIPTION ---------- */}
         <FormHeadingDescription formDescription={formDescription} />
@@ -164,7 +164,7 @@ const EnterRecipientDetails = ({
             </div>
           </div>
 
-          <div className="flex flex-col items-center w-full gap-14">
+          <div className="max-w-[50rem] flex flex-col items-center w-full gap-14">
             <NavigationButtons
               onBackClick={handlePrev}
               disabled={!form.formState.isValid}

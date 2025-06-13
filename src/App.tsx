@@ -5,10 +5,7 @@ import DefaultLayout from "./components/layouts/DefaultLayout";
 import ProtectedRoute from "./components/protected-route/ProtectedRoute";
 import TailwindIndicator from "./components/shared/TailwindIndicator";
 import { Toaster } from "./components/ui/sonner";
-import {
-  selectCurrentToken,
-  selectCurrentUser,
-} from "./features/auth/auth.slice";
+import { selectCurrentUser } from "./features/auth/auth.slice";
 import { useFetchReferencesQuery } from "./features/auth/authApi.slice";
 import useScrollToTop from "./hooks/scrollToTop";
 import CompleteProfile from "./pages/private/complete-profile/CompleteProfile";
@@ -145,21 +142,22 @@ const TestPaths = () => {
 };
 
 const TestRoute = () => {
-  const token = useSelector(selectCurrentToken);
   const user = useSelector(selectCurrentUser);
-  const { data } = useFetchReferencesQuery(undefined, { skip: !token });
+  const { data } = useFetchReferencesQuery(undefined);
 
   return (
     <div className="min-h-screen flex flex-col gap-6">
-      <h1 className="text-2xl">Protected Route</h1>
-
-      <div className="max-w-96 w-full p-6 border border-gray-300 shadow-sm rounded-lg flex flex-col gap-4">
+      <h1 className="text-2xl">Test Protected Route</h1>
+      <p className="bg-red-50 text-red-600 text-xl p-6">
+        This is a protected route for test purposes only
+      </p>
+      <div className="max-w-5xl w-full p-6 border border-gray-300 shadow-sm rounded-lg flex flex-col gap-4">
         <p>
           <span className="font-semibold">User: </span> {JSON.stringify(user)}
         </p>
         <p>
           <span className="font-semibold">Token:</span>
-          {token?.slice(0, 20)}...
+          {/* {token?.slice(0, 20)}... */}
         </p>
 
         <div>{JSON.stringify(data)}</div>

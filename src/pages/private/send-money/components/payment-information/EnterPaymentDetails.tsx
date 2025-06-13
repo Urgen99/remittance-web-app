@@ -54,7 +54,7 @@ const EnterPaymentDetails = ({
     handleNext();
   }
   return (
-    <section className="flex flex-col gap-6 items-center justify-center w-[50rem]">
+    <section className="flex flex-col gap-6 items-center justify-center">
       <div className="max-w-[33.5rem] flex flex-col gap-14 items-center w-full">
         {/* ---------- FORM DESCRIPTION ---------- */}
         <FormHeadingDescription formDescription={formDescription} />
@@ -64,7 +64,7 @@ const EnterPaymentDetails = ({
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col items-center gap-44 justify-between w-full h-full"
+          className="flex flex-col items-center gap-44 justify-between max-w-[50rem] w-full h-full"
         >
           <div className="w-full">
             <div className="w-full flex items-center gap-3">

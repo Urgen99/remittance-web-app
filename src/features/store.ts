@@ -1,4 +1,3 @@
-import { clearAuthState, saveAuthState } from "@/lib/storage";
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/api.slice";
 import authReducer from "./auth/auth.slice";
@@ -24,15 +23,6 @@ export const store = configureStore({
 });
 
 // subscribe to store changes and persist auth state
-store.subscribe(() => {
-  const authState = store.getState().auth;
-  try {
-    saveAuthState(authState);
-  } catch (error) {
-    console.error(`Error while persisting auth state: ${error}`);
-    clearAuthState();
-  }
-});
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

@@ -5,7 +5,7 @@ import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
 import {
   selectAuthEmail,
-  selectIsAuthVerified,
+  // selectIsAuthVerified,
   setAuthDetails,
   setCredentials,
 } from "@/features/auth/auth.slice";
@@ -24,8 +24,6 @@ import { toast } from "sonner";
 
 const Login = () => {
   const email = useSelector(selectAuthEmail);
-  // const isKycCompleted = useSelector(selectIsAuthKycCompleted);
-  const isAccountVerified = useSelector(selectIsAuthVerified);
 
   useRouteGuard({ primaryCondition: email, navigateTo: "/register" });
 
@@ -44,14 +42,14 @@ const Login = () => {
   async function onSubmit(data: PasswordSchemaType) {
     try {
       const response = await login({
-        username: email,
+        username: email as string,
         password: data.password,
       }).unwrap();
 
       if (response.data) {
         dispatch(setAuthDetails({ password: data.password }));
 
-        if (!isAccountVerified) {
+        if (!response.data.isVerified) {
           navigate("/verify-otp");
         }
         // else if (!isKycCompleted) {

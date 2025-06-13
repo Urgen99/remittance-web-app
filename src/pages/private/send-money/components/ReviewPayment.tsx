@@ -88,7 +88,7 @@ const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
 
   return (
     <section className="mt-7">
-      <div className="flex flex-col gap-10 items-center justify-center w-[50rem]">
+      <div className="flex flex-col gap-10 items-center justify-center ">
         <div className="items-center w-full">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
@@ -117,7 +117,7 @@ const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center w-full gap-14">
+          <div className="max-w-[50rem] flex flex-col items-center w-full gap-14">
             <NavigationButtons
               onBackClick={handlePrev}
               onContinueClick={handleNext}

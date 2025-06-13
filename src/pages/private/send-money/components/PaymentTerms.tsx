@@ -38,7 +38,7 @@ const PaymentTerms = ({ handleNext, handlePrev }: PaymentTermsProps) => {
 
   return (
     <section className="mt-7 ">
-      <div className="flex flex-col gap-6 items-center justify-center w-[50rem]">
+      <div className="flex flex-col gap-6 items-center justify-center">
         <div className="flex flex-col gap-14 items-center w-full">
           {/* ---------- FORM DESCRIPTION ---------- */}
           <FormHeadingDescription formDescription={formDescription} />
@@ -61,7 +61,7 @@ const PaymentTerms = ({ handleNext, handlePrev }: PaymentTermsProps) => {
               </form>
             </FormProvider>
           </div>
-          <div className="flex flex-col items-center w-full gap-14">
+          <div className="max-w-[50rem] flex flex-col items-center w-full gap-14">
             <NavigationButtons
               onBackClick={handlePrev}
               onContinueClick={handleNext}
