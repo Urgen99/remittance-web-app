@@ -1,5 +1,9 @@
 const BASE_URL = import.meta.env.VITE_SERVER;
 
+const VERIFICATION_ROUTES = ["/complete-profile", "/document-expired"];
+
+const PUBLIC_ROUTES = ["/login", "/register"];
+
 export const user = {
   name: "Amanda Smith",
   contact: "981823123",
@@ -299,4 +303,4 @@ export type Terms = {
   }[];
   conclusion?: string;
 };
-export { BASE_URL };
+export { BASE_URL, PUBLIC_ROUTES, VERIFICATION_ROUTES };

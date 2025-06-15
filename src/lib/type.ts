@@ -1,4 +1,4 @@
-import { JSX } from "react";
+import { JSX, ReactElement } from "react";
 import { Path } from "react-hook-form";
 import { z } from "zod";
 
@@ -15,7 +15,7 @@ export type InputFieldsType<T extends z.ZodTypeAny> = {
 export type FormDescription = {
   Icon: () => JSX.Element;
   title: string;
-  subtitle: string;
+  subtitle: string | ReactElement;
   links?: {
     title: string;
     to: string;

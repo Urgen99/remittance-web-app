@@ -23,16 +23,23 @@ import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
+interface VerifyOTPState {
+  verificationMode: "auth" | "forgot-password";
+}
+
 const VerifyOtp = () => {
+  const { state } = useLocation();
+  const { verificationMode } = (state as VerifyOTPState) || {};
+
   const email = useSelector(selectAuthEmail);
   const password = useSelector(selectAuthPassword);
 
   useRouteGuard({
     primaryCondition: email,
-    secondaryCondition: password,
+    secondaryCondition: verificationMode === "auth" ? password : true,
     navigateTo: "/register",
   });
 
@@ -50,35 +57,46 @@ const VerifyOtp = () => {
 
   async function onSubmit(data: OTPSchemaType) {
     try {
-      const credentials = {
-        emailAddress: email,
-        otpCode: data.otp,
-        password,
-      };
+      if (verificationMode === "auth") {
+        const credentials = {
+          emailAddress: email,
+          otpCode: data.otp,
+          password,
+        };
 
-      const response = await verifyOTP(credentials).unwrap();
+        const response = await verifyOTP(credentials).unwrap();
 
-      if (response) {
-        toast.success("Verification Successful", {
-          description: "You are being redirected to the dashboard page.",
-        });
+        if (response) {
+          toast.success("Verification Successful", {
+            description: "You are being redirected to the dashboard page.",
+          });
 
-        if (response?.data) {
-          dispatch(setCredentials({ ...response?.data }));
-          navigate("/test-protected");
+          if (response?.data) {
+            dispatch(setCredentials({ ...response?.data }));
+
+            if (!response?.data?.isKycCompleted) {
+              navigate("/complete-profile");
+            } else {
+              navigate("/dashboard");
+            }
+          }
         }
+      } else if (verificationMode === "forgot-password") {
+        navigate("/reset-password", { state: { otpCode: data.otp } });
       }
     } catch (e: any) {
       console.error("error here", e);
 
-      if (e?.status === 400 || e?.status === 401) {
-        toast.error("Invalid OTP", {
-          description: "Please enter a valid OTP.",
-        });
-      } else {
-        toast.error("Verification Failed", {
-          description: "Please try again later.",
-        });
+      if (verificationMode === "auth") {
+        if (e?.status === 400 || e?.status === 401) {
+          toast.error("Invalid OTP", {
+            description: "Please enter a valid OTP.",
+          });
+        } else {
+          toast.error("Verification Failed", {
+            description: "Please try again later.",
+          });
+        }
       }
     } finally {
       toast.dismiss();
@@ -108,6 +126,21 @@ const VerifyOtp = () => {
     }
   }
 
+  const formDescription: FormDescription = {
+    Icon: FormIcons.Lock,
+    title: "Verify your otp",
+    links: {
+      title: "Back to Login",
+      to: "/login",
+    },
+    subtitle: (
+      <span>
+        Enter the six digit code that you received in your mail{" "}
+        <span className="text-[#1B1B1B]">{email}</span> ,and click verify to
+      </span>
+    ),
+  };
+
   return (
     <section className="mt-7 px-5">
       <div className="flex items-center justify-center">
@@ -116,8 +149,6 @@ const VerifyOtp = () => {
 
           <FormHeadingDescription formDescription={formDescription} />
 
-          {email}
-          {password}
           <div className="flex flex-col gap-5 items-center">
             {/* ---------- FORM CONTAINER ---------- */}
             <Form {...form}>
@@ -174,14 +205,3 @@ const VerifyOtp = () => {
 };
 
 export default VerifyOtp;
-
-const formDescription: FormDescription = {
-  Icon: FormIcons.Lock,
-  title: "Verify your otp",
-  subtitle:
-    "Forgot your password? No worries! Enter your email below, and we'll send you an OTP to reset your password securely.",
-  links: {
-    title: "Back to Login",
-    to: "/login",
-  },
-};

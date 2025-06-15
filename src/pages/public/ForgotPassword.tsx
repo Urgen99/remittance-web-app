@@ -3,6 +3,7 @@ import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
+import useAuthState from "@/hooks/useAuthState";
 import { EmailSchema, EmailSchemaType } from "@/lib/schemas/user/email";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
+  useAuthState();
   const form = useForm<EmailSchemaType>({
     resolver: zodResolver(EmailSchema),
     mode: "all",

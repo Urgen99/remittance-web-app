@@ -56,9 +56,11 @@ const AppContent = () => {
         <Route path="reset-password" element={<ResetPassword />} />
 
         {/* Private Pages */}
-        <Route path="complete-profile" element={<CompleteProfile />} />
-        <Route path="document-expired" element={<DocumentExpired />} />
-        <Route path="send-money" element={<SendMoney />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="complete-profile" element={<CompleteProfile />} />
+          <Route path="document-expired" element={<DocumentExpired />} />
+          <Route path="send-money" element={<SendMoney />} />
+        </Route>
       </Route>
 
       {/* ---------- DASHBOARD LAYOUT PAGES  ---------- */}

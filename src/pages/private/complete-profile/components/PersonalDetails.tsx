@@ -1,3 +1,4 @@
+import { useCompleteProfileMutation } from "@/features/complete-profile/complete-profile.apiSlice";
 import { setFormData } from "@/features/complete-profile/slice";
 import { RootState } from "@/features/store";
 import {
@@ -12,12 +13,11 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { FormIcons } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
-import NavigationButtons from "./NavigationButtons";
-import TextInput from "../../../../components/ui/forms/TextInput";
+import DatePicker from "../../../../components/ui/forms/DatePicker";
 import DateSelector from "../../../../components/ui/forms/DateSelector";
 import DropDownSelect from "../../../../components/ui/forms/DropDownSelect";
-import DatePicker from "../../../../components/ui/forms/DatePicker";
-import { useCompleteProfileMutation } from "@/features/complete-profile/complete-profile.apiSlice";
+import TextInput from "../../../../components/ui/forms/TextInput";
+import NavigationButtons from "./NavigationButtons";
 interface PersonalDetailProps {
   handlePrev: () => void;
 }
@@ -65,7 +65,10 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
     },
   });
 
-  const [completeProfile, { isLoading }] = useCompleteProfileMutation();
+  const [
+    completeProfile,
+    //  { isLoading }
+  ] = useCompleteProfileMutation();
 
   useEffect(() => {
     if (!documentBack) {
@@ -241,7 +244,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 disabled={!form.formState.isValid}
               />
             </form>
-            {/* <DevTool control={form.control} /> */}
+            <DevTool control={form.control} />
           </FormProvider>
         </div>
       </div>

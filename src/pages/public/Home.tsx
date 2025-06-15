@@ -5,6 +5,7 @@ import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
 import { setAuthDetails } from "@/features/auth/auth.slice";
 import { useLazyEmailExistsQuery } from "@/features/auth/authApi.slice";
+import useAuthState from "@/hooks/useAuthState";
 import { EmailSchema, EmailSchemaType } from "@/lib/schemas/user/email";
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +20,8 @@ const formDescription: FormDescription = {
     "Enjoy a seamless, hassle-free way to send money to Nepal with ease!",
 };
 const Home = () => {
+  useAuthState();
+
   const form = useForm<EmailSchemaType>({
     resolver: zodResolver(EmailSchema),
     mode: "all",

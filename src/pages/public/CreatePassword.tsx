@@ -49,7 +49,7 @@ const CreatePassword = () => {
           description: `${response?.message}`,
         });
         dispatch(setAuthDetails({ password: data.newPassword }));
-        navigate("/verify-otp");
+        navigate("/verify-otp", { state: { verificationMode: "auth" } });
       }
     } catch (e) {
       console.error("Error: ", e);

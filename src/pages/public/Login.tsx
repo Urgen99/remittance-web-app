@@ -5,11 +5,13 @@ import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
 import {
   selectAuthEmail,
-  // selectIsAuthVerified,
   setAuthDetails,
   setCredentials,
 } from "@/features/auth/auth.slice";
-import { useLoginMutation } from "@/features/auth/authApi.slice";
+import {
+  useForgotPasswordMutation,
+  useLoginMutation,
+} from "@/features/auth/authApi.slice";
 import useRouteGuard from "@/hooks/use-route-guard";
 import {
   PasswordSchema,
@@ -19,7 +21,7 @@ import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Login = () => {
@@ -35,7 +37,8 @@ const Login = () => {
     },
   });
   const [login, { isLoading: loginLoading }] = useLoginMutation();
-
+  const [forgotPassword, { isLoading: forgotPasswordLoading }] =
+    useForgotPasswordMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -50,18 +53,21 @@ const Login = () => {
         dispatch(setAuthDetails({ password: data.password }));
 
         if (!response.data.isVerified) {
-          navigate("/verify-otp");
-        }
-        // else if (!isKycCompleted) {
-        //   navigate("/document-expired"); // later change to complete-profile
-        // }
-        else {
+          navigate("/verify-otp", { state: { verificationMode: "auth" } });
+        } else {
           dispatch(setCredentials({ ...response.data }));
-          console.log(JSON.stringify(response));
-          navigate("/test-protected");
-          toast.success("Successfully Logged in", {
-            description: "You are logged in now",
-          });
+          if (!response.data.isKycCompleted) {
+            toast.warning("KYC not verified.", {
+              description: "Please verify your KYC before continuing.",
+            });
+            navigate("/complete-profile");
+          } else {
+            console.log(JSON.stringify(response));
+            navigate("/dashboard");
+            toast.success("Successfully Logged in", {
+              description: "You are logged in now",
+            });
+          }
         }
       }
     } catch (e: any) {
@@ -77,6 +83,25 @@ const Login = () => {
       }
     } finally {
       toast.dismiss();
+    }
+  }
+
+  async function handleForgotPassword() {
+    try {
+      const response = await forgotPassword(email).unwrap();
+
+      if (response?.message) {
+        toast.success(response?.message || "Email sent successfully", {
+          description:
+            "Please check your email. We have sent you an OTP to reset your password.",
+        });
+
+        navigate("/verify-otp", {
+          state: { verificationMode: "forgot-password" },
+        });
+      }
+    } catch (e) {
+      console.error("Error while sending email: ", e);
     }
   }
 
@@ -106,7 +131,7 @@ const Login = () => {
 
                 <Button
                   type="submit"
-                  disabled={loginLoading}
+                  disabled={loginLoading || forgotPasswordLoading}
                   className="cursor-pointer text-xs sm:text-sm font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full h-11 text-white"
                 >
                   Submit
@@ -118,7 +143,7 @@ const Login = () => {
               <Button
                 variant="outline"
                 className="h-10"
-                disabled={loginLoading}
+                disabled={loginLoading || forgotPasswordLoading}
               >
                 <FormIcons.Google />{" "}
                 <p className="text-xs sm:text-sm">Sign in with Google</p>
@@ -126,19 +151,21 @@ const Login = () => {
               <Button
                 variant="outline"
                 className="h-10"
-                disabled={loginLoading}
+                disabled={loginLoading || forgotPasswordLoading}
               >
                 <FormIcons.Apple />{" "}
                 <p className="text-xs sm:text-sm">Sign in with Apple</p>
               </Button>
             </div>
 
-            <Link
-              to="/forgot-password"
-              className="text-[#3333C1] text-sm font-medium font-inter tracking-[-1%] underline"
+            <Button
+              variant="link"
+              disabled={loginLoading || forgotPasswordLoading}
+              onClick={handleForgotPassword}
+              className="text-[#3333C1] text-sm font-medium font-inter tracking-[-1%] underline w-fit"
             >
               Forgot Password?
-            </Link>
+            </Button>
           </div>
         </div>
       </section>

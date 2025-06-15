@@ -6,6 +6,8 @@ export type AuthSavedState = {
   expiresAt: number | null;
   token: string | null;
   user: string | null;
+  isVerified: boolean | null;
+  isKycCompleted: boolean | null;
 };
 const loadAuthState = (): AuthSavedState | null => {
   try {

@@ -27,19 +27,22 @@ const defaultReceiver = {
   code: "INR",
 };
 const CurrentTransactionRate = () => {
-  // const token = useSelector(selectCurrentToken);
+  const token = useSelector(selectCurrentToken);
   const [senderCountry, setSenderCountry] = useState<Country>(defaultSender);
   const [receiverCountry, setReceiverCountry] =
     useState<Country>(defaultReceiver);
 
-  const { data, isLoading, isError, error } = useGetExchangeRatesQuery(
+  const {
+    data,
+    // isLoading, isError, error
+  } = useGetExchangeRatesQuery(
     {
       SendingCountry: senderCountry.name,
       SendingCurrency: senderCountry.code,
       ReceivingCountry: receiverCountry.name,
       ReceivingCurrency: receiverCountry.code,
     },
-    { skip: !senderCountry || !receiverCountry }
+    { skip: !token || !senderCountry || !receiverCountry }
   );
   const exchangeRate =
     data?.data?.map(({ rate }: { rate: number }) => rate) ?? [];

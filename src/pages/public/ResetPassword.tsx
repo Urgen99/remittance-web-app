@@ -3,6 +3,9 @@ import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
+import { selectAuthEmail } from "@/features/auth/auth.slice";
+import { useResetPasswordMutation } from "@/features/auth/authApi.slice";
+import useRouteGuard from "@/hooks/use-route-guard";
 import {
   CreatePasswordSchema,
   CreatePasswordSchemaType,
@@ -10,8 +13,25 @@ import {
 import { FormDescription } from "@/lib/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const ResetPassword = () => {
+  const { state } = useLocation();
+  const { otpCode } = (state as { otpCode: string }) || {};
+  const email = useSelector(selectAuthEmail);
+
+  useRouteGuard({
+    primaryCondition: email,
+    secondaryCondition: otpCode,
+    navigateTo: "/register",
+  });
+
+  const navigate = useNavigate();
+
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+
   const form = useForm<CreatePasswordSchemaType>({
     resolver: zodResolver(CreatePasswordSchema),
     defaultValues: {
@@ -19,17 +39,27 @@ const ResetPassword = () => {
       confirmPassword: "",
     },
   });
-  function onSubmit(data: CreatePasswordSchemaType) {
-    console.log("form is submitted", data);
 
-    alert({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  async function onSubmit(data: CreatePasswordSchemaType) {
+    try {
+      const credentials = {
+        userName: email,
+        password: data.newPassword,
+        confirmationCode: otpCode,
+      };
+
+      const response = await resetPassword(credentials).unwrap();
+
+      if (response?.message) {
+        toast.success(response?.message || "Password reset successfully");
+        navigate("/register");
+      }
+    } catch (e) {
+      console.log("Error", e);
+      if (e instanceof Error) {
+        toast.error(e?.message || "Something went wrong. Please try again.");
+      }
+    }
   }
 
   return (
@@ -68,6 +98,7 @@ const ResetPassword = () => {
 
                 <Button
                   type="submit"
+                  disabled={isLoading}
                   className="cursor-pointer font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full h-11 text-white"
                 >
                   Submit
@@ -79,7 +110,7 @@ const ResetPassword = () => {
               {formDescription.info && (
                 <ul className="p-3 bg-[#EBEBF9] text-[13px] rounded-[8px] flex flex-col gap-4">
                   {formDescription.info.map((item: string) => (
-                    <li key={item}>
+                    <li key={item + Math.random()}>
                       <p className="flex gap-1 sm:gap-[5px] text-xs sm:text-base">
                         <FormIcons.InfoFilled className="sm:mt-1" />
                         {item}

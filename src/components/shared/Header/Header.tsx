@@ -1,4 +1,4 @@
-import { HelpCircleIcon, TriangleAlert } from "lucide-react";
+import { HelpCircleIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Header = () => {
@@ -13,13 +13,6 @@ const Header = () => {
               className="w-28 h-[1.5rem] lg:w-32 lg:h-8 transition-all ease-in-out duration-300"
             />
           </Link>
-
-          {/* <div className="flex flex-col items-center gap-2 bg-red-100 sm:px-3 py-1 rounded-md text-red-600 ">
-            <TriangleAlert />
-            <span className="text-sm sm:text-sm">
-              Development Preview - Test Data Only
-            </span>
-          </div> */}
 
           <Link
             to="#"

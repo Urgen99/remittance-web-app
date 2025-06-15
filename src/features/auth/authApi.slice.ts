@@ -130,5 +130,7 @@ export const {
   useLazyEmailExistsQuery,
   useVerifyOTPMutation,
   useResendOTPMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
   // useSendRefreshTokenMutation,
 } = authApiSlice;
