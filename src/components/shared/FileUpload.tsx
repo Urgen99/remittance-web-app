@@ -17,7 +17,7 @@ import { setFormData } from "@/features/complete-profile/slice";
 import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import NavigationButtons from "../complete-profile/NavigationButtons";
+import NavigationButtons from "../../pages/private/complete-profile/components/NavigationButtons";
 
 import { FormIcons } from "../icons/Icons";
 

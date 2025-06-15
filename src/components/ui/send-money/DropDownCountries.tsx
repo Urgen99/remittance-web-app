@@ -5,7 +5,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Country } from "@/pages/user/dashboard/components/CurrentTransactionRate";
+import { Country } from "@/pages/private/dashboard/components/CurrentTransactionRate";
 import { ChevronDown } from "lucide-react";
 import React from "react";
 

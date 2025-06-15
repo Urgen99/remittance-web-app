@@ -1,4 +1,4 @@
-import { Country } from "@/pages/user/dashboard/components/CurrentTransactionRate";
+import { Country } from "@/pages/private/dashboard/components/CurrentTransactionRate";
 import React from "react";
 import DropDownCountries from "./DropDownCountries";
 import { Input } from "../input";

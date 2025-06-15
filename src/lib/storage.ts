@@ -1,56 +1,54 @@
-import { SESSION } from "./constant";
+import { STORAGE } from "@/config/env.config";
+import { decryptString, encryptString } from "./hash-string";
 
-export interface AuthState {
-  user: string | null;
-  token: string | null;
+export type AuthSavedState = {
   refreshToken: string | null;
-  expiresAt: string | null;
-}
-
-const loadAuthState = (): AuthState => {
-  const defaultAuthState: AuthState = {
-    user: null,
-    token: null,
-    refreshToken: null,
-    expiresAt: null,
-  };
-
+  expiresAt: number | null;
+  token: string | null;
+  user: string | null;
+  isVerified: boolean | null;
+  isKycCompleted: boolean | null;
+};
+const loadAuthState = (): AuthSavedState | null => {
   try {
-    const authData = sessionStorage.getItem(SESSION.key);
+    const authData = sessionStorage.getItem(STORAGE.key);
+    if (!authData) return null;
 
-    if (!authData) return defaultAuthState;
+    const parsedData = JSON.parse(
+      decryptString(authData, STORAGE.secret_key)
+    ) as AuthSavedState;
 
-    const authState = JSON.parse(atob(authData)) as AuthState;
-
-    const isValid =
-      authState.expiresAt && new Date(authState.expiresAt) > new Date();
-
-    if (isValid) {
-      return { ...defaultAuthState, ...authState };
+    if (
+      parsedData.refreshToken &&
+      parsedData.expiresAt &&
+      parsedData.expiresAt > Date.now()
+    ) {
+      return parsedData;
     }
 
-    sessionStorage.removeItem(SESSION.key);
-    return defaultAuthState;
+    return null;
   } catch (error) {
-    console.error("Error while loading auth state: ", error);
-    return defaultAuthState;
+    console.error("Auth state loading failed: ", error);
+    return null;
   }
 };
 
-const saveAuthState = (authState: AuthState): void => {
+const saveAuthState = (authState: AuthSavedState): void => {
   try {
-    const authData = btoa(JSON.stringify(authState));
-    sessionStorage.setItem(SESSION.key, authData);
-  } catch (error) {
-    console.error("Error while saving auth state: ", error);
+    const encryptData = encryptString(
+      JSON.stringify(authState),
+      STORAGE.secret_key
+    );
+
+    // Decide later whether to use sessionStorage or localStorage
+    sessionStorage.setItem(STORAGE.key, encryptData);
+  } catch (err) {
+    console.error("Error while saving auth state: ", err);
   }
 };
 
 const clearAuthState = () => {
-  try {
-    sessionStorage.removeItem(SESSION.key);
-  } catch (error) {
-    console.error("Error while clearing auth state: ", error);
-  }
+  sessionStorage.removeItem(STORAGE.key);
 };
+
 export { clearAuthState, loadAuthState, saveAuthState };

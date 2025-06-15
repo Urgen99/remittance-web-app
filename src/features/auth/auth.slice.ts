@@ -1,15 +1,14 @@
-import { clearAuthState, loadAuthState } from "@/lib/storage";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { clearAuthState, loadAuthState, saveAuthState } from "@/lib/storage";
+import { AuthResponse } from "@/lib/type";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-interface AuthPayload {
-  userName: string;
-  token: string;
-  refreshToken: string;
-  expiration: string;
-}
 
 type AuthInitialStateType = {
   email: string | null;
+  user: string | null;
+  token: string | null;
+  refreshToken: string | null;
+  expiresAt: number | null;
   password: string | null;
   isVerified: boolean | null;
   isKycCompleted: boolean | null;
@@ -18,74 +17,97 @@ type AuthInitialStateType = {
 const authInitialState: AuthInitialStateType = {
   email: null,
   password: null,
+  user: null,
+  token: null,
+  refreshToken: null,
+  expiresAt: null,
   isVerified: null,
   isKycCompleted: null,
 };
 
-const initialState = {
-  ...loadAuthState(),
+const initialState: AuthInitialStateType = {
   ...authInitialState,
+  ...loadAuthState(),
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<AuthPayload>) => {
-      const { userName, token, refreshToken, expiration } = action.payload;
+    setCredentials: (state, action: PayloadAction<AuthResponse>) => {
+      const {
+        userName,
+        token,
+        refreshToken,
+        expiration,
+        isVerified,
+        isKycCompleted,
+      } = action.payload;
+      const expiresAt = Date.now() + parseInt(expiration) * 1000; // 3600 expiration = 1 hour
+
       state.user = userName;
       state.token = token;
       state.refreshToken = refreshToken;
-      state.expiresAt = expiration;
+      state.expiresAt = expiresAt;
+      state.isVerified = isVerified;
+      state.isKycCompleted = isKycCompleted;
+
+      saveAuthState({
+        refreshToken,
+        expiresAt,
+        token,
+        user: userName,
+        isVerified,
+        isKycCompleted,
+      });
     },
 
     setAuthDetails: (
       state,
-      action: PayloadAction<
-        Partial<{
-          email?: string;
-          password?: string;
-          isVerified?: boolean;
-          isKycCompleted?: boolean;
-        }>
-      >
+      action: PayloadAction<Partial<{ email?: string; password?: string }>>
     ) => {
-      const { email, password, isVerified, isKycCompleted } = action.payload;
+      const { email, password } = action.payload;
       if (email !== undefined) state.email = email;
       if (password !== undefined) state.password = password;
-      if (isVerified !== undefined) state.isVerified = isVerified;
-      if (isKycCompleted !== undefined) state.isKycCompleted = isKycCompleted;
     },
 
     logOut: (state) => {
-      state.user = null;
-      state.token = null;
-      state.refreshToken = null;
-      state.expiresAt = null;
-
+      Object.assign(state, authInitialState);
       clearAuthState();
+    },
+
+    removeAuthDetails: (state) => {
+      state.email = null;
+      state.password = null;
     },
   },
 });
 
 export const { setCredentials, logOut, setAuthDetails } = authSlice.actions;
 
-const selectCurrentUser = (state: RootState) => state.auth.user;
-const selectCurrentToken = (state: RootState) => state.auth.token;
-const selectCurrentRefreshToken = (state: RootState) => state.auth.refreshToken;
+/* ---------- AUTH DETAILS SELECTORS ---------- */
 const selectAuthEmail = (state: RootState) => state.auth.email;
 const selectAuthPassword = (state: RootState) => state.auth.password;
-const selectIsAuthVerified = (state: RootState) => state.auth.isVerified;
-const selectIsAuthKycCompleted = (state: RootState) =>
-  state.auth.isKycCompleted;
+
+/* ---------- CURRENT USER SELECTORS ---------- */
+const selectCurrentUser = (state: RootState) => state.auth.user;
+const selectCurrentToken = (state: RootState) => state.auth.token;
+const selectCurrentExpiry = (state: RootState) => state.auth.expiresAt;
+
+const selectVerifiedUser = createSelector(
+  [
+    (state: RootState) => state.auth.isVerified,
+    (state: RootState) => state.auth.isKycCompleted,
+  ],
+  (isVerified, isKycCompleted) => isVerified && isKycCompleted
+);
 
 export {
   selectAuthEmail,
   selectAuthPassword,
-  selectCurrentRefreshToken,
+  selectCurrentExpiry,
   selectCurrentToken,
   selectCurrentUser,
-  selectIsAuthKycCompleted,
-  selectIsAuthVerified,
+  selectVerifiedUser,
 };
 export default authSlice.reducer;

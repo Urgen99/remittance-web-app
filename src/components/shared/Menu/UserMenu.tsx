@@ -9,13 +9,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { logOut } from "@/features/auth/auth.slice";
 import {
   getRandomColor,
   getUserInitials,
   userColorPalettes,
 } from "@/lib/getColors";
+import { useDispatch } from "react-redux";
 
 const UserMenu = ({ user = {} }: { user: any }) => {
+  const dispatch = useDispatch();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -55,7 +59,10 @@ const UserMenu = ({ user = {} }: { user: any }) => {
               Account
             </span>
           </div>
-          <DropdownMenuItem className="px-4 gap-1">
+          <DropdownMenuItem
+            className="px-4 gap-1"
+            onClick={() => dispatch(logOut())}
+          >
             <DashboardHeaderIcons.Logout />
             <span className="text-red-500 font-roboto font-normal text-sm tracking-[-1%]">
               Log out

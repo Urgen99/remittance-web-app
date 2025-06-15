@@ -1,8 +1,8 @@
 const BASE_URL = import.meta.env.VITE_SERVER;
-const SESSION = {
-  key: import.meta.env.VITE_SESSION_KEY,
-  age: import.meta.env.VITE_MAX_SESSION_AGE,
-};
+
+const VERIFICATION_ROUTES = ["/complete-profile", "/document-expired"];
+
+const PUBLIC_ROUTES = ["/login", "/register"];
 
 export const user = {
   name: "Amanda Smith",
@@ -303,4 +303,4 @@ export type Terms = {
   }[];
   conclusion?: string;
 };
-export { BASE_URL, SESSION };
+export { BASE_URL, PUBLIC_ROUTES, VERIFICATION_ROUTES };
