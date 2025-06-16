@@ -1,15 +1,12 @@
-import { setFormData } from "@/features/complete-profile/slice";
-import {
-  DocumentSelectSchema,
-  DocumentSelectSchemaType,
-} from "@/lib/schemas/user/completeProfile";
+import { setKycData } from "@/features/kyc/kyc.slice";
+import { DocumentSchema } from "@/lib/schemas/kyc/upload-kyc";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { z } from "zod";
 import { FormIcons } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
 import { FormField } from "../../../../components/ui/form";
@@ -46,12 +43,18 @@ const documents = [
   },
 ];
 
-const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
-  const form = useForm<DocumentSelectSchemaType>({
+const DocumentType = DocumentSchema.pick({
+  documentTypeId: true,
+});
+
+type DocumentType = z.infer<typeof DocumentType>;
+
+const SelectDocument = ({ handleNext }: SelectDocumentProps) => {
+  const form = useForm<DocumentType>({
     mode: "all",
-    resolver: zodResolver(DocumentSelectSchema),
+    resolver: zodResolver(DocumentType),
     defaultValues: {
-      documentType: "passport",
+      documentTypeId: undefined,
     },
   });
   const navigate = useNavigate();
@@ -60,8 +63,9 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
     navigate("/", { replace: true });
   };
 
-  const onSubmit = (data: DocumentSelectSchemaType) => {
-    dispatch(setFormData({ documentType: data.documentType }));
+  const onSubmit = (data: DocumentType) => {
+    // dispatch(setFormData({ documentType: data.documentType }));
+    dispatch(setKycData({ identityTypeId: data.documentTypeId }));
     handleNext();
   };
 

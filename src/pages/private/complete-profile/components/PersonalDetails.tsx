@@ -1,4 +1,4 @@
-import { useCompleteProfileMutation } from "@/features/complete-profile/complete-profile.apiSlice";
+import { useSubmitKycMutation } from "@/features/complete-profile/kyc.apiSlice";
 import { setFormData } from "@/features/complete-profile/slice";
 import { RootState } from "@/features/store";
 import {
@@ -65,10 +65,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
     },
   });
 
-  const [
-    completeProfile,
-    //  { isLoading }
-  ] = useCompleteProfileMutation();
+  const [submitKyc, { isLoading }] = useSubmitKycMutation();
 
   useEffect(() => {
     if (!documentBack) {
@@ -136,7 +133,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
         ],
       };
       console.log(JSON.stringify(dataForm));
-      const res = await completeProfile(JSON.stringify(dataForm)).unwrap();
+      const res = await submitKyc(JSON.stringify(dataForm)).unwrap();
 
       console.log("This is the response:", res);
     } catch (e) {
@@ -241,7 +238,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
               <NavigationButtons
                 type="submit"
                 onBackClick={handlePrev}
-                disabled={!form.formState.isValid}
+                disabled={!form.formState.isValid || isLoading}
               />
             </form>
             <DevTool control={form.control} />

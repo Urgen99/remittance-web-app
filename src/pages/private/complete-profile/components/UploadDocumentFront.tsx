@@ -28,6 +28,12 @@ import {
 } from "../../../../components/ui/form";
 import { Tabs, TabsList, TabsTrigger } from "../../../../components/ui/tabs";
 import NavigationButtons from "./NavigationButtons";
+import {
+  DocumentSchema,
+  DocumentSchemaType,
+  KycSchema,
+} from "@/lib/schemas/kyc/upload-kyc";
+import { selectKycState, setKycData } from "@/features/kyc/kyc.slice";
 
 interface UploadDocumentFrontProps {
   handleNext: () => void;
@@ -45,20 +51,14 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
   handleNext,
   handlePrev,
 }) => {
-  const { documentType, documentFront } = useSelector(
-    (state: RootState) => state.userForm
-  );
-  const [files, setFiles] = useState<File[] | null>(
-    documentFront ? [documentFront] : null
-  );
-
-  console.log(files);
-
-  const methods = useForm<DocumentFrontSchemaType>({
+  const [files, setFiles] = useState<File[] | null>(null);
+  const { identityTypeId } = useSelector(selectKycState);
+  const methods = useForm<DocumentSchemaType>({
     mode: "all",
-    resolver: zodResolver(DocumentFrontSchema),
+    resolver: zodResolver(DocumentSchema),
     defaultValues: {
-      documentFront: documentFront,
+      documentTypeId: identityTypeId || undefined,
+      documentUpload: undefined,
     },
   });
 
@@ -69,30 +69,38 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
   };
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (files?.length) {
-      methods.setValue("documentFront", files[0]);
-    } else {
-      methods.setValue("documentFront", undefined as unknown as File);
-    }
-  }, [files, methods]);
+  // useEffect(() => {
+  //   if (files?.length) {
+  //     methods.setValue("documentFront", files[0]);
+  //   } else {
+  //     methods.setValue("documentFront", undefined as unknown as File);
+  //   }
+  // }, [files, methods]);
 
   useEffect(() => {
-    if (!documentType) {
+    if (!identityTypeId) {
       handlePrev();
     }
-  }, [documentType, handlePrev]);
+  }, [identityTypeId, handlePrev]);
 
-  async function onSubmit(values: DocumentFrontSchemaType) {
+  async function onSubmit(formData: DocumentSchemaType) {
     try {
-      const base64 = await readFileAsBase64(values.documentFront);
-      const documentFront = {
-        name: values.documentFront.name,
-        type: values.documentFront.type,
-        base64,
+      // const base64 = await readFileAsBase64(values.documentFront);
+      // const documentFront = {
+      //   name: values.documentFront.name,
+      //   type: values.documentFront.type,
+      //   base64,
+      // };
+
+      // handle form upload api here
+
+      const values = {
+        documentTypeId: identityTypeId || 1,
+        documentUpload: "5103f942-e8df-4b16-a715-888c53b870b4",
       };
 
-      dispatch(setFormData({ documentFront } as any));
+      dispatch(setKycData({ documentFront: values }));
+
       handleNext();
     } catch (e) {
       console.error("Error while reading file. Please try again.", e);
@@ -131,7 +139,7 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
             <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
               <FormField
                 control={methods.control}
-                name="documentFront"
+                name=""
                 render={() => {
                   return (
                     <FormItem>
