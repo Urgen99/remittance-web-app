@@ -1,15 +1,12 @@
-import { setFormData } from "@/features/complete-profile/slice";
-import {
-  DocumentSelectSchema,
-  DocumentSelectSchemaType,
-} from "@/lib/schemas/user/completeProfile";
+import { setKycData } from "@/features/kyc/kyc.slice";
+import { KycSchema } from "@/lib/schemas/kyc/upload-kyc";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { z } from "zod";
 import { FormIcons } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
 import { FormField } from "../../../../components/ui/form";
@@ -31,27 +28,36 @@ const documents = [
     title: "Passport Verification",
     subtitle: "Upload your passport image for quick identity verification.",
     documentType: "passport",
+    documentId: 3,
   },
   {
     Icon: FormIcons.License,
     title: "Drivers license verification",
     subtitle: "Upload your drivers license for quick identity verification.",
     documentType: "license",
+    documentId: 2,
   },
   {
-    Icon: FormIcons.Passport,
+    Icon: FormIcons.NationalId,
     title: "National ID verification",
     subtitle: "Upload your national ID for quick identity verification.",
     documentType: "nationalId",
+    documentId: 1,
   },
 ];
 
-const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
-  const form = useForm<DocumentSelectSchemaType>({
+const DocumentType = KycSchema.pick({
+  identityTypeId: true,
+});
+
+type DocumentType = z.infer<typeof DocumentType>;
+
+const SelectDocument = ({ handleNext }: SelectDocumentProps) => {
+  const form = useForm<DocumentType>({
     mode: "all",
-    resolver: zodResolver(DocumentSelectSchema),
+    resolver: zodResolver(DocumentType),
     defaultValues: {
-      documentType: "passport",
+      identityTypeId: undefined,
     },
   });
   const navigate = useNavigate();
@@ -60,8 +66,9 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
     navigate("/", { replace: true });
   };
 
-  const onSubmit = (data: DocumentSelectSchemaType) => {
-    dispatch(setFormData({ documentType: data.documentType }));
+  const onSubmit = (data: DocumentType) => {
+    dispatch(setKycData({ identityTypeId: data.identityTypeId }));
+    console.log("Here after dispatch");
     handleNext();
   };
 
@@ -80,21 +87,21 @@ const SelectDocument: React.FC<SelectDocumentProps> = ({ handleNext }) => {
             className="max-w-[50rem] w-full flex flex-col items-center gap-5"
           >
             <FormField
-              name="documentType"
+              name="identityTypeId"
               render={({ field: { value, onChange } }) => {
                 return (
                   <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                     {documents.map(
-                      ({ Icon, title, subtitle, documentType }) => (
+                      ({ Icon, title, subtitle, documentType, documentId }) => (
                         <article
                           key={documentType}
                           className={`cursor-pointer p-4 bg-[url('/images/upload.png')] md:max-w-[16rem] w-full h-[5.5rem] md:h-[10.5rem] bg-cover md:bg-auto bg-no-repeat bg-top rounded-[8px] border border-[#00000008] hover:border-[#3333C1] hover:bg-[#EBEBF9] flex md:justify-end relative ${
-                            value === documentType &&
+                            value === documentId &&
                             "border-[#3333C1] bg-[#EBEBF9]"
                           }`}
-                          onClick={() => onChange(documentType)}
+                          onClick={() => onChange(documentId)}
                         >
-                          {value === documentType && (
+                          {value === documentId && (
                             <div className="absolute right-4 md:right-auto">
                               <FormIcons.CheckIcon />
                             </div>

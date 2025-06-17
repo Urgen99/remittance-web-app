@@ -5,7 +5,7 @@ import userFormReducer from "./complete-profile/slice";
 import exchangeRateReducer from "./exchange-rate/exchange.slice";
 import sendMoneyReducer from "./send-money/sendMoney.slice";
 import usersReducer from "./users/users.slice";
-
+import kycReducer from "./kyc/kyc.slice";
 export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
@@ -14,6 +14,7 @@ export const store = configureStore({
     sendMoney: sendMoneyReducer,
     users: usersReducer,
     exchangeRate: exchangeRateReducer,
+    kyc: kycReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(

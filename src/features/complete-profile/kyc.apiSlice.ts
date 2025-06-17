@@ -1,11 +1,11 @@
 import { apiSlice } from "../api/api.slice";
 
-export const completeProfileApiSlice = apiSlice.injectEndpoints({
+export const kycApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
 
   endpoints: (builder) => ({
     // complete profile endpoint
-    completeProfile: builder.mutation({
+    submitKyc: builder.mutation({
       query: (formData) => ({
         url: "/Kyc",
         method: "POST",
@@ -18,4 +18,4 @@ export const completeProfileApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useCompleteProfileMutation } = completeProfileApiSlice;
+export const { useSubmitKycMutation } = kycApiSlice;

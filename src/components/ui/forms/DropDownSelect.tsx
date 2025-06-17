@@ -24,7 +24,7 @@ interface DropDownSelectProps {
 }
 
 type Items = {
-  value: string;
+  value: string | number;
   label: string;
 };
 
@@ -55,7 +55,7 @@ const DropDownSelect = ({
               </FormControl>
               <SelectContent>
                 {items.map(({ value, label }) => (
-                  <SelectItem key={value} value={value}>
+                  <SelectItem key={value} value={value.toString()}>
                     {label}
                   </SelectItem>
                 ))}

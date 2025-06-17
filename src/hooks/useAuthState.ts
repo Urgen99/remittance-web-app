@@ -19,7 +19,7 @@ const useAuthState = () => {
       token &&
       expiresAt &&
       expiresAt > Date.now() &&
-      !PUBLIC_ROUTES.includes(currentPath)
+      PUBLIC_ROUTES.includes(currentPath)
     ) {
       navigate("/dashboard", { replace: true });
     }

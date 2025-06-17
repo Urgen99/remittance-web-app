@@ -5,9 +5,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     /**
-     * @DESC: [Register new user]
-     * @Route: [POST: /User]
-     * Access Public
+     * @DESC : Register new user
+     * @Method : POST
+     * @Route : /User
+     * @Access : Public
      */
     register: builder.mutation({
       query: (credentials) => ({
@@ -18,9 +19,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
     }),
 
     /**
-     * @DESC: [Login user]
-     * @Route: [POST: /User/LoginUser]
-     * Access Public
+     * @DESC : Login user
+     * @Method : POST
+     * @Route : /User/LoginUser
+     * @Access : Public
      */
 
     login: builder.mutation<
@@ -48,9 +50,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
     // }),
 
     /**
-     * @DESC: [Check if email exists]
-     * @Route: [GET: /User/exists?email="user@email.com"]
-     * Access Public
+     * @DESC : Check if email exists
+     * @Method : GET
+     * @Route : /User/exists?email="user@email.com"
+     * @Access : Public
      */
 
     emailExists: builder.query({
@@ -61,9 +64,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
     }),
 
     /**
-     * @DESC: [Verify OTP code]
-     * @Route: [POST: /User/ConfirmOtp]
-     * Access Public
+     * @DESC : [Verify OTP code]
+     * @Method : POST
+     * @Route : /User/ConfirmOtp
+     * @Access : Public
      */
 
     verifyOTP: builder.mutation({
@@ -75,9 +79,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
     }),
 
     /**
-     * @DESC: [Resend OTP code]
-     * @Route: [POST: /User/ResendConfirmation]
-     * Access Public
+     * @DESC : Resend OTP code
+     * @Method : POST
+     * @Route : /User/ResendConfirmation
+     * @Access : Public
      */
 
     resendOTP: builder.mutation({
@@ -89,9 +94,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
     }),
 
     /**
-     * @DESC: [Forgot Password]
-     * @Route: [POST: /User/ResetPassword?email=test@gmail.com]
-     * Access Public
+     * @DESC : [Forgot Password]
+     * @Method : POST
+     * @Route : /User/ResetPassword?email=test@gmail.com
+     * @Access : Public
      */
     forgotPassword: builder.mutation({
       query: (email) => ({
@@ -101,9 +107,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
     }),
 
     /**
-     * @DESC: [Reset Password]
-     * @Route: [POST: /User/SetNewPassword]
-     * Access Public
+     * @DESC : Reset Password
+     * @Method : POST
+     * @Route : /User/SetNewPassword
+     * @Access : Public
      */
     resetPassword: builder.mutation({
       query: (credentials) => ({

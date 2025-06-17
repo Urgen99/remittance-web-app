@@ -1,16 +1,15 @@
-import { useCompleteProfileMutation } from "@/features/complete-profile/complete-profile.apiSlice";
-import { setFormData } from "@/features/complete-profile/slice";
-import { RootState } from "@/features/store";
-import {
-  PersonalDetailSchema,
-  PersonalDetailSchemaType,
-} from "@/lib/schemas/user/completeProfile";
+import { logOut } from "@/features/auth/auth.slice";
+import { clearKycData, selectKycState } from "@/features/kyc/kyc.slice";
+import { useSubmitKycMutation } from "@/features/kyc/kycApi.slice";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
+import { format } from "date-fns";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
+import { z } from "zod";
 import { FormIcons } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
 import DatePicker from "../../../../components/ui/forms/DatePicker";
@@ -30,115 +29,111 @@ const formDescription: FormDescription = {
 };
 const documentItems = [
   {
-    value: "passport",
+    value: 3,
     label: "Passport",
   },
   {
-    value: "license",
+    value: 2,
     label: "Driving License",
   },
   {
-    value: "nationalId",
+    value: 1,
     label: "National Id",
   },
 ];
 
-const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
-  const { documentType, documentFront, documentBack } = useSelector(
-    (state: RootState) => state.userForm
-  );
+const PersonalDetailsSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  middleName: z.optional(z.string()),
+  lastName: z.string().min(1, "Last name is required"),
+  dateOfBirth: z.preprocess(
+    (val) => (typeof val === "string" ? new Date(val) : val),
+    z.date({ required_error: "Birth date is required" })
+  ),
+  identityTypeId: z.union([
+    z.literal(1), // 1 National ID
+    z.literal(2), // 2 License
+    z.literal(3), // 3 Passport
+  ]),
+  identityNo: z.string().min(1, "Identity number is required"),
+  identityExpiryDate: z.preprocess(
+    (val) => (typeof val === "string" ? new Date(val) : val),
+    z.date({ required_error: "Expiry date is required" })
+  ),
+  city: z.string().min(1, "City is required"),
+  address: z.string().min(1, "Address is required"),
+});
+
+type PersonalDetailsSchema = z.infer<typeof PersonalDetailsSchema>;
+
+const PersonalDetails = ({ handlePrev }: PersonalDetailProps) => {
+  const { identityTypeId, documentFront, documentBack } =
+    useSelector(selectKycState);
 
   const dispatch = useDispatch();
-  const form = useForm<PersonalDetailSchemaType>({
+  const form = useForm<PersonalDetailsSchema>({
     mode: "all",
-    resolver: zodResolver(PersonalDetailSchema),
+    resolver: zodResolver(PersonalDetailsSchema),
     defaultValues: {
       firstName: "",
-      middleName: "",
-      lastName: "",
-      birthDate: new Date(),
-      documentType: documentType,
-      documentExpiry: new Date(),
-      documentNumber: "",
-      city: "",
-      addressLine: "",
+      middleName: undefined,
+      lastName: undefined,
+      dateOfBirth: undefined,
+      identityTypeId: identityTypeId || undefined,
+      identityNo: undefined,
+      identityExpiryDate: undefined,
     },
   });
 
-  const [
-    completeProfile,
-    //  { isLoading }
-  ] = useCompleteProfileMutation();
+  const [submitKyc, { isLoading }] = useSubmitKycMutation();
 
   useEffect(() => {
-    if (!documentBack) {
+    if (identityTypeId && !documentFront && !documentBack) {
       handlePrev();
     }
-  }, [documentBack, handlePrev]);
+  }, [identityTypeId, documentFront, documentBack, handlePrev]);
 
-  async function onSubmit(data: PersonalDetailSchemaType) {
+  async function onSubmit(data: PersonalDetailsSchema) {
     try {
       const formData = {
-        firstName: data.firstName,
-        middleName: data.middleName,
-        lastName: data.lastName,
-        birthDate: data.birthDate,
-        documentType: data.documentType,
-        documentNumber: data.documentNumber,
-        documentExpiry: data.documentExpiry,
-        documentFront,
-        documentBack,
-        city: data.city,
-        addressLine: data.addressLine,
-      };
-      dispatch(setFormData(formData));
-
-      const dataForm = {
-        firstName: data.firstName,
-        middleName: data.middleName,
-        lastName: data.lastName,
-        dateOfBirth: data.birthDate,
+        ...data,
+        dateOfBirth: format(data.dateOfBirth, "yyyy-MM-dd"),
         mobileNumber: "9876543210",
+        birthCountryId: 1,
         permanentAddress: {
-          countryId: 0,
-          postCode: "12345",
-          unit: "test",
-          street: data.addressLine,
           city: data.city,
+          address: data.address,
+          countryId: 1,
+          postCode: "12345",
+          unit: "test unit",
+          street: "test street",
           state: "test state",
-          address: data.addressLine,
         },
         temporaryAddress: {
-          countryId: 0,
-          postCode: "12345",
-          unit: "test",
-          street: data.addressLine,
           city: data.city,
+          address: data.address,
+          countryId: 1,
+          postCode: "12345",
+          unit: "test unit",
+          street: "test street",
           state: "test state",
-          address: data.addressLine,
         },
-        identityTypeId: 0,
-        identityNo: data.documentNumber,
-        identityIssuedDate: data.birthDate,
+        documents: [documentFront, documentBack],
         identityIssuedBy: data.firstName,
-        identityExpiryDate: data.documentExpiry,
-        identityIssuedCountryId: 0,
-        birthCountryId: 0,
-        documents: [
-          {
-            documentTypeId: 0,
-            documentUpload: JSON.stringify(documentFront),
-          },
-          {
-            documentTypeId: 0,
-            documentUpload: JSON.stringify(documentBack),
-          },
-        ],
+        identityIssuedDate: "2023-01-01",
+        identityExpiryDate: format(data.identityExpiryDate, "yyyy-MM-dd"),
+        identityIssuedCountryId: 1,
       };
-      console.log(JSON.stringify(dataForm));
-      const res = await completeProfile(JSON.stringify(dataForm)).unwrap();
 
-      console.log("This is the response:", res);
+      const res = await submitKyc(formData).unwrap();
+
+      if (res?.message) {
+        toast.success("Kyc submitted successfully.", {
+          description: "Please login again to continue.",
+        });
+        dispatch(clearKycData());
+        dispatch(logOut());
+      }
     } catch (e) {
       console.error("Error: ", e);
     }
@@ -184,7 +179,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
 
               <div className="w-full flex flex-col md:flex-row md:items-center gap-3 transition-all ease-in-out duration-300">
                 <DateSelector
-                  name="birthDate"
+                  name="dateOfBirth"
                   label="Select your birth date"
                   isImportant
                   form={form}
@@ -192,11 +187,11 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
 
                 <div className="flex-1">
                   <DropDownSelect
-                    name="documentType"
+                    name="identityTypeId"
                     label="Document Type"
                     control={form.control}
                     isImportant
-                    defaultValue={documentType}
+                    defaultValue={identityTypeId?.toString()}
                     items={documentItems}
                     placeholder="Select Document Type"
                   />
@@ -205,7 +200,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
 
               <div className="w-full flex flex-col md:flex-row md:items-center gap-3 transition-all ease-in-out duration-300">
                 <TextInput
-                  name="documentNumber"
+                  name="identityNo"
                   label="Document Number"
                   isImportant
                   placeholder="Eg: 123456"
@@ -213,7 +208,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 />
 
                 <DatePicker
-                  name="documentExpiry"
+                  name="identityExpiryDate"
                   label="Document Expiry Date"
                   control={form.control}
                   isImportant
@@ -230,7 +225,7 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
                 />
 
                 <TextInput
-                  name="addressLine"
+                  name="address"
                   label="Enter the address line"
                   isImportant
                   placeholder="Eg:Bhaktpur, Jadibuti"
@@ -241,7 +236,10 @@ const PersonalDetails: React.FC<PersonalDetailProps> = ({ handlePrev }) => {
               <NavigationButtons
                 type="submit"
                 onBackClick={handlePrev}
-                disabled={!form.formState.isValid}
+                disabled={
+                  isLoading
+                  // !form.formState.isValid
+                }
               />
             </form>
             <DevTool control={form.control} />
