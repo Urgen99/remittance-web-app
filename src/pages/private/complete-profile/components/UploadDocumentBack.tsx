@@ -1,17 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { setFormData } from "@/features/complete-profile/slice";
-import { RootState } from "@/features/store";
-import {
-  DocumentBackSchema,
-  DocumentBackSchemaType,
-} from "@/lib/schemas/user/completeProfile";
+import { useUploadDocumentMutation } from "@/features/documents/documentsApi.slice";
+import { selectKycState, setKycData } from "@/features/kyc/kyc.slice";
 import { FormDescription } from "@/lib/type";
-import { readFileAsBase64 } from "@/utils/readFile";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
+import { z } from "zod";
 import { FormIcons } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
 import {
@@ -41,23 +37,26 @@ const formDescription: FormDescription = {
     "To comply with Australian government regulations and verify your status, you are required to submit an approved form of identification. Please select one from the options below.",
 };
 
-const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
+const DocumentUploadSchema = z.object({
+  back: z.instanceof(File, { message: "Document back is required" }),
+});
+type DocumentUploadSchema = z.infer<typeof DocumentUploadSchema>;
+
+const UploadDocumentBack = ({
   handleNext,
   handlePrev,
-}) => {
-  const { documentFront, documentBack } = useSelector(
-    (state: RootState) => state.userForm
-  );
-  const dispatch = useDispatch();
-  const [files, setFiles] = useState<File[] | null>(
-    documentBack ? [documentBack] : []
-  );
+}: UploadDocumentBackProps) => {
+  const [files, setFiles] = useState<File[] | null>(null);
+  const { identityTypeId, documentFront } = useSelector(selectKycState);
 
-  const methods = useForm<DocumentBackSchemaType>({
+  const dispatch = useDispatch();
+  const [uploadDocument, { isLoading }] = useUploadDocumentMutation();
+
+  const methods = useForm<DocumentUploadSchema>({
     mode: "all",
-    resolver: zodResolver(DocumentBackSchema),
+    resolver: zodResolver(DocumentUploadSchema),
     defaultValues: {
-      documentBack: undefined as unknown as File,
+      back: undefined,
     },
   });
 
@@ -68,30 +67,26 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
   };
 
   useEffect(() => {
-    if (files?.length) {
-      methods.setValue("documentBack", files[0]);
-    } else {
-      methods.setValue("documentBack", undefined as unknown as File);
-    }
-  }, [files, methods]);
-
-  useEffect(() => {
-    if (!documentFront) {
+    if (!identityTypeId || !documentFront) {
       handlePrev();
     }
-  }, [documentFront, handlePrev]);
+  }, [identityTypeId, documentFront, handlePrev]);
 
-  async function onSubmit(values: DocumentBackSchemaType) {
+  async function onSubmit(formData: DocumentUploadSchema) {
     try {
-      const base64 = await readFileAsBase64(values.documentBack);
-      const documentBack = {
-        name: values.documentBack.name,
-        type: values.documentBack.type,
-        base64,
-      };
+      const myForm = new FormData();
+      myForm.append("Data", formData.back);
+      const response = await uploadDocument(myForm).unwrap();
 
-      dispatch(setFormData({ documentBack } as any));
-      handleNext();
+      if (response) {
+        const values = {
+          documentTypeId: identityTypeId || 1,
+          documentUpload: response?.data,
+        };
+        dispatch(setKycData({ documentBack: values }));
+        toast.success("Document uploaded successfully");
+        handleNext();
+      }
     } catch (e) {
       console.error("Error while reading file. Please try again.", e);
     }
@@ -129,14 +124,21 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
             <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
               <FormField
                 control={methods.control}
-                name="documentBack"
+                name="back"
                 render={() => {
                   return (
                     <FormItem>
                       <FormControl>
                         <FileUploader
                           value={files}
-                          onValueChange={setFiles}
+                          onValueChange={(newFiles) => {
+                            setFiles(newFiles);
+                            methods.setValue(
+                              "back",
+                              newFiles?.[0] || (null as unknown as File)
+                            );
+                            methods.trigger("back");
+                          }}
                           dropzoneOptions={dropZoneConfig}
                           className="relative bg-background rounded-lg p-2"
                         >
@@ -186,7 +188,11 @@ const UploadDocumentBack: React.FC<UploadDocumentBackProps> = ({
                 }}
               />
 
-              <NavigationButtons onBackClick={handlePrev} type="submit" />
+              <NavigationButtons
+                onBackClick={handlePrev}
+                type="submit"
+                disabled={isLoading}
+              />
             </form>
 
             <DevTool control={methods.control} />

@@ -64,5 +64,4 @@ const KycSchema = z.object({
 });
 
 export type KycSchemaType = z.infer<typeof KycSchema>;
-export type DocumentSchemaType = z.infer<typeof DocumentSchema>;
-export { DocumentSchema, KycSchema };
+export { KycSchema };

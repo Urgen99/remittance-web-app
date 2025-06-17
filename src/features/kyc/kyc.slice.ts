@@ -11,7 +11,8 @@ const initialState: Partial<KycSchemaType> = {
   birthCountryId: undefined,
   permanentAddress: undefined,
   temporaryAddress: undefined,
-  documents: undefined,
+  documentBack: undefined,
+  documentFront: undefined,
   identityTypeId: undefined,
   identityNo: undefined,
   identityIssuedBy: undefined,
@@ -26,7 +27,7 @@ const kycSlice = createSlice({
   reducers: {
     // set the form data
     setKycData: (state, action: PayloadAction<Partial<KycSchemaType>>) => {
-      Object.assign({ ...state, ...action.payload });
+      Object.assign(state, action.payload);
     },
 
     // remove the form data

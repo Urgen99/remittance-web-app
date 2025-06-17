@@ -8,7 +8,14 @@ interface ExchangeRateParams {
 export const exchangeRateApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    // get exchange rates with query params
+    /**
+     * @DESC : Fetch Exchange Rate
+     * @Method : GET
+     * @Route : /ExchangeRate
+     * @Access :  Private
+     * @Headers : { Authorization: Bearer token }
+     */
+
     getExchangeRates: builder.query({
       query: (params: ExchangeRateParams) => ({
         // url: `/ExchangeRate?SendingCountry=Nepal&SendingCurrency=NPR&ReceivingCountry=India&ReceivingCurrency=INR`

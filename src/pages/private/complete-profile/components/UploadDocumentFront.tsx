@@ -1,17 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { setFormData } from "@/features/complete-profile/slice";
-import { RootState } from "@/features/store";
-import {
-  DocumentFrontSchema,
-  DocumentFrontSchemaType,
-} from "@/lib/schemas/user/completeProfile";
+import { useUploadDocumentMutation } from "@/features/documents/documentsApi.slice";
+import { selectKycState, setKycData } from "@/features/kyc/kyc.slice";
 import { FormDescription } from "@/lib/type";
-import { readFileAsBase64 } from "@/utils/readFile";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
+import { z } from "zod";
 import { FormIcons } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
 import {
@@ -28,12 +24,6 @@ import {
 } from "../../../../components/ui/form";
 import { Tabs, TabsList, TabsTrigger } from "../../../../components/ui/tabs";
 import NavigationButtons from "./NavigationButtons";
-import {
-  DocumentSchema,
-  DocumentSchemaType,
-  KycSchema,
-} from "@/lib/schemas/kyc/upload-kyc";
-import { selectKycState, setKycData } from "@/features/kyc/kyc.slice";
 
 interface UploadDocumentFrontProps {
   handleNext: () => void;
@@ -47,18 +37,22 @@ const formDescription: FormDescription = {
     "To comply with Australian government regulations and verify your status, you are required to submit an approved form of identification. Please select one from the options below.",
 };
 
-const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
+const DocumentUploadSchema = z.object({
+  front: z.instanceof(File, { message: "Document front is required" }),
+});
+type DocumentUploadSchemaType = z.infer<typeof DocumentUploadSchema>;
+
+const UploadDocumentFront = ({
   handleNext,
   handlePrev,
-}) => {
+}: UploadDocumentFrontProps) => {
   const [files, setFiles] = useState<File[] | null>(null);
   const { identityTypeId } = useSelector(selectKycState);
-  const methods = useForm<DocumentSchemaType>({
+  const methods = useForm<DocumentUploadSchemaType>({
     mode: "all",
-    resolver: zodResolver(DocumentSchema),
+    resolver: zodResolver(DocumentUploadSchema),
     defaultValues: {
-      documentTypeId: identityTypeId || undefined,
-      documentUpload: undefined,
+      front: undefined,
     },
   });
 
@@ -68,14 +62,13 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
     multiple: false,
   };
   const dispatch = useDispatch();
+  const [uploadDocument, { isLoading }] = useUploadDocumentMutation();
 
-  // useEffect(() => {
-  //   if (files?.length) {
-  //     methods.setValue("documentFront", files[0]);
-  //   } else {
-  //     methods.setValue("documentFront", undefined as unknown as File);
-  //   }
-  // }, [files, methods]);
+  useEffect(() => {
+    if (!identityTypeId) {
+      handlePrev();
+    }
+  }, [identityTypeId, handlePrev, methods]);
 
   useEffect(() => {
     if (!identityTypeId) {
@@ -83,25 +76,22 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
     }
   }, [identityTypeId, handlePrev]);
 
-  async function onSubmit(formData: DocumentSchemaType) {
+  async function onSubmit(formData: DocumentUploadSchemaType) {
     try {
-      // const base64 = await readFileAsBase64(values.documentFront);
-      // const documentFront = {
-      //   name: values.documentFront.name,
-      //   type: values.documentFront.type,
-      //   base64,
-      // };
+      const myForm = new FormData();
+      myForm.append("Data", formData.front);
 
-      // handle form upload api here
+      const response = await uploadDocument(myForm).unwrap();
 
-      const values = {
-        documentTypeId: identityTypeId || 1,
-        documentUpload: "5103f942-e8df-4b16-a715-888c53b870b4",
-      };
-
-      dispatch(setKycData({ documentFront: values }));
-
-      handleNext();
+      if (response) {
+        const values = {
+          documentTypeId: identityTypeId || 1,
+          documentUpload: response?.data,
+        };
+        dispatch(setKycData({ documentFront: values }));
+        toast.success("Document uploaded successfully");
+        handleNext();
+      }
     } catch (e) {
       console.error("Error while reading file. Please try again.", e);
     }
@@ -139,19 +129,26 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
             <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
               <FormField
                 control={methods.control}
-                name=""
+                name="front"
                 render={() => {
                   return (
                     <FormItem>
                       <FormControl>
                         <FileUploader
                           value={files}
-                          onValueChange={setFiles}
+                          onValueChange={(newFiles) => {
+                            setFiles(newFiles);
+                            methods.setValue(
+                              "front",
+                              newFiles?.[0] || (null as unknown as File)
+                            );
+                            methods.trigger("front");
+                          }}
                           dropzoneOptions={dropZoneConfig}
                           className="relative bg-background rounded-lg p-2"
                         >
                           <FileInput
-                            id="documentFront"
+                            id="front"
                             className="outline-dashed outline-1 outline-slate-500 h-[11rem] flex items-center justify-center"
                           >
                             <div className="flex items-center justify-center flex-col p-8 w-full gap-2">
@@ -196,7 +193,11 @@ const UploadDocumentFront: React.FC<UploadDocumentFrontProps> = ({
                 }}
               />
 
-              <NavigationButtons onBackClick={handlePrev} type="submit" />
+              <NavigationButtons
+                onBackClick={handlePrev}
+                type="submit"
+                disabled={isLoading}
+              />
             </form>
 
             <DevTool control={methods.control} />

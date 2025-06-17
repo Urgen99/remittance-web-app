@@ -1,5 +1,5 @@
 import { setKycData } from "@/features/kyc/kyc.slice";
-import { DocumentSchema } from "@/lib/schemas/kyc/upload-kyc";
+import { KycSchema } from "@/lib/schemas/kyc/upload-kyc";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,23 +28,26 @@ const documents = [
     title: "Passport Verification",
     subtitle: "Upload your passport image for quick identity verification.",
     documentType: "passport",
+    documentId: 3,
   },
   {
     Icon: FormIcons.License,
     title: "Drivers license verification",
     subtitle: "Upload your drivers license for quick identity verification.",
     documentType: "license",
+    documentId: 2,
   },
   {
-    Icon: FormIcons.Passport,
+    Icon: FormIcons.NationalId,
     title: "National ID verification",
     subtitle: "Upload your national ID for quick identity verification.",
     documentType: "nationalId",
+    documentId: 1,
   },
 ];
 
-const DocumentType = DocumentSchema.pick({
-  documentTypeId: true,
+const DocumentType = KycSchema.pick({
+  identityTypeId: true,
 });
 
 type DocumentType = z.infer<typeof DocumentType>;
@@ -54,7 +57,7 @@ const SelectDocument = ({ handleNext }: SelectDocumentProps) => {
     mode: "all",
     resolver: zodResolver(DocumentType),
     defaultValues: {
-      documentTypeId: undefined,
+      identityTypeId: undefined,
     },
   });
   const navigate = useNavigate();
@@ -64,8 +67,8 @@ const SelectDocument = ({ handleNext }: SelectDocumentProps) => {
   };
 
   const onSubmit = (data: DocumentType) => {
-    // dispatch(setFormData({ documentType: data.documentType }));
-    dispatch(setKycData({ identityTypeId: data.documentTypeId }));
+    dispatch(setKycData({ identityTypeId: data.identityTypeId }));
+    console.log("Here after dispatch");
     handleNext();
   };
 
@@ -84,21 +87,21 @@ const SelectDocument = ({ handleNext }: SelectDocumentProps) => {
             className="max-w-[50rem] w-full flex flex-col items-center gap-5"
           >
             <FormField
-              name="documentType"
+              name="identityTypeId"
               render={({ field: { value, onChange } }) => {
                 return (
                   <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                     {documents.map(
-                      ({ Icon, title, subtitle, documentType }) => (
+                      ({ Icon, title, subtitle, documentType, documentId }) => (
                         <article
                           key={documentType}
                           className={`cursor-pointer p-4 bg-[url('/images/upload.png')] md:max-w-[16rem] w-full h-[5.5rem] md:h-[10.5rem] bg-cover md:bg-auto bg-no-repeat bg-top rounded-[8px] border border-[#00000008] hover:border-[#3333C1] hover:bg-[#EBEBF9] flex md:justify-end relative ${
-                            value === documentType &&
+                            value === documentId &&
                             "border-[#3333C1] bg-[#EBEBF9]"
                           }`}
-                          onClick={() => onChange(documentType)}
+                          onClick={() => onChange(documentId)}
                         >
-                          {value === documentType && (
+                          {value === documentId && (
                             <div className="absolute right-4 md:right-auto">
                               <FormIcons.CheckIcon />
                             </div>
