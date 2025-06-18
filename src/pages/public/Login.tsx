@@ -17,7 +17,8 @@ import {
   PasswordSchema,
   PasswordSchemaType,
 } from "@/lib/schemas/user/password";
-import { FormDescription } from "@/lib/type";
+import { FormDescription, ResponseError } from "@/lib/type";
+import { showError, showSuccess, showWarning } from "@/utils/toaster";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +28,7 @@ import { toast } from "sonner";
 const Login = () => {
   const email = useSelector(selectAuthEmail);
 
-  useRouteGuard({ primaryCondition: email, navigateTo: "/register" });
+  useRouteGuard({ primaryCondition: email, navigateTo: "/" });
 
   const form = useForm<PasswordSchemaType>({
     mode: "all",
@@ -53,36 +54,40 @@ const Login = () => {
         dispatch(setAuthDetails({ password: data.password }));
 
         if (!response.data.isVerified) {
+          showWarning(
+            "Email not verified.",
+            "Please verify your email before continuing."
+          );
           navigate("/verify-otp", { state: { verificationMode: "auth" } });
         } else {
           dispatch(setCredentials({ ...response.data }));
           if (!response.data.isKycCompleted) {
-            toast.warning("KYC not verified.", {
-              description: "Please verify your KYC before continuing.",
-            });
+            showWarning(
+              "KYC not verified.",
+              "Please verify your KYC before continuing."
+            );
             navigate("/complete-profile");
           } else {
-            console.log(JSON.stringify(response));
             navigate("/dashboard");
-            toast.success("Successfully Logged in", {
-              description: "You are logged in now",
-            });
+            showSuccess("Successfully Logged in", "You are logged in now");
           }
         }
       }
-    } catch (e: any) {
-      if (!e.status) {
-        console.log("No server response error: ", e);
-        toast.error("No Server Response");
-      } else if (e.status === 400) {
-        toast.error("Invalid Credentials");
-      } else if (e.status === 401) {
-        toast.error("Unauthorized");
+    } catch (e) {
+      const { status } = e as ResponseError;
+
+      if (!status) {
+        showError("No Server Response", "Please try again later.");
+      } else if (status === 400) {
+        showError("Invalid Credentials", "Please enter correct details.");
+      } else if (status === 401) {
+        showError(
+          "Unauthorized",
+          "You are not authorized to perform this action."
+        );
       } else {
-        toast.error("Login Failed");
+        showError("Something went wrong!", "Please try again later.");
       }
-    } finally {
-      toast.dismiss();
     }
   }
 

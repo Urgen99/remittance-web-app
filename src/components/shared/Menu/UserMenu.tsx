@@ -15,11 +15,16 @@ import {
   getUserInitials,
   userColorPalettes,
 } from "@/lib/getColors";
+import { showSuccess } from "@/utils/toaster";
 import { useDispatch } from "react-redux";
 
 const UserMenu = ({ user = {} }: { user: any }) => {
   const dispatch = useDispatch();
 
+  const handleLogout = () => {
+    dispatch(logOut());
+    showSuccess("Success", "You have successfully logged out.");
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -59,10 +64,7 @@ const UserMenu = ({ user = {} }: { user: any }) => {
               Account
             </span>
           </div>
-          <DropdownMenuItem
-            className="px-4 gap-1"
-            onClick={() => dispatch(logOut())}
-          >
+          <DropdownMenuItem className="px-4 gap-1" onClick={handleLogout}>
             <DashboardHeaderIcons.Logout />
             <span className="text-red-500 font-roboto font-normal text-sm tracking-[-1%]">
               Log out

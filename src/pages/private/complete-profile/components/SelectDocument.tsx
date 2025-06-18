@@ -1,10 +1,10 @@
-import { setKycData } from "@/features/kyc/kyc.slice";
+import { selectKycState, setKycData } from "@/features/kyc/kyc.slice";
 import { KycSchema } from "@/lib/schemas/kyc/upload-kyc";
 import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { FormIcons } from "../../../../components/icons/Icons";
@@ -53,11 +53,13 @@ const DocumentType = KycSchema.pick({
 type DocumentType = z.infer<typeof DocumentType>;
 
 const SelectDocument = ({ handleNext }: SelectDocumentProps) => {
+  const { identityTypeId } = useSelector(selectKycState);
+
   const form = useForm<DocumentType>({
     mode: "all",
     resolver: zodResolver(DocumentType),
     defaultValues: {
-      identityTypeId: undefined,
+      identityTypeId: identityTypeId || undefined,
     },
   });
   const navigate = useNavigate();
@@ -68,7 +70,6 @@ const SelectDocument = ({ handleNext }: SelectDocumentProps) => {
 
   const onSubmit = (data: DocumentType) => {
     dispatch(setKycData({ identityTypeId: data.identityTypeId }));
-    console.log("Here after dispatch");
     handleNext();
   };
 

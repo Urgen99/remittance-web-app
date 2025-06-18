@@ -7,7 +7,8 @@ import { setAuthDetails } from "@/features/auth/auth.slice";
 import { useLazyEmailExistsQuery } from "@/features/auth/authApi.slice";
 import useAuthState from "@/hooks/useAuthState";
 import { EmailSchema, EmailSchemaType } from "@/lib/schemas/user/email";
-import { FormDescription } from "@/lib/type";
+import { FormDescription, ResponseError } from "@/lib/type";
+import { showError } from "@/utils/toaster";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -38,22 +39,22 @@ const Home = () => {
     try {
       const response = await emailExists(formData.email).unwrap();
       if (response?.emailExists?.data) {
-        dispatch(
-          setAuthDetails({
-            email: formData.email,
-            // isVerified: response?.emailExists?.data?.isVerified,
-            // isKycCompleted: response?.emailExists?.data?.isKycCompleted,
-          })
-        );
+        dispatch(setAuthDetails({ email: formData.email }));
+
         if (response?.emailExists?.data?.exists) {
           navigate("/login");
         } else {
           navigate("/create-password");
         }
       }
-    } catch (e: any) {
-      console.error("Error: ", e?.data?.message);
-      // add alert later
+    } catch (e) {
+      const { status } = e as ResponseError;
+
+      if (status === 400) {
+        showError("Invalid email address!", "Please enter a valid email.");
+      }
+
+      showError("Something went wrong!", "Please try again.");
     }
   }
 

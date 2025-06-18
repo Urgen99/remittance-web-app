@@ -10,16 +10,16 @@ import {
   CreatePasswordSchema,
   CreatePasswordSchemaType,
 } from "@/lib/schemas/user/createPassword";
-import { FormDescription } from "@/lib/type";
+import { FormDescription, ResponseError } from "@/lib/type";
+import { showError, showSuccess } from "@/utils/toaster";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 const CreatePassword = () => {
   const email = useSelector(selectAuthEmail);
-  useRouteGuard({ primaryCondition: email, navigateTo: "/register" });
+  useRouteGuard({ primaryCondition: email, navigateTo: "/" });
 
   const form = useForm<CreatePasswordSchemaType>({
     resolver: zodResolver(CreatePasswordSchema),
@@ -45,16 +45,18 @@ const CreatePassword = () => {
       const response = await register(credentials).unwrap();
 
       if (response?.message) {
-        toast.success("User Created", {
-          description: `${response?.message}`,
-        });
+        showSuccess("Success", "You have successfully registered.");
         dispatch(setAuthDetails({ password: data.newPassword }));
         navigate("/verify-otp", { state: { verificationMode: "auth" } });
       }
     } catch (e) {
-      console.error("Error: ", e);
-    } finally {
-      toast.dismiss();
+      const { status } = e as ResponseError;
+
+      if (status === 400) {
+        showError("Invalid email address!", "Please enter a valid email.");
+      }
+
+      showError("Something went wrong!", "Please try again.");
     }
   }
 

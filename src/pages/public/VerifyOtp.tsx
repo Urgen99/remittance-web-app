@@ -19,12 +19,12 @@ import {
 } from "@/features/auth/authApi.slice";
 import useRouteGuard from "@/hooks/use-route-guard";
 import { OTPSchema, OTPSchemaType } from "@/lib/schemas/user/verifyOtp";
-import { FormDescription } from "@/lib/type";
+import { FormDescription, ResponseError } from "@/lib/type";
+import { showError, showSuccess } from "@/utils/toaster";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 interface VerifyOTPState {
   verificationMode: "auth" | "forgot-password";
@@ -40,7 +40,7 @@ const VerifyOtp = () => {
   useRouteGuard({
     primaryCondition: email,
     secondaryCondition: verificationMode === "auth" ? password : true,
-    navigateTo: "/register",
+    navigateTo: "/",
   });
 
   const dispatch = useDispatch();
@@ -67,9 +67,7 @@ const VerifyOtp = () => {
         const response = await verifyOTP(credentials).unwrap();
 
         if (response) {
-          toast.success("Verification Successful", {
-            description: "You are being redirected to the dashboard page.",
-          });
+          showSuccess("Verification Successful", "You are being redirected.");
 
           if (response?.data) {
             dispatch(setCredentials({ ...response?.data }));
@@ -84,22 +82,26 @@ const VerifyOtp = () => {
       } else if (verificationMode === "forgot-password") {
         navigate("/reset-password", { state: { otpCode: data.otp } });
       }
-    } catch (e: any) {
-      console.error("error here", e);
+    } catch (e) {
+      const { status } = e as ResponseError;
 
       if (verificationMode === "auth") {
-        if (e?.status === 400 || e?.status === 401) {
-          toast.error("Invalid OTP", {
-            description: "Please enter a valid OTP.",
-          });
+        if (status === 400 || status === 401) {
+          showError("Invalid OTP", "Please enter a valid OTP.");
         } else {
-          toast.error("Verification Failed", {
-            description: "Please try again later.",
-          });
+          showError("Verification Failed", "Please try again later.");
         }
       }
-    } finally {
-      toast.dismiss();
+
+      if (verificationMode === "forgot-password") {
+        if (status === 400) {
+          showError("Invalid OTP", "Please enter a valid OTP.");
+        } else {
+          showError("Verification Failed", "Please try again later.");
+        }
+      }
+
+      showError("Something went wrong", "Please try again later.");
     }
   }
 
@@ -110,19 +112,19 @@ const VerifyOtp = () => {
       };
       const response = await resendOTP(credentials).unwrap();
 
-      if (response?.message) {
-        toast.success("OTP sent successfully", {
-          description: "Please check your email.",
-        });
+      if (response) {
+        showSuccess("OTP sent successfully", "Please check your email.");
+      } else {
+        showError("Something went wrong", "Please try again later.");
       }
-    } catch (e: any) {
-      console.error("Error from handle resend otp: ", e);
+    } catch (e) {
+      const { status } = e as ResponseError;
 
-      if (e?.status === 400) {
-        toast.error("Invalid Email", {
-          description: "Please enter a valid email address.",
-        });
+      if (status === 400) {
+        showError("Invalid Email", "Please enter a valid email address.");
       }
+
+      showError("Something went wrong", "Please try again later.");
     }
   }
 

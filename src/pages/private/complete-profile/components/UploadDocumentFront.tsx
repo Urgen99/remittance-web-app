@@ -1,12 +1,12 @@
 import { useUploadDocumentMutation } from "@/features/documents/documentsApi.slice";
 import { selectKycState, setKycData } from "@/features/kyc/kyc.slice";
-import { FormDescription } from "@/lib/type";
+import { FormDescription, ResponseError } from "@/lib/type";
+import { showError, showSuccess } from "@/utils/toaster";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "sonner";
 import { z } from "zod";
 import { FormIcons } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
@@ -46,13 +46,16 @@ const UploadDocumentFront = ({
   handleNext,
   handlePrev,
 }: UploadDocumentFrontProps) => {
-  const [files, setFiles] = useState<File[] | null>(null);
+  const front = localStorage.getItem("front")
+    ? [JSON.parse(localStorage.getItem("front") as string)]
+    : null;
+  const [files, setFiles] = useState<File[] | null>(front || null);
   const { identityTypeId } = useSelector(selectKycState);
   const methods = useForm<DocumentUploadSchemaType>({
     mode: "all",
     resolver: zodResolver(DocumentUploadSchema),
     defaultValues: {
-      front: undefined,
+      front: files ? files[0] : undefined,
     },
   });
 
@@ -89,11 +92,23 @@ const UploadDocumentFront = ({
           documentUpload: response?.data,
         };
         dispatch(setKycData({ documentFront: values }));
-        toast.success("Document uploaded successfully");
+        localStorage.setItem("DOCUMENT_FRONT", JSON.stringify(formData.front));
+        showSuccess("Success", "Document uploaded successfully");
         handleNext();
       }
     } catch (e) {
-      console.error("Error while reading file. Please try again.", e);
+      const { status } = e as ResponseError;
+
+      if (status === 400) {
+        showError(
+          "Invalid document!",
+          "Please upload a valid document. Supported types: [JPG, JPEG, PNG]."
+        );
+      } else if (status === 401) {
+        showError("Unauthorized", "Please login to access this resource.");
+      } else {
+        showError("Error", "Something went wrong. Please try again.");
+      }
     }
   }
 

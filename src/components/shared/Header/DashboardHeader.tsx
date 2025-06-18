@@ -9,7 +9,7 @@ import NotificationMenu from "../Menu/NotificationMenu";
 import UserMenu from "../Menu/UserMenu";
 const DashboardHeader = () => {
   return (
-    <header className="sticky top-0 h-14 px-6 py-2 bg-[#EBEBF9] flex items-center justify-end">
+    <header className="sticky top-0 h-14 px-6 py-2 bg-[#EBEBF9] flex items-center justify-end z-10">
       <nav className="flex items-center gap-3">
         <div>
           <NotificationMenu notifications={user?.notifications} />
