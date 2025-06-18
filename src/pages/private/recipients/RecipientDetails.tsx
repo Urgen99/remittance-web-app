@@ -24,7 +24,7 @@ const RecipientDetails = () => {
   console.log(id);
 
   return (
-    <div className="min-h-screen flex flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <div>
         <TextContainer title="Recipient details" />
       </div>

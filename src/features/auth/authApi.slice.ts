@@ -119,21 +119,12 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: credentials,
       }),
     }),
-
-    // ------- FOR TESTING ONLY -------
-    // reference data remove later - todo
-    fetchReferences: builder.query({
-      query: () => ({
-        url: "/ReferenceData",
-      }),
-    }),
   }),
 });
 
 export const {
   useRegisterMutation,
   useLoginMutation,
-  useFetchReferencesQuery,
   useLazyEmailExistsQuery,
   useVerifyOTPMutation,
   useResendOTPMutation,

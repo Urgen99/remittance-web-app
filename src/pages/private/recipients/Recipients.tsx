@@ -28,7 +28,7 @@ const colorPalettes = [
 ];
 const Recipients = () => {
   return (
-    <div className="min-h-screen flex flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <TextContainer title="Recipients" />
 
       {user?.recentPeoples.length > 0 ? (
@@ -58,7 +58,7 @@ const Recipients = () => {
           <div className="p-4 flex flex-col gap-5 border border-[#0000001A] rounded-[8px]">
             <IconTextContainer title="All saved recipients" />
 
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 max-h-[27rem] overflow-y-scroll">
               {user?.recentPeoples.map(({ id, name, avatar, contact }) => (
                 <ListItemCard key={id}>
                   <div className="flex gap-2.5 items-center">

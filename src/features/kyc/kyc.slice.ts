@@ -27,12 +27,17 @@ const kycSlice = createSlice({
   reducers: {
     // set the form data
     setKycData: (state, action: PayloadAction<Partial<KycSchemaType>>) => {
-      Object.assign(state, action.payload);
+      const newState = { ...state, ...action.payload };
+      localStorage.setItem("EAGLE_REMIT_KYC", JSON.stringify(newState));
+      return newState;
     },
 
     // remove the form data
     clearKycData: () => {
-      Object.assign(initialState);
+      localStorage.removeItem("EAGLE_REMIT_KYC");
+      localStorage.removeItem("DOCUMENT_FRONT");
+      localStorage.removeItem("DOCUMENT_BACK");
+      return initialState;
     },
   },
 });

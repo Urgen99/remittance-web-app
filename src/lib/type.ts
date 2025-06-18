@@ -33,3 +33,10 @@ export interface AuthResponse {
   isVerified: boolean;
   isKycCompleted: boolean;
 }
+
+export interface ResponseError {
+  status: number | string | null;
+  message: string | null;
+  data: number | string | null;
+  errors: string[];
+}

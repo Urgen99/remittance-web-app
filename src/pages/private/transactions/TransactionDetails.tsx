@@ -131,7 +131,7 @@ const TransactionDetails = () => {
   // const { id } = useParams();
 
   return (
-    <div className="min-h-screen flex flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <div>
         <TextContainer
           title="Transaction Details"

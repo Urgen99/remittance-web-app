@@ -16,6 +16,7 @@ const ProtectedRoute = () => {
   const verifiedUser = useSelector(selectVerifiedUser);
   const currentPath = location.pathname;
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (
       !token ||
@@ -26,8 +27,12 @@ const ProtectedRoute = () => {
     }
   }, [token, expiresAt, dispatch]);
 
-  if (!token || !expiresAt || (token && expiresAt && expiresAt < Date.now())) {
-    return <Navigate to="/register" replace state={{ from: location }} />;
+  if (!token || !expiresAt) {
+    return <Navigate to="/" replace state={{ from: location }} />;
+  }
+
+  if (token && expiresAt && expiresAt < Date.now()) {
+    return <Navigate to="/" replace state={{ from: location }} />;
   }
 
   if (!verifiedUser) {

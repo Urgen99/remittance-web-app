@@ -10,7 +10,8 @@ import {
   CreatePasswordSchema,
   CreatePasswordSchemaType,
 } from "@/lib/schemas/user/createPassword";
-import { FormDescription } from "@/lib/type";
+import { FormDescription, ResponseError } from "@/lib/type";
+import { showError } from "@/utils/toaster";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -25,7 +26,7 @@ const ResetPassword = () => {
   useRouteGuard({
     primaryCondition: email,
     secondaryCondition: otpCode,
-    navigateTo: "/register",
+    navigateTo: "/",
   });
 
   const navigate = useNavigate();
@@ -55,10 +56,13 @@ const ResetPassword = () => {
         navigate("/register");
       }
     } catch (e) {
-      console.log("Error", e);
-      if (e instanceof Error) {
-        toast.error(e?.message || "Something went wrong. Please try again.");
+      const { status } = e as ResponseError;
+
+      if (status === 400) {
+        showError("Invalid email address!", "Please enter a valid email.");
       }
+
+      showError("Something went wrong!", "Please try again.");
     }
   }
 

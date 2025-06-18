@@ -1,14 +1,15 @@
-import { logOut } from "@/features/auth/auth.slice";
+import { setCredentials } from "@/features/auth/auth.slice";
 import { clearKycData, selectKycState } from "@/features/kyc/kyc.slice";
 import { useSubmitKycMutation } from "@/features/kyc/kycApi.slice";
-import { FormDescription } from "@/lib/type";
+import { loadAuthState } from "@/lib/storage";
+import { AuthResponse, FormDescription, ResponseError } from "@/lib/type";
+import { showError, showSuccess } from "@/utils/toaster";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "sonner";
 import { z } from "zod";
 import { FormIcons } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
@@ -69,7 +70,7 @@ type PersonalDetailsSchema = z.infer<typeof PersonalDetailsSchema>;
 const PersonalDetails = ({ handlePrev }: PersonalDetailProps) => {
   const { identityTypeId, documentFront, documentBack } =
     useSelector(selectKycState);
-
+  console.log("Auth state is here: ", loadAuthState());
   const dispatch = useDispatch();
   const form = useForm<PersonalDetailsSchema>({
     mode: "all",
@@ -127,18 +128,34 @@ const PersonalDetails = ({ handlePrev }: PersonalDetailProps) => {
 
       const res = await submitKyc(formData).unwrap();
 
-      if (res?.message) {
-        toast.success("Kyc submitted successfully.", {
-          description: "Please login again to continue.",
-        });
+      if (res) {
+        showSuccess(
+          "KYC submitted successfully.",
+          "You are being redirected to the dashboard."
+        );
         dispatch(clearKycData());
-        dispatch(logOut());
+        dispatch(
+          setCredentials({
+            ...loadAuthState(),
+            isKycCompleted: true,
+          } as AuthResponse)
+        );
       }
     } catch (e) {
-      console.error("Error: ", e);
+      const { status } = e as ResponseError;
+
+      if (status === 400) {
+        showError("Invalid details", "Please enter valid details.");
+      } else if (status === 401) {
+        showError(
+          "Unauthorized",
+          "Please login again to access this resource."
+        );
+      } else {
+        showError("Something went wrong", "Please try again later.");
+      }
     }
   }
-
   return (
     <section className="md:mt-7 px-5">
       <div className="flex items-center justify-center">
