@@ -1,16 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/api.slice";
 import authReducer from "./auth/auth.slice";
-import userFormReducer from "./complete-profile/slice";
 import exchangeRateReducer from "./exchange-rate/exchange.slice";
+import kycReducer from "./kyc/kyc.slice";
 import sendMoneyReducer from "./send-money/sendMoney.slice";
 import usersReducer from "./users/users.slice";
-import kycReducer from "./kyc/kyc.slice";
 export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
-    userForm: userFormReducer,
     sendMoney: sendMoneyReducer,
     users: usersReducer,
     exchangeRate: exchangeRateReducer,

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -25,20 +26,19 @@ const SettingsDialog = () => {
       <DialogContent
         className="gap-0 p-0 w-full !max-w-[54.35rem] min-h-[40.68rem]"
         Icon={UserSettingsIcons.Close}
-        iconClassName="-mt-0.5 right-10 focus:!ring-transparent focus:!ring-0 focus:!ring-offset-0 opacity-100 transition-none ring-offset-none"
+        aria-description="user-settings"
         aria-describedby="user-settings"
+        iconClassName="-mt-0.5 right-10 focus:!ring-transparent focus:!ring-0 focus:!ring-offset-0 opacity-100 transition-none ring-offset-none"
       >
-        <DialogTitle className="hidden">Settings</DialogTitle>
         {/* SETTINGS HEADER */}
-        <DialogHeader className="bg-[#EBEBF9] h-12 px-6 justify-center py-4 rounded-t-[8px]">
-          <div className={`flex items-center gap-1`}>
+        <DialogHeader className="bg-[#EBEBF9] h-12 px-6  py-4 rounded-t-[8px] flex items-center gap-1 flex-row ">
+          <DialogTitle>
             <UserSettingsIcons.Notes />
-            <h3 className="font-general-sans font-medium text-base leading-5 tracking-[-1%] text-[#0A090B]">
-              Setting and profile
-            </h3>
-          </div>
+          </DialogTitle>
+          <DialogDescription className="font-general-sans font-medium text-base leading-5 tracking-[-1%] text-[#0A090B]">
+            Setting and profile
+          </DialogDescription>
         </DialogHeader>
-
         {/* SETTINGS CONTENT */}
         <UserSettingsLayout />
       </DialogContent>

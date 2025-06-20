@@ -1,6 +1,12 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
+/**
+ * Hook to scroll to the top of the page smoothly
+ * @example
+ * useScrollToTop();
+ */
+
 const useScrollToTop = () => {
   const { hash, pathname } = useLocation();
   useEffect(() => {

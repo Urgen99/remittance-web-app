@@ -80,7 +80,7 @@ const DashboardSideBar = () => {
           <SidebarGroupContent className="flex items-center">
             <SidebarMenu>
               <SidebarMenuItem key="profile">
-                <SettingsDialog />
+                <SettingsDialog aria-describedby="user settings dialog" />
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>

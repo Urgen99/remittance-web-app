@@ -10,7 +10,9 @@ const SimpleTextContainer = ({
       <h4 className="uppercase text-[#696969] text-sm leading-[18px]">
         {title}
       </h4>
-      <h6 className="text-[#222222] text-base leading-6">{content}</h6>
+      <h6 className="text-[#222222] text-base leading-6 capitalize">
+        {content}
+      </h6>
     </div>
   );
 };

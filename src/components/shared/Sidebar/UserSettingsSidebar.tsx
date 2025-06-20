@@ -1,7 +1,10 @@
 import { UserSettingsIcons } from "@/components/icons/Icons";
 import { Button } from "@/components/ui/button";
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React from "react";
+import { logOut } from "@/features/auth/auth.slice";
+import { showSuccess } from "@/utils/toaster";
+import { ReactNode } from "react";
+import { useDispatch } from "react-redux";
 
 interface UserSettingsSidebarProps {
   tabs: Tabs[];
@@ -10,15 +13,22 @@ interface UserSettingsSidebarProps {
 }
 
 type Tabs = {
-  Icon: React.FC<{ color?: string }>;
+  Icon: (props: { color?: string }) => ReactNode;
   title: string;
   value: string;
 };
-const UserSettingsSidebar: React.FC<UserSettingsSidebarProps> = ({
+const UserSettingsSidebar = ({
   tabs,
   activeTab,
   handleTabChange,
-}) => {
+}: UserSettingsSidebarProps) => {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logOut());
+    showSuccess("Success", "You have successfully logged out.");
+  };
+
   return (
     <TabsList
       className={`py-6 rounded-none h-full shadow-md rounded-bl-[8px] ml-0 bg-white flex flex-col items-start justify-between max-w-[14.5rem] w-full `}
@@ -40,6 +50,7 @@ const UserSettingsSidebar: React.FC<UserSettingsSidebarProps> = ({
       <div className="px-6">
         <Button
           variant="ghost"
+          onClick={handleLogout}
           className={`cursor-pointer border border-transparent hover:bg-transparent hover:border-[#D32F2F] transition-colors ease-linear duration-300 flex items-center gap-2 !py-2 !px-1.5 h-10 rounded-[8px]`}
         >
           <UserSettingsIcons.Logout />

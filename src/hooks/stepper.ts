@@ -1,5 +1,11 @@
 import { useState } from "react";
 
+/**
+ * Hook to manage the stepper for user settings dialog component
+ * @example
+ *  const { activeStep, handleNext, handlePrev } = useStepper("user-details");
+ */
+
 const useStepper = (page: string) => {
   const [activeStep, setActiveStep] = useState(page || "user-details");
 
