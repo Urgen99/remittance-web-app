@@ -1,10 +1,31 @@
 import { apiSlice } from "../api/api.slice";
 
+type Address = {
+  street: string;
+  city: string;
+  country: string;
+};
+
+type Documents = {
+  documentType: string;
+  url: string;
+};
+
+export type GetKycByUserResponse = {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  permanentAddress: Address;
+  identityExpiryDate: string;
+  identityNo: string;
+  documents: Documents[];
+};
+
 const kycApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     /**
-     * @DESC : Submit kyc
+     * @DESC : Submit KYC
      * @Method : POST
      * @Route : /Kyc
      * @Access :  Private
@@ -17,7 +38,43 @@ const kycApiSlice = apiSlice.injectEndpoints({
         body: formData,
       }),
     }),
+
+    /**
+     * @DESC : Get KYC by user
+     * @Method : GET
+     * @Route : /Kyc/getByUser/{userId}?userProfileId={userProfileId}
+     * @Access :  Private
+     * @Headers : { Authorization: Bearer token }
+     */
+    getKycByUser: builder.query({
+      query: (id) => ({
+        url: `/Kyc/getByUser/${id}`,
+        params: { userProfileId: id },
+      }),
+    }),
+
+    /**
+     * @DESC : Get KYC by ID
+     * @Method : GET
+     * @Route : /Kyc/getByUser/{id}
+     * @Access :  Private
+     * @Headers : { Authorization: Bearer token }
+     */
+    getKycById: builder.query<
+      {
+        data: GetKycByUserResponse;
+      },
+      string | number
+    >({
+      query: (id) => ({
+        url: `/Kyc/${id}`,
+      }),
+    }),
   }),
 });
 
-export const { useSubmitKycMutation } = kycApiSlice;
+export const {
+  useSubmitKycMutation,
+  useGetKycByIdQuery,
+  useGetKycByUserQuery,
+} = kycApiSlice;

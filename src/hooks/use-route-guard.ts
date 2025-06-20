@@ -11,11 +11,11 @@ type UseRouteGuardTypes = {
  * Hook to navigate back to a specified route when required conditions aren't met
  * 
  * @example 
- * // Navigates to "/register" if email is not present
+ * Navigates to "/register" if email is not present
  * useNavigateBack({ check1: email, navigateTo: "/register" });
  * 
  * @example
- * // Navigates to "/register" if email or password is not present
+ * Navigates to "/register" if email or password is not present
  * useNavigateBack({ check1: email, check2: password, navigateTo: "/register" });
 
 */

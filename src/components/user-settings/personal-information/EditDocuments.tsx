@@ -15,10 +15,9 @@ const EditDocuments: React.FC<{
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-1.5">
           <Button
-            size="icon"
-            variant="ghost"
             className="hover:bg-transparent size-fit cursor-pointer"
             onClick={() => handlePrev("user-details")}
+            variant="ghost"
           >
             <DialogSettingsIcons.ChevronLeft />
           </Button>

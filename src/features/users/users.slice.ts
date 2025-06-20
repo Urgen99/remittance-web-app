@@ -1,24 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
-const initialState = {
-  email: "",
+type UserInitialState = {
+  email?: string | null;
+  id: string | number | null;
+};
+
+const initialState: UserInitialState = {
+  email: null,
+  id: null,
 };
 
 const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    setUserEmail: (state, action: PayloadAction<string>) => {
-      state.email = action.payload;
+    setUsersData: (state, action: PayloadAction<UserInitialState>) => {
+      const { id } = action.payload;
+      state.id = id;
     },
   },
 });
 
-const selectCurrentEmail = (state: RootState) => state.users.email;
+/* ---------- SELECTORS ---------- */
+const selectUserId = (state: RootState) => state.users.id;
 
-export const { setUserEmail } = userSlice.actions;
-
-export { selectCurrentEmail };
-
+export const { setUsersData } = userSlice.actions;
+export { selectUserId };
 export default userSlice.reducer;
