@@ -9,7 +9,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PasswordInput } from "@/components/ui/password-input";
-import { selectCurrentUser } from "@/features/auth/auth.slice";
+import {
+  selectAuthPassword,
+  selectCurrentUser,
+} from "@/features/auth/auth.slice";
 import { useUpdatePasswordMutation } from "@/features/users/userApi.slice";
 import {
   CreatePasswordSchema,
@@ -19,12 +22,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import TextContainer from "../TextContainer";
+import { showError, showSuccess } from "@/utils/toaster";
+import { ResponseError } from "@/lib/type";
 
 const CreateNewPassword = ({
   handlePrev,
 }: {
   handlePrev: (args: string) => void;
 }) => {
+  const currentPassword = useSelector(selectAuthPassword);
+
   const user = useSelector(selectCurrentUser);
   const form = useForm<CreatePasswordSchemaType>({
     resolver: zodResolver(CreatePasswordSchema),
@@ -41,18 +48,29 @@ const CreateNewPassword = ({
     try {
       const credentials = {
         username: user,
-        password: formData.newPassword,
+        oldPassword: currentPassword,
+        newPassword: formData.newPassword,
       };
 
       const response = await updatePassword(credentials).unwrap();
 
       if (response) {
-        console.log(response);
-        // add later success toaster
+        showSuccess("Success", "You have successfully updated your password.");
         handlePrev("account-privacy");
       }
     } catch (error) {
-      console.error("Error while updating password: ", error);
+      const { status } = error as ResponseError;
+
+      if (status === 400 || status === 422) {
+        showError("Invalid password!", "Please enter a valid password.");
+      } else if (status === 401) {
+        showError(
+          "Unauthorized!",
+          "You are not authorized to perform this action."
+        );
+      } else {
+        showError("Something went wrong!", "Please try again.");
+      }
     }
   }
 
@@ -85,6 +103,7 @@ const CreateNewPassword = ({
                         <div className="flex flex-col gap-1 sm:gap-2 transition-all ease-in-out duration-300">
                           <FormControl>
                             <PasswordInput
+                              key={"newPassword"}
                               {...field}
                               className="border-[#E6E6E6] pr-2 pl-3 h-10 rounded-[8px] shadow-[0_1.5px_4px_-1px_rgba(10,9,11,0.07)] font-inter text-sm tracking-[-0.05px] leading-5"
                             />
@@ -108,6 +127,7 @@ const CreateNewPassword = ({
                         <div className="flex flex-col gap-1 ">
                           <FormControl>
                             <PasswordInput
+                              key={"confirmPassword"}
                               {...field}
                               className="border-[#E6E6E6] pr-2 pl-3 h-10 rounded-[8px] shadow-[0_1.5px_4px_-1px_rgba(10,9,11,0.07)] font-inter text-sm tracking-[-0.05px] leading-5"
                             />
@@ -128,8 +148,8 @@ const CreateNewPassword = ({
         </div>
         <div className="pl-1">
           <Button
-            disabled={isLoading}
-            className="font-mukta font-medium leading-7 w-fit h-10 rounded-[4px] bg-[#3333c1] hover:bg-[#3333c1] !px-5 !py-3"
+            disabled={!form.formState.isValid || isLoading}
+            className="font-mukta font-medium leading-7 w-fit h-10 rounded-[4px] bg-[#3333c1] hover:bg-[#3333c1] !px-5 !py-3 disabled:cursor-not-allowed disabled:bg-black"
           >
             Continue <DialogSettingsIcons.ChevronRight fill="#fff" />
           </Button>

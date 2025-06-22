@@ -70,7 +70,7 @@ type PersonalDetailsSchema = z.infer<typeof PersonalDetailsSchema>;
 const PersonalDetails = ({ handlePrev }: PersonalDetailProps) => {
   const { identityTypeId, documentFront, documentBack } =
     useSelector(selectKycState);
-  console.log("Auth state is here: ", loadAuthState());
+
   const dispatch = useDispatch();
   const form = useForm<PersonalDetailsSchema>({
     mode: "all",

@@ -3,12 +3,16 @@ import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import TextInput from "@/components/ui/forms/TextInput";
+import { setAuthDetails } from "@/features/auth/auth.slice";
+import { useForgotPasswordMutation } from "@/features/auth/authApi.slice";
 import useAuthState from "@/hooks/useAuthState";
 import { EmailSchema, EmailSchemaType } from "@/lib/schemas/user/email";
-import { FormDescription } from "@/lib/type";
+import { FormDescription, ResponseError } from "@/lib/type";
+import { showError, showSuccess } from "@/utils/toaster";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   useAuthState();
@@ -19,8 +23,36 @@ const ForgotPassword = () => {
       email: "",
     },
   });
-  function onSubmit(formData: EmailSchemaType) {
-    console.log("form is submitted", formData);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+  async function onSubmit(formData: EmailSchemaType) {
+    try {
+      const response = await forgotPassword(formData.email).unwrap();
+
+      if (response?.message) {
+        dispatch(setAuthDetails({ email: formData.email }));
+        showSuccess(
+          "Success",
+          "Please check your email. We have sent you an OTP to reset your password."
+        );
+
+        navigate("/verify-otp", {
+          state: { verificationMode: "forgot-password" },
+        });
+      }
+    } catch (e) {
+      const { status } = e as ResponseError;
+
+      if (!status) {
+        showError("No Server Response", "Please try again later.");
+      } else if (status === 400) {
+        showError("Error!", "Please enter all the required fields.");
+      } else {
+        showError("Something went wrong!", "Please try again later.");
+      }
+    }
   }
 
   return (
@@ -49,6 +81,7 @@ const ForgotPassword = () => {
 
                 <Button
                   type="submit"
+                  disabled={isLoading}
                   className="cursor-pointer text-xs sm:text-sm font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full h-11 text-white"
                 >
                   Submit
@@ -59,6 +92,7 @@ const ForgotPassword = () => {
             <Link
               to="/login"
               className="text-[#3333C1] text-sm font-medium font-inter tracking-[-1%] underline"
+              replace
             >
               Back to Login
             </Link>

@@ -10,27 +10,27 @@ type SettingsLists = {
 };
 
 const settingsLists: SettingsLists[] = [
-  {
-    Icon: DialogSettingsIcons.Mail,
-    title: "Update email",
-    id: "update-email",
-  },
+  // {
+  //   Icon: DialogSettingsIcons.Mail,
+  //   title: "Update email",
+  //   id: "update-email",
+  // }, // disabled for now..
   {
     Icon: DialogSettingsIcons.Password,
     title: "Update password",
     id: "update-password",
   },
-  {
-    Icon: DialogSettingsIcons.Pin,
-    title: "Update pin",
-    id: "update-pin",
-  },
-  {
-    Icon: DialogSettingsIcons.FramePerson,
-    title: "Enable face ID",
-    isSwitch: true,
-    id: "face-id",
-  },
+  // {
+  //   Icon: DialogSettingsIcons.Pin,
+  //   title: "Update pin",
+  //   id: "update-pin",
+  // },
+  // {
+  //   Icon: DialogSettingsIcons.FramePerson,
+  //   title: "Enable face ID",
+  //   isSwitch: true,
+  //   id: "face-id",
+  // },
   {
     Icon: DialogSettingsIcons.Cancel,
     title: "Close your account",

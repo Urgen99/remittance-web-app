@@ -1,14 +1,13 @@
-import useStepper from "@/hooks/stepper";
-import EditDocuments from "./EditDocuments";
-import UserDetails from "./UserDetails";
-import { Duration, formatDuration, intervalToDuration } from "date-fns";
-import { useSelector } from "react-redux";
-import { selectUserId } from "@/features/users/users.slice";
 import {
   GetKycByUserResponse,
-  useGetKycByIdQuery,
   useGetKycByUserQuery,
 } from "@/features/kyc/kycApi.slice";
+import { selectUserId } from "@/features/users/users.slice";
+import useStepper from "@/hooks/stepper";
+import { Duration, formatDuration, intervalToDuration } from "date-fns";
+import { useSelector } from "react-redux";
+import EditDocuments from "./EditDocuments";
+import UserDetails from "./UserDetails";
 export type UserData = {
   personalDetails: Data;
   addressDetails: Data;
@@ -44,25 +43,19 @@ const documents: DocumentProps = {
 };
 const PersonalInformation = () => {
   const { activeStep, handleNext, handlePrev } = useStepper("user-details");
-
   const id = useSelector(selectUserId);
+
   const {
     data,
     isLoading: idLoading,
     isFetching: idFetching,
-  } = useGetKycByUserQuery(id);
+  } = useGetKycByUserQuery(id as number);
 
-  const {
-    data: kycData,
-    isLoading: kycLoading,
-    isFetching: kycFetching,
-  } = useGetKycByIdQuery(data?.data?.id);
-
-  const filteredKycData =
-    kycData && filterKycData(kycData?.data as unknown as GetKycByUserResponse);
+  const filteredKycData = data
+    ? filterKycData(data?.data as unknown as GetKycByUserResponse)
+    : null;
 
   if (idLoading || idFetching) return <div>Loading...</div>;
-  if (kycLoading || kycFetching) return <div>Loading...</div>;
 
   return (
     <>

@@ -46,35 +46,17 @@ const kycApiSlice = apiSlice.injectEndpoints({
      * @Access :  Private
      * @Headers : { Authorization: Bearer token }
      */
-    getKycByUser: builder.query({
-      query: (id) => ({
-        url: `/Kyc/getByUser/${id}`,
-        params: { userProfileId: id },
-      }),
-    }),
-
-    /**
-     * @DESC : Get KYC by ID
-     * @Method : GET
-     * @Route : /Kyc/getByUser/{id}
-     * @Access :  Private
-     * @Headers : { Authorization: Bearer token }
-     */
-    getKycById: builder.query<
+    getKycByUser: builder.query<
       {
         data: GetKycByUserResponse;
       },
       string | number
     >({
       query: (id) => ({
-        url: `/Kyc/${id}`,
+        url: `/Kyc/getByUser/${id}`,
       }),
     }),
   }),
 });
 
-export const {
-  useSubmitKycMutation,
-  useGetKycByIdQuery,
-  useGetKycByUserQuery,
-} = kycApiSlice;
+export const { useSubmitKycMutation, useGetKycByUserQuery } = kycApiSlice;
