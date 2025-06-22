@@ -8,10 +8,7 @@ import {
   setAuthDetails,
   setCredentials,
 } from "@/features/auth/auth.slice";
-import {
-  useForgotPasswordMutation,
-  useLoginMutation,
-} from "@/features/auth/authApi.slice";
+import { useLoginMutation } from "@/features/auth/authApi.slice";
 import useRouteGuard from "@/hooks/use-route-guard";
 import {
   PasswordSchema,
@@ -23,7 +20,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 const Login = () => {
   const email = useSelector(selectAuthEmail);
@@ -37,9 +33,8 @@ const Login = () => {
       password: "",
     },
   });
-  const [login, { isLoading: loginLoading }] = useLoginMutation();
-  const [forgotPassword, { isLoading: forgotPasswordLoading }] =
-    useForgotPasswordMutation();
+  const [login, { isLoading }] = useLoginMutation();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -91,23 +86,8 @@ const Login = () => {
     }
   }
 
-  async function handleForgotPassword() {
-    try {
-      const response = await forgotPassword(email).unwrap();
-
-      if (response?.message) {
-        toast.success(response?.message || "Email sent successfully", {
-          description:
-            "Please check your email. We have sent you an OTP to reset your password.",
-        });
-
-        navigate("/verify-otp", {
-          state: { verificationMode: "forgot-password" },
-        });
-      }
-    } catch (e) {
-      console.error("Error while sending email: ", e);
-    }
+  function handleForgotPassword() {
+    navigate("/forgot-password");
   }
 
   return (
@@ -136,7 +116,7 @@ const Login = () => {
 
                 <Button
                   type="submit"
-                  disabled={loginLoading || forgotPasswordLoading}
+                  disabled={isLoading}
                   className="cursor-pointer text-xs sm:text-sm font-inter tracking-[-0.18px] hover:bg-[#3333c1e0] bg-[#3333C1] rounded-[6px] w-full h-11 text-white"
                 >
                   Submit
@@ -145,19 +125,11 @@ const Login = () => {
             </Form>
 
             <div className="flex flex-col gap-3 font-inter font-medium leading-5 tracking-[-0.02px] text-[#0A090B]">
-              <Button
-                variant="outline"
-                className="h-10"
-                disabled={loginLoading || forgotPasswordLoading}
-              >
+              <Button variant="outline" className="h-10" disabled={isLoading}>
                 <FormIcons.Google />{" "}
                 <p className="text-xs sm:text-sm">Sign in with Google</p>
               </Button>
-              <Button
-                variant="outline"
-                className="h-10"
-                disabled={loginLoading || forgotPasswordLoading}
-              >
+              <Button variant="outline" className="h-10" disabled={isLoading}>
                 <FormIcons.Apple />{" "}
                 <p className="text-xs sm:text-sm">Sign in with Apple</p>
               </Button>
@@ -165,7 +137,7 @@ const Login = () => {
 
             <Button
               variant="link"
-              disabled={loginLoading || forgotPasswordLoading}
+              disabled={isLoading}
               onClick={handleForgotPassword}
               className="text-[#3333C1] text-sm font-medium font-inter tracking-[-1%] underline w-fit"
             >

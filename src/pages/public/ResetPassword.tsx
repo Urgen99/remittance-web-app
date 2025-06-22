@@ -11,12 +11,11 @@ import {
   CreatePasswordSchemaType,
 } from "@/lib/schemas/user/createPassword";
 import { FormDescription, ResponseError } from "@/lib/type";
-import { showError } from "@/utils/toaster";
+import { showError, showSuccess } from "@/utils/toaster";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 const ResetPassword = () => {
   const { state } = useLocation();
@@ -52,8 +51,8 @@ const ResetPassword = () => {
       const response = await resetPassword(credentials).unwrap();
 
       if (response?.message) {
-        toast.success(response?.message || "Password reset successfully");
-        navigate("/register");
+        showSuccess("Success", "You have successfully reset your password.");
+        navigate("/");
       }
     } catch (e) {
       const { status } = e as ResponseError;

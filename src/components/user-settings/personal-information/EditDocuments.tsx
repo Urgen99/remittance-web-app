@@ -46,7 +46,11 @@ const EditDocuments: React.FC<{
 
             <div className="flex items-center gap-3.5">
               {documents.image.map(({ side }: { side: string }) => (
-                <DocumentCard title={documents.type} subtitle={side} />
+                <DocumentCard
+                  key={side}
+                  title={documents.type}
+                  subtitle={side}
+                />
               ))}
             </div>
 
