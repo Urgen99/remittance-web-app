@@ -98,7 +98,7 @@ const UserDetails = ({ handleNext, kycData }: UserDetails) => {
                   documentDetails.data.map(({ side, content, subtitle }) => (
                     <DocumentCard
                       key={side}
-                      title={subtitle?.toLowerCase()}
+                      title={subtitle?.toLowerCase()?.replace("_", " ")}
                       subtitle={`(${side?.slice(0, 1).toUpperCase()})`}
                       image={content}
                     />

@@ -45,7 +45,6 @@ const AppContent = () => {
         <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="verify-otp" element={<VerifyOtp />} />
         <Route path="reset-password" element={<ResetPassword />} />
-
         {/* Private Pages */}
         <Route element={<ProtectedRoute />}>
           <Route path="complete-profile" element={<CompleteProfile />} />

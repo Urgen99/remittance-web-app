@@ -4,7 +4,7 @@ import {
 } from "@/features/kyc/kycApi.slice";
 import { selectUserId } from "@/features/users/users.slice";
 import useStepper from "@/hooks/stepper";
-import { Duration, formatDuration, intervalToDuration } from "date-fns";
+import convertTime from "@/utils/convertTimeLeft";
 import { useSelector } from "react-redux";
 import EditDocuments from "./EditDocuments";
 import UserDetails from "./UserDetails";
@@ -85,7 +85,8 @@ const filterKycData = (kycData: GetKycByUserResponse) => {
     documents,
   } = kycData;
 
-  const expiryDate = convertExpiryDaysLeft(identityExpiryDate);
+  // Format Expiry date using date-fns
+  const timeLeft = convertTime(identityExpiryDate);
 
   /**
    * Extract URLs from documents array and add side to each document
@@ -113,7 +114,7 @@ const filterKycData = (kycData: GetKycByUserResponse) => {
       { subtitle: "DOCUMENT", content: documentType },
       {
         subtitle: "DOC EXPIRY DATE",
-        content: `${identityExpiryDate} (${expiryDate} left)`,
+        content: `${identityExpiryDate} (${timeLeft})`,
       },
       { subtitle: "DOCUMENT NO", content: identityNo },
     ],
@@ -138,39 +139,4 @@ const filterKycData = (kycData: GetKycByUserResponse) => {
     addressDetails,
     documentDetails,
   };
-};
-
-/**
- * Format Expiry date using date-fns
- * @example
- * @response : "2025-06-26"
- * @return : "24 days left"
- */
-const convertExpiryDaysLeft = (expiryDate: string) => {
-  const expiryDuration = intervalToDuration({
-    start: new Date(expiryDate),
-    end: new Date(),
-  });
-
-  const units = [
-    "years",
-    "months",
-    "weeks",
-    "days",
-    "hours",
-    "minutes",
-    "seconds",
-  ];
-  const nonzero = Object.entries(expiryDuration)
-    .filter(([_, value]) => value || 0 > 0)
-    .map(([unit, _]) => unit);
-
-  const formattedDuration = formatDuration(expiryDuration, {
-    format: units
-      .filter((i) => new Set(nonzero).has(i))
-      .slice(0, 1) as keyof Duration[keyof Duration],
-    delimiter: ", ",
-  });
-
-  return formattedDuration;
 };
