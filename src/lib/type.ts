@@ -36,7 +36,12 @@ export interface AuthResponse {
 
 export interface ResponseError {
   status: number | string | null;
-  message: string | null;
-  data: number | string | null;
-  errors: string[];
+  data: {
+    message: string | null;
+    data: number | string | null;
+    validationErrors: {
+      field: string;
+      errorMessage: string;
+    }[];
+  };
 }

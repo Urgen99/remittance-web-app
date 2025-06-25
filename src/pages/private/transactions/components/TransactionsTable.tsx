@@ -3,6 +3,7 @@ import DataNotFound from "@/components/shared/DataNotFound";
 import DataTable from "@/components/shared/Generic/DataTable";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { user } from "@/lib/constant";
+import { format } from "date-fns";
 import { EyeIcon } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -104,11 +105,7 @@ const TransactionsTable = () => {
       iconLeft: <TransactionIcons.Calendar />,
       render: (date) => (
         <div className="px-2">
-          {date instanceof Date ? (
-            <>{date.toLocaleDateString("en-GB")}</>
-          ) : (
-            <>-</>
-          )}
+          {format(new Date(date as string), "dd/MM/yyyy")}
         </div>
       ),
     },

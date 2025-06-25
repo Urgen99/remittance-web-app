@@ -84,7 +84,7 @@ export const user = {
       id: "asds",
       name: "Devon Lane",
       avatar: "",
-      date: "2025-03-06T10:15:00Z",
+      date: "2025-03-27T10:15:00Z",
       count: 20,
       contact: "077 6764 8570",
     },
@@ -146,7 +146,7 @@ export const user = {
       status: "initiated",
       amount: 120,
       method: "Bank Transfer",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-04-27T10:15:00Z",
     },
     {
       id: 2,
@@ -154,7 +154,7 @@ export const user = {
       status: "progress",
       amount: 120,
       method: "Bank Transfer",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-03-06T10:15:00Z",
     },
     {
       id: 3,
@@ -162,7 +162,7 @@ export const user = {
       status: "verifying",
       amount: 120,
       method: "Bank Transfer",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-03-06T10:15:00Z",
     },
     {
       id: 4,
@@ -170,7 +170,7 @@ export const user = {
       status: "completed",
       amount: 120,
       method: "Bank Transfer",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-06-06T10:15:00Z",
     },
     {
       id: 5,
@@ -178,7 +178,7 @@ export const user = {
       status: "completed",
       amount: 120,
       method: "Bank Transfer",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-03-06T10:15:00Z",
     },
     {
       id: 6,
@@ -186,7 +186,7 @@ export const user = {
       status: "initiated",
       amount: 351.02,
       method: "visa",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-03-06T10:15:00Z",
     },
     {
       id: 7,
@@ -194,7 +194,7 @@ export const user = {
       status: "progress",
       amount: 275.43,
       method: "promissory",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-03-06T10:15:00Z",
     },
     {
       id: 8,
@@ -202,7 +202,7 @@ export const user = {
       status: "delivered",
       amount: 782.01,
       method: "apple pay",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-03-06T10:15:00Z",
     },
     {
       id: 9,
@@ -210,7 +210,7 @@ export const user = {
       status: "delivered",
       amount: 169.43,
       method: "american express",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-03-06T10:15:00Z",
     },
     {
       id: 10,
@@ -218,7 +218,7 @@ export const user = {
       status: "delivered",
       amount: 475.22,
       method: "payMee",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-03-06T10:15:00Z",
     },
     {
       id: 11,
@@ -226,7 +226,7 @@ export const user = {
       status: "delivered",
       amount: 767.51,
       method: "aura",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-03-06T10:15:00Z",
     },
     {
       id: 12,
@@ -234,7 +234,7 @@ export const user = {
       status: "delivered",
       amount: 943.65,
       method: "pix",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-03-06T10:15:00Z",
     },
     {
       id: 13,
@@ -242,7 +242,7 @@ export const user = {
       status: "delivered",
       amount: 473.85,
       method: "visa electron",
-      date: new Date("2025-03-06T10:15:00Z"),
+      date: "2025-03-06T10:15:00Z",
     },
   ],
 };
@@ -304,3 +304,8 @@ export type Terms = {
   conclusion?: string;
 };
 export { BASE_URL, PUBLIC_ROUTES, VERIFICATION_ROUTES };
+
+// ${formatDistanceToNow(new Date(user.date), {
+// includeSeconds: true,
+//   addSuffix: true,
+// })}

@@ -2,9 +2,9 @@ import { TransactionIcons } from "@/components/icons/Icons";
 import TextContainer from "@/components/shared/TextContainer";
 import { Button } from "@/components/ui/button";
 import { maskAccountNumber } from "@/utils/maskAccountNumber";
-import moment from "moment";
 import CountryDetails from "./components/CountryDetails";
 import DetailsTable from "./components/DetailsTable";
+import { format } from "date-fns";
 
 // import { useParams } from "react-router-dom";
 const transactionDetails = {
@@ -95,7 +95,7 @@ const TransactionDetails = () => {
   const generalDetailsRows = [
     {
       label: "Initiated on",
-      value: moment(transactionDetails.date).format("YYYY-MM-DD"),
+      value: format(transactionDetails.date, "yyyy-MM-dd"),
     },
     {
       label: "Channel",

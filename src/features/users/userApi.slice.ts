@@ -37,8 +37,26 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: credentials,
       }),
     }),
+
+    /**
+     * @DESC : Update User's Pin
+     * @Method : PUT
+     * @Route : /api/v1/TransactionPin
+     * @Access :  Private
+     * @Headers : { Authorization: Bearer token }
+     */
+    updatePin: builder.mutation({
+      query: (credentials) => ({
+        url: "/TransactionPin",
+        method: "PUT",
+        body: credentials,
+      }),
+    }),
   }),
 });
 
-export const { useUpdatePasswordMutation, useGetUserByEmailQuery } =
-  usersApiSlice;
+export const {
+  useUpdatePasswordMutation,
+  useGetUserByEmailQuery,
+  useUpdatePinMutation,
+} = usersApiSlice;

@@ -20,8 +20,6 @@ const RecentPeopleContainer = ({ user }: any) => {
       <div className="pr-3 pl-3.5 flex items-center">
         <div className="flex flex-wrap gap-x-[11px] gap-y-[15px]">
           {user.recentPeoples.slice(0, 4).map((user: any) => (
-            // <RecentPeopleCard key={user.id} user={user} />
-
             <PeopleCard
               key={user.id}
               variant="recent"
