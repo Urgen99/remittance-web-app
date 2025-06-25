@@ -20,11 +20,11 @@ const settingsLists: SettingsLists[] = [
     title: "Update password",
     id: "update-password",
   },
-  // {
-  //   Icon: DialogSettingsIcons.Pin,
-  //   title: "Update pin",
-  //   id: "update-pin",
-  // },
+  {
+    Icon: DialogSettingsIcons.Pin,
+    title: "Update pin",
+    id: "update-pin",
+  },
   // {
   //   Icon: DialogSettingsIcons.FramePerson,
   //   title: "Enable face ID",

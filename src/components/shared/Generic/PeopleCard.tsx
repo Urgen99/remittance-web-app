@@ -2,8 +2,7 @@ import { UserIcons } from "@/components/icons/Icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { getColors } from "@/lib/generateRandomColors";
-import moment from "moment";
-
+import { format } from "date-fns";
 type UserBase = {
   id: string;
   name: string;
@@ -76,7 +75,7 @@ const PeopleCard = (props: PeopleCardProps) => {
 
         <div
           className={`flex flex-col gap-3 ${
-            variant === "recent" ? "items-center" : ""
+            variant === "recent" ? "items-center text-center" : ""
           }`}
         >
           <h3 className="font-roboto font-normal text-base !leading-[24px] tracking-[-1%] text-black">
@@ -85,7 +84,7 @@ const PeopleCard = (props: PeopleCardProps) => {
 
           <p className="font-roboto text-sm leading-[18px] tracking-[-1%] font-normal text-[#696969]">
             {variant === "recent"
-              ? `Sent on ${moment(user.date).format("Do MMM")}`
+              ? `Sent on ${format(user.date, "do MMM")}`
               : user.contact}
           </p>
         </div>

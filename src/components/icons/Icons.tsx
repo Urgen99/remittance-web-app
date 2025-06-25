@@ -1614,6 +1614,23 @@ const DialogSettingsIcons = {
       />
     </svg>
   ),
+  ArrowUpRight: () => (
+    <svg
+      width="36"
+      height="36"
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M14.083 21.9169L21.9174 14.0825M21.9174 14.0825L21.9174 19.9583M21.9174 14.0825L16.0416 14.0825"
+        stroke="#3333C1"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
 };
 
 const SendMoneyStepper = {

@@ -1,9 +1,9 @@
 import { TransactionIcons } from "@/components/icons/Icons";
 import IconTextContainer from "@/components/shared/IconTextContainer";
 import { maskAccountNumber } from "@/utils/maskAccountNumber";
-import moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
 const AccountDetails = ({ user }: { user: any }) => {
   const totalAmount: number = user?.transactions.reduce(
@@ -12,15 +12,15 @@ const AccountDetails = ({ user }: { user: any }) => {
   );
   const totalTransactions = user?.transactions.length;
   const lastTransactionDate =
-    user.transactions.length > 0
+    user?.transactions.length > 0
       ? new Date(
           Math.max(
-            ...user.transactions.map(({ date }: { date: string | Date }) =>
+            ...user.transactions.map(({ date }: { date: Date }) =>
               new Date(date).getTime()
             )
           )
         )
-      : undefined;
+      : new Date();
 
   const accountDetails = [
     {
@@ -36,7 +36,8 @@ const AccountDetails = ({ user }: { user: any }) => {
     {
       Icon: TransactionIcons.ArrowTransfer,
       title: "Last Sent",
-      subtitle: moment(lastTransactionDate).format("DD/MM/YY") || "N/A",
+      subtitle:
+        format(new Date(lastTransactionDate as Date), "dd/LL/yyyy") || "N/A",
     },
   ];
 

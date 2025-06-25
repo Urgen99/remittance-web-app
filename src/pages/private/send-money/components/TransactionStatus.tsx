@@ -1,12 +1,12 @@
 import { getStatusColor, getTextColor } from "@/lib/getColors";
 import { FormDescription } from "@/lib/type";
 import { maskAccountNumber } from "@/utils/maskAccountNumber";
-import moment from "moment";
 import NavigationButtons from "../../complete-profile/components/NavigationButtons";
 import { SendMoneyForm } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
 import PaymentCountry from "./review-payment/PaymentCountry";
 import PaymentDetailTable from "./review-payment/PaymentDetailTable";
+import { format } from "date-fns";
 
 interface TransactionStatusProps {
   handleNext: () => void;
@@ -92,7 +92,7 @@ const TransactionStatus = ({
     },
     {
       label: "Payment initiated date",
-      value: moment(transactionDetails.date).format("YYYY-MM-DD"),
+      value: format(transactionDetails.date, "yyyy-MM-dd"),
     },
     {
       label: "Payment Method",

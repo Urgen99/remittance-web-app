@@ -26,6 +26,8 @@ const Dashboard = () => {
     }
   );
 
+  console.log(isLoading, isFetching);
+
   useEffect(() => {
     let mounted = true;
 

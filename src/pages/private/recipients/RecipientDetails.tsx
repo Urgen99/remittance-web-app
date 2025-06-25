@@ -18,7 +18,6 @@ import {
 } from "@/lib/getColors";
 import { useParams } from "react-router-dom";
 import AccountDetails from "./components/AccountDetails";
-
 const RecipientDetails = () => {
   const { id } = useParams();
   console.log(id);
