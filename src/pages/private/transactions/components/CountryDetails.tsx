@@ -1,6 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDecimal } from "@/utils/formatDecimals";
-import React from "react";
 
 type CountryDetailsProps = {
   title: string;
@@ -12,7 +11,7 @@ type CountryDetailsProps = {
   end?: boolean;
 };
 
-const CountryDetails: React.FC<CountryDetailsProps> = ({
+const CountryDetails = ({
   title,
   flag,
   name,
@@ -20,7 +19,7 @@ const CountryDetails: React.FC<CountryDetailsProps> = ({
   amount,
   code,
   end = false,
-}) => {
+}: CountryDetailsProps) => {
   const formattedAmount = formatDecimal(amount);
 
   return (
