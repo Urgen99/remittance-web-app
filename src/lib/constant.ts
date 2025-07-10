@@ -2,7 +2,7 @@ const BASE_URL = import.meta.env.VITE_SERVER;
 
 const VERIFICATION_ROUTES = ["/complete-profile", "/document-expired"];
 
-const PUBLIC_ROUTES = ["/register", "/forgot-password"];
+const PUBLIC_ROUTES = ["/", "/forgot-password"];
 
 export const user = {
   name: "Amanda Smith",
