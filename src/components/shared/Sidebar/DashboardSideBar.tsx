@@ -16,19 +16,23 @@ import { Link, useLocation } from "react-router-dom";
 const DashboardSideBar = () => {
   const { pathname } = useLocation();
 
-  const normalizePath = (path: string) => path.replace(/\/+$/, "") || "/";
+  const getBasePath = (path: string) => {
+    const pathWithoutQuery = path.split(/[?#]/)[0];
+
+    // remove slashes
+    return pathWithoutQuery.replace(/\/+$/, "") || "/";
+  };
 
   const isActiveLink = (currentPath: string, targetUrl: string) => {
-    const normalizedCurrent = normalizePath(currentPath);
-    const normalizedTarget = normalizePath(targetUrl);
+    const baseCurrent = getBasePath(currentPath);
+    const baseTarget = getBasePath(targetUrl);
 
-    if (normalizedTarget === "/") {
-      return normalizedCurrent === "/";
+    if (baseTarget === "/") {
+      return baseCurrent === "/";
     }
 
     return (
-      normalizedCurrent === normalizedTarget ||
-      normalizedCurrent.startsWith(`${normalizedTarget}/`)
+      baseCurrent === baseTarget || baseCurrent.startsWith(`${baseTarget}/`)
     );
   };
 
