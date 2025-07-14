@@ -51,12 +51,14 @@ const PersonalInformation = () => {
     isFetching: idFetching,
   } = useGetKycByUserQuery(id as number);
 
+  console.log("data", data);
   const filteredKycData = data
     ? filterKycData(data?.data as unknown as GetKycByUserResponse)
     : null;
 
   if (idLoading || idFetching) return <div>Loading...</div>;
 
+  console.log("filtered data", filteredKycData);
   return (
     <>
       {activeStep === "user-details" && (

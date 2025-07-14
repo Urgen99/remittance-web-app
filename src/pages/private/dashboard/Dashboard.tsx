@@ -13,7 +13,7 @@ import { setUsersData } from "@/features/users/users.slice";
 
 const Dashboard = () => {
   const currentUser = useSelector(selectCurrentUser);
-
+  console.log("currentUser", currentUser);
   /* ---------- FOR TESTING ONLY ---------- */
 
   const dispatch = useDispatch();
@@ -26,13 +26,15 @@ const Dashboard = () => {
     }
   );
 
+  console.log("data", data);
+
   console.log(isLoading, isFetching);
 
   useEffect(() => {
     let mounted = true;
 
     if (data && mounted) {
-      const { id } = data?.data || {};
+      const { relatedId: id } = data?.data || {};
       dispatch(setUsersData({ id }));
     }
 

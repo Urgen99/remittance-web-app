@@ -1,12 +1,5 @@
 import { z } from "zod";
 
-const PAYMENT_TYPE = z.union([
-  z.literal("card"),
-  z.literal("apple-pay"),
-  z.literal("google-pay"),
-  z.literal("stripe"),
-]);
-
 const DELIVERY_TYPE = z.union([z.literal("pickup"), z.literal("delivery")]);
 
 const SendMoneyFormSchema = z.object({
@@ -16,7 +9,7 @@ const SendMoneyFormSchema = z.object({
   ReceivingCountry: z.string().min(1, "Please select a receiver country"),
   ReceivingCurrency: z.string().min(1, "Please select a receiver currency"),
   SendingAmount: z.string().min(1, "Amount is required"),
-  PaymentType: PAYMENT_TYPE,
+  PaymentType: z.string().min(1, "Please select a payment type"),
   DeliveryType: DELIVERY_TYPE,
   Remarks: z.string(),
 

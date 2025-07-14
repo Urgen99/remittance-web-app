@@ -1,3 +1,4 @@
+import { useGetPaymentTypesQuery } from "@/features/reference-data/typePaymentApi.slice";
 import {
   AmountDetailSchema,
   AmountDetailSchemaType,
@@ -9,12 +10,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import NavigationButtons from "../../complete-profile/components/NavigationButtons";
 import { SendMoneyForm } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
 import DropDownSelect from "../../../../components/ui/forms/DropDownSelect";
 import TextInput from "../../../../components/ui/forms/TextInput";
 import CountryAmountSelect from "../../../../components/ui/send-money/CountryAmountSelect";
+import NavigationButtons from "../../complete-profile/components/NavigationButtons";
 interface AmountDetailProps {
   handleNext: () => void;
 }
@@ -38,25 +39,6 @@ const defaultReceiver = {
   code: "NPR",
 };
 
-const paymentMethods = [
-  {
-    value: "card",
-    label: "Card",
-  },
-  {
-    value: "apple-pay",
-    label: "Apple Pay",
-  },
-  {
-    value: "google-pay",
-    label: "Google Pay",
-  },
-  {
-    value: "stripe",
-    label: "Stripe",
-  },
-];
-
 const deliveryMethods = [
   {
     value: "pickup",
@@ -73,6 +55,22 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
   const [receiverCountry, setReceiverCountry] =
     useState<Country>(defaultReceiver);
   const navigate = useNavigate();
+
+  const {
+    data: paymentData,
+    isLoading: paymentTypeLoading,
+    isFetching: paymentTypeFetching,
+  } = useGetPaymentTypesQuery("PAYMENT_TYPE");
+
+  console.log("paymentTypeLoading", paymentTypeLoading);
+  console.log("paymentTypeFetching", paymentTypeFetching);
+  console.log("paymentTypes", paymentData);
+
+  const paymentMethods =
+    paymentData?.data.map((item) => ({
+      label: item.name,
+      value: item.id,
+    })) || [];
 
   const form = useForm<AmountDetailSchemaType>({
     mode: "all",
@@ -150,7 +148,7 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
                     isImportant
                     items={paymentMethods}
                     control={form.control}
-                    defaultValue={paymentMethods[0].value}
+                    defaultValue={String(paymentMethods[0].value)}
                     placeholder="Select payment method"
                   />
                   <DropDownSelect

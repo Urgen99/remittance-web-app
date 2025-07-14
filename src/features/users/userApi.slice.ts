@@ -2,7 +2,7 @@ import { apiSlice } from "../api/api.slice";
 
 type GetUserByEmailResponse = {
   email: string;
-  id: string | number;
+  relatedId: string | number;
 };
 
 export const usersApiSlice = apiSlice.injectEndpoints({
