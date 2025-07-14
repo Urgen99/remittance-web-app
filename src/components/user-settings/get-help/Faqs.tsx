@@ -7,46 +7,12 @@ import {
 } from "@/components/ui/accordion";
 
 import { Button } from "@/components/ui/button";
+import { useGetAllFaqsQuery } from "@/features/faqs/faqApi.slice";
 
-const faqs = [
-  {
-    question: "What happens if my transfer is rejected?",
-    answer:
-      "If your transfer is rejected, the funds are usually returned to your account. Check for errors and follow up with your bank for next steps.",
-    id: "1",
-  },
-  {
-    question: "How can I dispute an incorrect transfer?",
-    answer:
-      "If your transfer is rejected, the funds are usually returned to your account. Check for errors and follow up with your bank for next steps.",
-    id: "2",
-  },
-  {
-    question: "Why was my transfer refunded?",
-    answer:
-      "If your transfer is rejected, the funds are usually returned to your account. Check for errors and follow up with your bank for next steps.",
-    id: "3",
-  },
-  {
-    question: "How do I change my password ?",
-    answer:
-      "If your transfer is rejected, the funds are usually returned to your account. Check for errors and follow up with your bank for next steps.",
-    id: "4",
-  },
-  {
-    question: "What happens if my transfer is rejected?",
-    answer:
-      "If your transfer is rejected, the funds are usually returned to your account. Check for errors and follow up with your bank for next steps.",
-    id: "5",
-  },
-  {
-    question: "How do I verify my identity?",
-    answer:
-      "If your transfer is rejected, the funds are usually returned to your account. Check for errors and follow up with your bank for next steps.",
-    id: "6",
-  },
-];
 const Faqs = ({ handlePrev }: { handlePrev: () => void }) => {
+  const { data, isLoading, isFetching } = useGetAllFaqsQuery();
+  const faqs = data?.data;
+
   return (
     <div className="h-full pt-4 pr-7">
       <div className="flex flex-col gap-5">
@@ -75,23 +41,27 @@ const Faqs = ({ handlePrev }: { handlePrev: () => void }) => {
         </div>
 
         <div className="rounded-[4px] py-0.5 px-2 border-[#0000000A] border shadow-xs">
-          <Accordion type="single" collapsible className="w-full">
-            {faqs &&
-              faqs.map(({ question, answer, id }) => (
-                <AccordionItem value={id} key={id}>
-                  <AccordionTrigger>
-                    <h6 className="font-roboto font-normal text-base leading-6 tracking-[-1%] text-black">
-                      {question}
-                    </h6>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-sm font-roboto text-[#696969] tracking-[-1%] leading-[18px]">
-                      {answer}
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-          </Accordion>
+          {isLoading && isFetching ? (
+            <p>Loading</p>
+          ) : (
+            <Accordion type="single" collapsible className="w-full">
+              {faqs &&
+                faqs.map(({ question, answer, id }) => (
+                  <AccordionItem value={String(id)} key={id}>
+                    <AccordionTrigger>
+                      <h6 className="font-roboto font-normal text-base leading-6 tracking-[-1%] text-black">
+                        {question}
+                      </h6>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <p className="text-sm font-roboto text-[#696969] tracking-[-1%] leading-[18px]">
+                        {answer}
+                      </p>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+            </Accordion>
+          )}
         </div>
       </div>
     </div>

@@ -1,15 +1,18 @@
 import { SendMoneyStepper } from "@/components/icons/Icons";
-import AmountDetails from "@/pages/private/send-money/components/AmountDetails";
-import PaymentInformation from "@/pages/private/send-money/components/PaymentInformation";
-import PaymentTerms from "@/pages/private/send-money/components/PaymentTerms";
-import RecipientDetails from "@/pages/private/send-money/components/RecipientDetails";
-import ReviewPayment from "@/pages/private/send-money/components/ReviewPayment";
-import SendMoneyError from "@/pages/private/send-money/components/SendMoneyError";
-import TransactionStatus from "@/pages/private/send-money/components/TransactionStatus";
 import Steppers from "@/components/ui/stepper/steppers";
 import { Steps } from "@/lib/interface";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { lazy, useEffect, useRef, useState } from "react";
+
+const AmountDetails = lazy(() => import("./components/AmountDetails"));
+const PaymentInformation = lazy(
+  () => import("./components/PaymentInformation")
+);
+const PaymentTerms = lazy(() => import("./components/PaymentTerms"));
+const RecipientDetails = lazy(() => import("./components/RecipientDetails"));
+const ReviewPayment = lazy(() => import("./components/ReviewPayment"));
+const SendMoneyError = lazy(() => import("./components/SendMoneyError"));
+const TransactionStatus = lazy(() => import("./components/TransactionStatus"));
 
 const steps = [
   {

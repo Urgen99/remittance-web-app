@@ -2,11 +2,16 @@ import { CompleteProfileStepper } from "@/components/icons/Icons";
 import Steppers from "@/components/ui/stepper/steppers";
 import { Steps } from "@/lib/interface";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import PersonalDetails from "./components/PersonalDetails";
-import SelectDocument from "./components/SelectDocument";
-import UploadDocumentBack from "./components/UploadDocumentBack";
-import UploadDocumentFront from "./components/UploadDocumentFront";
+import { lazy, useEffect, useRef, useState } from "react";
+
+const PersonalDetails = lazy(() => import("./components/PersonalDetails"));
+const SelectDocument = lazy(() => import("./components/SelectDocument"));
+const UploadDocumentBack = lazy(
+  () => import("./components/UploadDocumentBack")
+);
+const UploadDocumentFront = lazy(
+  () => import("./components/UploadDocumentFront")
+);
 
 const steps = [
   {

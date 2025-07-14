@@ -50,7 +50,7 @@ const CurrentTransactionRate = () => {
 
   return (
     <>
-      <div className="min-h-[12.7rem] max-w-[30.68rem] 2xl:max-w-full w-full rounded-[8px] border border-[#0000001A]">
+      <div className="min-h-[12.7rem] max-w-[30.68rem] w-full rounded-[8px] border border-[#0000001A]">
         <div className="p-4 flex flex-col gap-3">
           <IconTextContainer title="Current transaction rate" />
 

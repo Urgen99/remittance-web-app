@@ -22,7 +22,7 @@ const ReferFriend = () => {
             </div>
           </div>
 
-          <div className="max-w-[255px] w-full">
+          <div className="max-w-[16rem] w-full">
             <img src="/images/locker.png" />
           </div>
         </div>

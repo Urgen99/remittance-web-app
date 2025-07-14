@@ -1,0 +1,163 @@
+
+MONEY SEND FLOW
+
+{/* <!--  GET METHOD API ROUTES --> */}
+
+A. Enter Money Section
+	1. get all countries (sender and receiver) 
+		i. only required response: 
+			{
+				"id": 0,
+				"name": "string",
+				"currency": "string",
+				"isEligible": true
+    		}
+
+	2. currency converter
+		i. only required response: 
+			{
+				"id": 0,
+				"sendingCountry": "string",
+				"sendingCurrency": "string",
+				"receivingCountry": "string",
+				"receivingCurrency": "string",
+				"rate": 0
+    		}
+
+	3. get all available payment methods - TBD in backend
+	4. get all available delivery methods - TBD in backend
+	5. platform fee - TBD in backend
+
+
+B. Receiver Details
+	1. If user has not saved recipients
+		i. get all available banks
+	2. If user has saved recipients
+		i. get all saved recipients
+			x. only required response: 
+				 {
+      "id": 0,
+      "isDeleted": true,
+      "firstName": "string",  
+      "middleName": "string",  
+      "lastName": "string",  
+      "email": "string",  
+      "mobileNumber": "string",  
+	  "addressLine1": {
+        "id": 0,
+        "isDeleted": true,
+        "countryId": 0,  
+        "postCode": "string",  
+        "unit": "string",  
+        "street": "string",  
+        "city": "string",  
+        "state": "string",  
+        "address": "string",   
+      },
+      "identityTypeId": 0,  
+      "identityNo": "string",  
+      "identityIssuedDate": "2025-07-08",  
+      "identityExpiryDate": "2025-07-08",  
+      "identityIssueCountryId": 0,  
+      "dateOfBirth": "2025-07-08",  
+      "relationId": 0,  
+   	  "paymentInstitutionId": 0,  
+      "paymentInstitutionBranch": "string",  
+      "paymentInstitutionUniqueNo": "string",  
+      "accountName": "string",  
+     
+    }
+
+C. Payment Information
+	1. If user has not saved payment methods
+		i. no need to get any thing
+	2. If user has saved payment methods
+		i. get all saved payment methods
+
+D. Review Payment
+	no need to get any thing
+
+E. T&C
+	1. get all terms and conditions
+
+F. Transaction Status
+	i. get the status returned from the api after post
+
+
+
+{/* <!--  POST METHOD API ROUTES --> */}
+/api/v1/Transaction
+
+body : 
+{
+  "sendingCountry": "string",
+  "payoutCountry": "string",
+  "sendingCurrency": "string",
+  "payoutCurrency": "string",
+  "paymentTypeId": 0,
+  "deliveryMethodId": 0,
+  "remarks": "string",
+  "sendingAmount": 0,
+
+
+  "beneficiaryFirstName": "string",  
+  "beneficiaryMiddleName": "string",  
+  "beneficiaryLastName": "string",  
+  "beneficiaryEmail": "string",  
+  "beneficiaryMobileNumber": "string",  
+
+  "beneficiaryAddressCountryId": 0,  
+  "beneficiaryAddressPostCode": "string",  
+  "beneficiaryAddressUnit": "string",  
+  "beneficiaryAddressStreet": "string",  
+  "beneficiaryAddressCity": "string",  
+  "beneficiaryAddressState": "string",  
+  "beneficiaryAddress": "string",  
+
+  "identityTypeId": 0,  
+  "identityNo": "string",  
+  "identityIssuedDate": "2025-07-08",  
+  "identityExpiryDate": "2025-07-08",  
+  "identityIssueCountryId": 0,  
+  "dateOfBirth": "2025-07-08",  
+  "relationId": 0,  
+  "paymentInstitutionId": 0,  
+  "paymentInstitutionBranch": "string",  
+  "paymentInstitutionUniqueNo": "string",  
+  "accountName": "string",  
+  "saveBeneficiary": true
+}
+
+
+
+
+{
+    "sendingCountry": "Australia",
+    "payoutCountry": "Nepal",
+    "sendingCurrency": "AUD",
+    "payoutCurrency": "NPR",
+    "paymentMethod": "Card",
+    "deliveryMethod": "Delivery",
+    "remarks": "This is a test send money check.",
+    "sendingAmount": 100,
+    "beneficiaryFirstName": "Saved",
+    "beneficiaryMiddleName": "Beneficiary",
+    "beneficiaryLastName": "User",
+    "beneficiaryEmail": "savedbeneficiary@gmail.com",
+    "beneficiaryMobileNumber": "9876543210",
+    "beneficiaryAddressLine1": "KTM",
+    "identityTypeId": 2,
+    "identityNo": "passport",
+    "identityIssuedDate": "2020-05-05",
+    "identityExpiryDate": "2027-05-04",
+    "identityIssueCountryId": 2,
+    "dateOfBirth": "1995-05-05",
+    "relationId": 2,
+    "addressLine1": "ktm",
+    "paymentTypeId": 1,
+    "paymentInstitutionId": 3,
+    "paymentInstitutionBranch": "tester",
+    "paymentInstitutionUniqueNo": "testerUnique123",
+    "accountName": "saved beneficiary user",
+    "saveBeneficiary": true
+}

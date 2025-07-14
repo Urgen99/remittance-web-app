@@ -16,6 +16,26 @@ import { Link, useLocation } from "react-router-dom";
 const DashboardSideBar = () => {
   const { pathname } = useLocation();
 
+  const getBasePath = (path: string) => {
+    const pathWithoutQuery = path.split(/[?#]/)[0];
+
+    // remove slashes
+    return pathWithoutQuery.replace(/\/+$/, "") || "/";
+  };
+
+  const isActiveLink = (currentPath: string, targetUrl: string) => {
+    const baseCurrent = getBasePath(currentPath);
+    const baseTarget = getBasePath(targetUrl);
+
+    if (baseTarget === "/") {
+      return baseCurrent === "/";
+    }
+
+    return (
+      baseCurrent === baseTarget || baseCurrent.startsWith(`${baseTarget}/`)
+    );
+  };
+
   return (
     <Sidebar
       aria-label="Sidebar"
@@ -49,25 +69,25 @@ const DashboardSideBar = () => {
             </SidebarGroupLabel>
             <SidebarGroupContent className="flex items-center">
               <SidebarMenu>
-                {items.map(({ title, url, Icon }) => (
-                  <SidebarMenuItem key={title}>
-                    <SidebarMenuButton
-                      asChild
-                      className={`h-10 font-inter font-[475] text-sm tracking-[-0.05px] px-1.5 py-2 hover:bg-white rounded-[8px] ${
-                        pathname === url
-                          ? "bg-white text-[#3333C1]"
-                          : "text-[#696969]"
-                      }`}
-                    >
-                      <Link to={url} className={`flex items-center gap-2 `}>
-                        <Icon
-                          fill={`${pathname === url ? "#3333C1" : "#696969"}`}
-                        />
-                        <span>{title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {items.map(({ title, url, Icon }) => {
+                  const active = isActiveLink(pathname, url);
+
+                  return (
+                    <SidebarMenuItem key={title}>
+                      <SidebarMenuButton
+                        asChild
+                        className={`h-10 font-inter font-[475] text-sm tracking-[-0.05px] px-1.5 py-2 hover:bg-white rounded-[8px] ${
+                          active ? "bg-white text-[#3333C1]" : "text-[#696969]"
+                        }`}
+                      >
+                        <Link to={url} className={`flex items-center gap-2 `}>
+                          <Icon fill={`${active ? "#3333C1" : "#696969"}`} />
+                          <span>{title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

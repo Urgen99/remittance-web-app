@@ -118,7 +118,7 @@ const SavedPayments = ({
                 <div className="space-y-3 max-h-[13.5rem] overflow-y-scroll">
                   {otherPayments.map((method) => (
                     <div
-                      key={`${method.accountNumber}-${method.bankName}`}
+                      key={`${method.id}`}
                       onClick={() => handleSelect(method)}
                       className={`cursor-pointer hover:bg-[#EBEBF9] rounded-[6px] border p-4 flex justify-between ${
                         selectedMethod === method

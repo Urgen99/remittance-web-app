@@ -5,6 +5,8 @@ import ProtectedRoute from "./components/protected-route/ProtectedRoute";
 import TailwindIndicator from "./components/shared/TailwindIndicator";
 import { Toaster } from "./components/ui/sonner";
 import useScrollToTop from "./hooks/scrollToTop";
+
+/* ---------- LATER ADD LAZY LOAD ----------  */
 import CompleteProfile from "./pages/private/complete-profile/CompleteProfile";
 import Dashboard from "./pages/private/dashboard/Dashboard";
 import DocumentExpired from "./pages/private/DocumentExpired";
