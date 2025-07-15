@@ -7,45 +7,58 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Country } from "@/pages/private/dashboard/components/CurrentTransactionRate";
 import { ChevronDown } from "lucide-react";
-import React from "react";
+import { Dispatch, SetStateAction } from "react";
 
 interface DropDownCountriesProps {
   country: Country;
-  setCountry: React.Dispatch<React.SetStateAction<Country>>;
+  setCountry: Dispatch<SetStateAction<Country>>;
 }
 
 // remove this fetch from db
-const countries = [
+const currencies = [
   {
+    id: 1,
     name: "Nepal",
-    code: "NPR",
-    currency: "Nepalese Rupee",
+    iso2: "NP",
+    iso3: "NPR",
+    countryId: 1,
     flag: "/images/nepal.svg",
   },
   {
+    id: 2,
     name: "Australia",
-    code: "AUD",
-    currency: "Australian Dollar",
+    iso2: "AU",
+    iso3: "AUD",
+    countryId: 2,
     flag: "/images/australia.svg",
   },
   {
+    id: 3,
     name: "United States of America",
-    code: "USD",
-    currency: "United States Dollar",
+    iso2: "US",
+    iso3: "USD",
+    countryId: 3,
     flag: "/images/australia.svg",
   },
   {
+    id: 4,
     name: "United Kingdom",
-    code: "GBP",
-    currency: "United Kingdom Pound",
+    iso2: "GB",
+    iso3: "GBP",
+    countryId: 4,
     flag: "/images/nepal.svg",
+  },
+  {
+    id: 5,
+    name: "India",
+    iso2: "IN",
+    iso3: "INR",
+    countryId: 5,
+    flag: "/images/australia.svg",
   },
 ];
 
-const DropDownCountries: React.FC<DropDownCountriesProps> = ({
-  country,
-  setCountry,
-}) => {
+const DropDownCountries = ({ country, setCountry }: DropDownCountriesProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -58,18 +71,18 @@ const DropDownCountries: React.FC<DropDownCountriesProps> = ({
               </AvatarFallback>
             </Avatar>{" "}
             <p className="font-roboto text-[#696969] text-sm tracking-[-1%] font-normal">
-              {country?.code}
+              {country?.iso3}
             </p>
           </div>{" "}
           <ChevronDown className="size-3" />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        {countries.map(({ name, code, currency, flag }) => (
+        {currencies.map(({ name, flag, countryId, iso3, id }) => (
           <DropdownMenuLabel
-            onClick={() => setCountry({ name, code, currency, flag })}
-            key={code}
-            className="flex items-center gap-1.5"
+            onClick={() => setCountry({ name, flag, countryId, iso3, id })}
+            key={iso3}
+            className="cursor-pointer flex items-center gap-1.5"
           >
             <Avatar className="!size-[18px]">
               <AvatarImage src={flag} alt={name + "- flag"} />
@@ -78,8 +91,8 @@ const DropDownCountries: React.FC<DropDownCountriesProps> = ({
               </AvatarFallback>
             </Avatar>
             <div className="px-1 flex flex-col gap-1">
-              <h4 className="font-inter font-[475] text-sm tracking-[-0.05px] text-[#0a090b]">
-                {code}
+              <h4 className="font-inter font-[475] text-sm tracking-[-0.05px] text-[#0a090b] uppercase">
+                {iso3}
               </h4>
             </div>
           </DropdownMenuLabel>

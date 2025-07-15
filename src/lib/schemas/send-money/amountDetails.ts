@@ -1,27 +1,28 @@
 import { z } from "zod";
 
-const DELIVERY_TYPE = z.union([z.literal("pickup"), z.literal("delivery")]);
-
 const SendMoneyFormSchema = z.object({
   // Step - 1: Amount Details
-  SendingCountry: z.string().min(1, "Please select a sender country"),
-  SendingCurrency: z.string().min(1, "Please select a sender currency"),
-  ReceivingCountry: z.string().min(1, "Please select a receiver country"),
-  ReceivingCurrency: z.string().min(1, "Please select a receiver currency"),
-  SendingAmount: z.string().min(1, "Amount is required"),
-  PaymentType: z.string().min(1, "Please select a payment type"),
-  DeliveryType: DELIVERY_TYPE,
-  Remarks: z.string(),
+  sendingCountryId: z.string(),
+  sendingCurrencyId: z.string(),
+  payoutCountryId: z.string(),
+  payoutCurrencyId: z.string(),
+  sendingAmount: z.string().min(1, "Amount is required"),
+  paymentTypeId: z.string().min(1, "Please select a payment method"),
+  deliveryMethodId: z.string().min(1, "Please select a delivery type"),
+  remarks: z.string().min(1, "Remarks is required"),
 
   // Step - 2: Receiver Details
   BankName: z.string().min(1, "Please select a bank"),
-  AccountNumber: z.string().min(1, "Please enter receiver account number"),
-  FirstName: z.string().min(1, "Please enter receiver first name"),
-  MiddleName: z.optional(z.string()),
-  LastName: z.string().min(1, "Please enter receiver last name"),
-  PhoneNumber: z.optional(z.string()),
-  AddressLine: z.string().min(1, "Please enter address"),
-  SaveReceiverInfo: z.optional(z.boolean()),
+  accountName: z.string().min(1, "Please enter receiver account number"),
+  beneficiaryFirstName: z.string().min(1, "Please enter receiver first name"),
+  beneficiaryMiddleName: z.optional(z.string()),
+  beneficiaryLastName: z.string().min(1, "Please enter receiver last name"),
+  beneficiaryMobileNumber: z
+    .string()
+    .min(1, "Please enter receiver phone number")
+    .max(10),
+  beneficiaryAddress: z.string().min(1, "Please enter address"),
+  saveBeneficiary: z.optional(z.boolean()),
 
   // Step - 3: Card Details
   CardHolderName: z.string().min(1, "Please enter card holder's name"),
@@ -31,29 +32,34 @@ const SendMoneyFormSchema = z.object({
   SavePaymentInfo: z.optional(z.boolean()),
 
   // Step - 4: Terms accept
-  TermsAccepted: z.boolean(),
+  TermsAccepted: z
+    .boolean()
+    .refine(
+      (value) => value === true,
+      "You must agree to the terms and conditions"
+    ),
 });
 
 const AmountDetailSchema = SendMoneyFormSchema.pick({
-  SendingCountry: true,
-  SendingCurrency: true,
-  ReceivingCountry: true,
-  ReceivingCurrency: true,
-  SendingAmount: true,
-  PaymentType: true,
-  DeliveryType: true,
-  Remarks: true,
+  sendingCountryId: true,
+  sendingCurrencyId: true,
+  payoutCountryId: true,
+  payoutCurrencyId: true,
+  sendingAmount: true,
+  paymentTypeId: true,
+  deliveryMethodId: true,
+  remarks: true,
 });
 
 const ReceiverDetailsSchema = SendMoneyFormSchema.pick({
   BankName: true,
-  AccountNumber: true,
-  FirstName: true,
-  MiddleName: true,
-  LastName: true,
-  PhoneNumber: true,
-  AddressLine: true,
-  SaveReceiverInfo: true,
+  accountName: true,
+  beneficiaryFirstName: true,
+  beneficiaryMiddleName: true,
+  beneficiaryLastName: true,
+  beneficiaryMobileNumber: true,
+  beneficiaryAddress: true,
+  saveBeneficiary: true,
 });
 
 const CardDetailsSchema = SendMoneyFormSchema.pick({

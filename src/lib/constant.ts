@@ -142,7 +142,7 @@ export const user = {
   transactions: [
     {
       id: 1,
-      user: { name: "Ranjit Kumar" },
+      recipientName: "Ranjit Kumar",
       status: "initiated",
       amount: 120,
       method: "Bank Transfer",
@@ -150,7 +150,7 @@ export const user = {
     },
     {
       id: 2,
-      user: { name: "Ranjit Kumar" },
+      recipientName: "Ranjit Kumar",
       status: "progress",
       amount: 120,
       method: "Bank Transfer",
@@ -158,7 +158,7 @@ export const user = {
     },
     {
       id: 3,
-      user: { name: "Ranjit Kumar" },
+      recipientName: "Ranjit Kumar",
       status: "verifying",
       amount: 120,
       method: "Bank Transfer",
@@ -166,7 +166,7 @@ export const user = {
     },
     {
       id: 4,
-      user: { name: "Ranjit Kumar" },
+      recipientName: "Ranjit Kumar",
       status: "completed",
       amount: 120,
       method: "Bank Transfer",
@@ -174,7 +174,7 @@ export const user = {
     },
     {
       id: 5,
-      user: { name: "Ranjit Kumar" },
+      recipientName: "Ranjit Kumar",
       status: "completed",
       amount: 120,
       method: "Bank Transfer",
@@ -182,7 +182,7 @@ export const user = {
     },
     {
       id: 6,
-      user: { name: "Bessie Cooper" },
+      recipientName: "Bessie Cooper",
       status: "initiated",
       amount: 351.02,
       method: "visa",
@@ -190,7 +190,7 @@ export const user = {
     },
     {
       id: 7,
-      user: { name: "Jane Cooper" },
+      recipientName: "Jane Cooper",
       status: "progress",
       amount: 275.43,
       method: "promissory",
@@ -198,7 +198,7 @@ export const user = {
     },
     {
       id: 8,
-      user: { name: "Theresa Webb" },
+      recipientName: "Theresa Webb",
       status: "delivered",
       amount: 782.01,
       method: "apple pay",
@@ -206,7 +206,7 @@ export const user = {
     },
     {
       id: 9,
-      user: { name: "Darlene Robertson" },
+      recipientName: "Darlene Robertson",
       status: "delivered",
       amount: 169.43,
       method: "american express",
@@ -214,7 +214,7 @@ export const user = {
     },
     {
       id: 10,
-      user: { name: "Devon Lane" },
+      recipientName: "Devon Lane",
       status: "delivered",
       amount: 475.22,
       method: "payMee",
@@ -222,7 +222,7 @@ export const user = {
     },
     {
       id: 11,
-      user: { name: "Marvin Mckinney" },
+      recipientName: "Marvin Mckinney",
       status: "delivered",
       amount: 767.51,
       method: "aura",
@@ -230,7 +230,7 @@ export const user = {
     },
     {
       id: 12,
-      user: { name: "Kristin Watson" },
+      recipientName: "Kristin Watson",
       status: "delivered",
       amount: 943.65,
       method: "pix",
@@ -238,7 +238,7 @@ export const user = {
     },
     {
       id: 13,
-      user: { name: "Eleanor Pena" },
+      recipientName: "Eleanor Pena",
       status: "delivered",
       amount: 473.85,
       method: "visa electron",

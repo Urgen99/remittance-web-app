@@ -16,6 +16,13 @@ import DropDownSelect from "../../../../components/ui/forms/DropDownSelect";
 import TextInput from "../../../../components/ui/forms/TextInput";
 import CountryAmountSelect from "../../../../components/ui/send-money/CountryAmountSelect";
 import NavigationButtons from "../../complete-profile/components/NavigationButtons";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 interface AmountDetailProps {
   handleNext: () => void;
 }
@@ -26,26 +33,30 @@ const formDescription: FormDescription = {
 };
 
 const defaultSender = {
-  name: "Australia",
-  currency: "Australian Dollar",
-  flag: "/images/australia.svg",
-  code: "AUD",
+  id: 1,
+  name: "Nepal",
+  iso2: "NP",
+  iso3: "NPR",
+  countryId: 1,
+  flag: "/images/nepal.svg",
 };
 
 const defaultReceiver = {
-  name: "Nepal",
-  currency: "Nepalese Rupee",
-  flag: "/images/nepal.svg",
-  code: "NPR",
+  id: 2,
+  name: "Australia",
+  iso2: "AU",
+  iso3: "AUD",
+  countryId: 2,
+  flag: "/images/australia.svg",
 };
 
 const deliveryMethods = [
   {
-    value: "pickup",
+    value: "1",
     label: "Pickup",
   },
   {
-    value: "delivery",
+    value: "2",
     label: "Delivery",
   },
 ];
@@ -62,28 +73,24 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
     isFetching: paymentTypeFetching,
   } = useGetPaymentTypesQuery("PAYMENT_TYPE");
 
-  console.log("paymentTypeLoading", paymentTypeLoading);
-  console.log("paymentTypeFetching", paymentTypeFetching);
-  console.log("paymentTypes", paymentData);
-
   const paymentMethods =
     paymentData?.data.map((item) => ({
-      label: item.name,
-      value: item.id,
+      label: item?.name,
+      value: item?.id,
     })) || [];
 
   const form = useForm<AmountDetailSchemaType>({
     mode: "all",
     resolver: zodResolver(AmountDetailSchema),
     defaultValues: {
-      SendingCountry: "Australia",
-      SendingCurrency: "AUD",
-      ReceivingCountry: "Nepal",
-      ReceivingCurrency: "NPR",
-      SendingAmount: "",
-      PaymentType: "card",
-      DeliveryType: "delivery",
-      Remarks: "",
+      sendingCountryId: "",
+      sendingCurrencyId: "",
+      payoutCountryId: "",
+      payoutCurrencyId: "",
+      sendingAmount: "",
+      paymentTypeId: "",
+      deliveryMethodId: "",
+      remarks: "",
     },
   });
 
@@ -94,13 +101,12 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
   function onSubmit(data: AmountDetailSchemaType) {
     const formData = {
       ...data,
-      SendingCountry: senderCountry.name,
-      SendingCurrency: senderCountry.code,
-      ReceivingCountry: receiverCountry.name,
-      ReceivingCurrency: receiverCountry.code,
+      SendingCountry: senderCountry.countryId,
+      SendingCurrency: senderCountry.iso3,
+      ReceivingCountry: receiverCountry.countryId,
+      ReceivingCurrency: receiverCountry.iso3,
     };
 
-    console.log(formData);
     handleNext();
   }
 
@@ -118,53 +124,93 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col items-center gap-8 md:gap-[7.5rem] justify-between w-full h-full"
           >
-            <div className="flex flex-col gap-4 md:max-w-[48.5rem] w-full">
+            <div className="flex flex-col md:max-w-[48.5rem] w-full">
               <div className="flex flex-col md:flex-row md:items-center gap-3 transition-all ease-in-out duration-300">
-                <CountryAmountSelect
-                  key="sender"
-                  title={"YOU ARE SENDING"}
-                  Icon={SendMoneyForm.AmountDetails.ArrowDownRight}
-                  country={senderCountry}
-                  setCountry={setSenderCountry}
-                  isSender
-                  control={form.control}
-                />
+                <div className="flex flex-col gap-2 w-full h-30">
+                  <CountryAmountSelect
+                    key="sender"
+                    title={"YOU ARE SENDING"}
+                    Icon={SendMoneyForm.AmountDetails.ArrowDownRight}
+                    country={senderCountry}
+                    setCountry={setSenderCountry}
+                  />
 
-                <CountryAmountSelect
-                  key="receiver"
-                  title={"THEY WILL RECEIVE"}
-                  Icon={SendMoneyForm.AmountDetails.ArrowUpRight}
-                  country={receiverCountry}
-                  setCountry={setReceiverCountry}
-                  isSender={false}
-                />
+                  <FormField
+                    control={form.control}
+                    name="sendingAmount"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="relative w-full flex items-center justify-between">
+                          <FormControl>
+                            <Input
+                              className="px-3 py-1 h-12 border border-[#E6E6E6] font-general-sans font-medium text-[#000000] shadow-sm rounded-[8px]"
+                              placeholder="0.00"
+                              {...field}
+                            />
+                          </FormControl>
+                          <div className="absolute right-4">
+                            <div className="bg-[#F6F6F6] w-11 h-7 flex items-center justify-center rounded-[4px]">
+                              <p className="font-mukta font-medium text-sm leading-[22px] text-[#1b1b1b]">
+                                {senderCountry?.iso3}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="h-30 flex flex-col gap-2 w-full">
+                  <CountryAmountSelect
+                    key="receiver"
+                    title={"THEY WILL RECEIVE"}
+                    Icon={SendMoneyForm.AmountDetails.ArrowUpRight}
+                    country={receiverCountry}
+                    setCountry={setReceiverCountry}
+                  />
+
+                  <div className="relative px-3 w-full py-1 flex items-center justify-between shadow-sm rounded-[8px] h-12 border border-[#E6E6E6]">
+                    <p className="font-general-sans font-medium text-[#5F5F5F]">
+                      loading... {/*converted amount goes here*/}
+                    </p>
+
+                    <div className="absolute right-4">
+                      <div className="bg-[#F6F6F6] w-11 h-7 flex items-center justify-center rounded-[4px]">
+                        <p className="font-mukta font-medium text-sm leading-[22px] text-[#1b1b1b]">
+                          {receiverCountry?.iso3}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              <div>
+              <div className="-mt-1.5">
                 <div className="flex flex-col md:flex-row md:items-center gap-3 transition-all ease-in-out duration-300">
                   <DropDownSelect
-                    name="PaymentType"
+                    name="paymentTypeId"
                     label="Select payment method"
                     isImportant
                     items={paymentMethods}
                     control={form.control}
-                    defaultValue={String(paymentMethods[0].value)}
                     placeholder="Select payment method"
                   />
                   <DropDownSelect
-                    name="DeliveryType"
+                    name="deliveryMethodId"
                     label="Select delivery options"
                     placeholder="Select delivery options"
                     isImportant
                     control={form.control}
                     items={deliveryMethods}
-                    defaultValue={deliveryMethods[0].value}
                   />
                 </div>
-                <div className="-mt-3 md:w-[49%]">
+
+                <div className="-mt-1.5 md:w-[49%]">
                   <TextInput
                     control={form.control}
-                    name="Remarks"
+                    name="remarks"
                     label="Enter remarks"
                     isImportant
                     placeholder="Enter remarks"
@@ -207,7 +253,7 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
 
               <NavigationButtons
                 onBackClick={handleBack}
-                disabled={!form.formState.isValid}
+                // disabled={!form.formState.isValid}
                 type="submit"
               />
             </div>
