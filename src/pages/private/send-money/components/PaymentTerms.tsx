@@ -10,6 +10,7 @@ import NavigationButtons from "../../complete-profile/components/NavigationButto
 import { SendMoneyForm } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
 import CheckBox from "../../../../components/ui/forms/CheckBox";
+import { FormMessage } from "@/components/ui/form";
 
 interface PaymentTermsProps {
   handleNext: () => void;
@@ -26,9 +27,7 @@ const PaymentTerms = ({ handleNext, handlePrev }: PaymentTermsProps) => {
   const form = useForm<TermsSchemaType>({
     mode: "all",
     resolver: zodResolver(TermsSchema),
-    defaultValues: {
-      TermsAccepted: false,
-    },
+    // defaultValues: { TermsAccepted: false },
   });
 
   function onSubmit(data: TermsSchemaType) {
@@ -53,8 +52,8 @@ const PaymentTerms = ({ handleNext, handlePrev }: PaymentTermsProps) => {
             <FormProvider {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <CheckBox
-                  name="terms"
-                  label="I agree with SWIFTSEND'S terms and condition and usage policy"
+                  name="TermsAccepted"
+                  label="I agree with Eagle Remit's terms and condition and usage policy"
                   isImportant
                   control={form.control}
                 />
@@ -64,6 +63,7 @@ const PaymentTerms = ({ handleNext, handlePrev }: PaymentTermsProps) => {
           <div className="max-w-[50rem] flex flex-col items-center w-full gap-14">
             <NavigationButtons
               onBackClick={handlePrev}
+              disabled={!form.formState.isValid}
               onContinueClick={handleNext}
             />
           </div>

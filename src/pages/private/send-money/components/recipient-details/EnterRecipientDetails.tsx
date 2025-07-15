@@ -53,13 +53,13 @@ const EnterRecipientDetails = ({
     resolver: zodResolver(ReceiverDetailsSchema),
     defaultValues: {
       BankName: "",
-      AccountNumber: "",
-      FirstName: "",
-      MiddleName: "",
-      LastName: "",
-      PhoneNumber: "",
-      AddressLine: "",
-      SaveReceiverInfo: false,
+      accountName: "",
+      beneficiaryFirstName: "",
+      beneficiaryMiddleName: "",
+      beneficiaryLastName: "",
+      beneficiaryMobileNumber: "",
+      beneficiaryAddress: "",
+      saveBeneficiary: false,
     },
   });
 
@@ -87,17 +87,17 @@ const EnterRecipientDetails = ({
                 <div className="w-full flex items-center gap-3">
                   <div className="flex-1">
                     <DropDownSelect
+                      key="bankName"
                       name="BankName"
                       label="Select a bank"
                       control={form.control}
                       isImportant
-                      defaultValue={form.getValues("BankName")}
                       items={banks}
                       placeholder="Select a bank"
                     />
                   </div>
                   <TextInput
-                    name="AccountNumber"
+                    name="accountName"
                     label="Account number"
                     isImportant
                     placeholder="Eg:2025-12-11"
@@ -107,25 +107,25 @@ const EnterRecipientDetails = ({
 
                 <div className="w-full flex items-center gap-3">
                   <TextInput
-                    name="FirstName"
+                    name="beneficiaryFirstName"
                     label="First Name"
                     isImportant
-                    placeholder="Enter your first name"
+                    placeholder="Enter recipient your first name"
                     control={form.control}
                   />
                   <TextInput
-                    name="MiddleName"
+                    name="beneficiaryMiddleName"
                     label="Middle Name"
                     isImportant={false}
-                    placeholder="Enter your middle name"
+                    placeholder="Enter recipient your middle name"
                     control={form.control}
                   />
 
                   <TextInput
-                    name="LastName"
+                    name="beneficiaryLastName"
                     label="Last Name"
                     isImportant
-                    placeholder="Enter your last name"
+                    placeholder="Enter recipient last name"
                     control={form.control}
                   />
                 </div>
@@ -137,7 +137,7 @@ const EnterRecipientDetails = ({
 
               <div className="w-full flex items-center gap-3">
                 <TextInput
-                  name="PhoneNumber"
+                  name="beneficiaryMobileNumber"
                   label="Phone Number"
                   isImportant={false}
                   placeholder="Eg:12345"
@@ -145,7 +145,7 @@ const EnterRecipientDetails = ({
                 />
 
                 <TextInput
-                  name="AddressLine"
+                  name="beneficiaryAddress"
                   label="Address Line"
                   isImportant
                   placeholder="Eg:12345"

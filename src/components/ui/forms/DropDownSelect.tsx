@@ -19,7 +19,6 @@ interface DropDownSelectProps {
   isImportant: boolean;
   control: any;
   items: Items[];
-  defaultValue: string | undefined;
   placeholder: string;
 }
 
@@ -32,7 +31,6 @@ const DropDownSelect = ({
   name,
   label,
   isImportant,
-  defaultValue,
   control,
   items,
   placeholder,
@@ -47,7 +45,7 @@ const DropDownSelect = ({
             {label} {isImportant && <span className="text-[#D32F2F]">*</span>}
           </FormLabel>
           <div className="flex flex-col gap-2 min-h-20">
-            <Select onValueChange={field.onChange} defaultValue={defaultValue}>
+            <Select onValueChange={field.onChange}>
               <FormControl>
                 <SelectTrigger className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12">
                   <SelectValue placeholder={placeholder} />

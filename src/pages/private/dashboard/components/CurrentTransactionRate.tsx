@@ -7,24 +7,30 @@ import { useSelector } from "react-redux";
 import DropDownCountries from "./DropDownCountries";
 import ExchangeRate from "./ExchangeRate";
 export interface Country {
+  id: number | string;
   name: string;
-  currency: string;
+  iso2?: string;
+  iso3: string;
+  countryId: number | string;
   flag: string;
-  code: string;
 }
 
 const defaultSender = {
+  id: 1,
   name: "Nepal",
-  currency: "Nepalese Rupee",
+  iso2: "NP",
+  iso3: "NPR",
+  countryId: 1,
   flag: "/images/nepal.svg",
-  code: "NPR",
 };
 
 const defaultReceiver = {
-  name: "India",
-  currency: "Indian Rupee",
+  id: 2,
+  name: "Australia",
+  iso2: "AU",
+  iso3: "AUD",
+  countryId: 2,
   flag: "/images/australia.svg",
-  code: "INR",
 };
 const CurrentTransactionRate = () => {
   const token = useSelector(selectCurrentToken);
@@ -38,9 +44,9 @@ const CurrentTransactionRate = () => {
   } = useGetExchangeRatesQuery(
     {
       SendingCountry: senderCountry.name,
-      SendingCurrency: senderCountry.code,
+      SendingCurrency: senderCountry.iso3,
       ReceivingCountry: receiverCountry.name,
-      ReceivingCurrency: receiverCountry.code,
+      ReceivingCurrency: receiverCountry.iso3,
     },
     { skip: !token || !senderCountry || !receiverCountry }
   );
@@ -62,9 +68,9 @@ const CurrentTransactionRate = () => {
                   setCountry={setSenderCountry}
                 />
                 <ExchangeRate
-                  currency={senderCountry.currency}
+                  currency={senderCountry.iso3}
                   amount={1}
-                  code={senderCountry.code}
+                  code={senderCountry.iso3}
                 />
               </div>
               <div className="flex flex-col gap-1">
@@ -73,9 +79,9 @@ const CurrentTransactionRate = () => {
                   setCountry={setReceiverCountry}
                 />
                 <ExchangeRate
-                  currency={receiverCountry.currency}
+                  currency={receiverCountry.iso3}
                   amount={1 * exchangeRateValue}
-                  code={receiverCountry.code}
+                  code={receiverCountry.iso3}
                 />
               </div>
             </CardContent>
