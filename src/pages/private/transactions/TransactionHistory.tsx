@@ -163,10 +163,21 @@ const TransactionHistory = () => {
     {
       accessorKey: "recipientName",
       size: 283,
-      header: () => (
+      header: ({ column }) => (
         <div className="flex items-center gap-1">
           <TransactionIcons.Person />
-          Receiver name
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="!p-0 hover:bg-transparent group "
+          >
+            Receiver name
+            <TransactionIcons.ArrowDown
+              className={`${
+                column.getIsSorted() === "asc" ? "rotate-180" : ""
+              } transition-all duration-200 ease-in-out`}
+            />
+          </Button>
         </div>
       ),
       cell: ({ row }) => (
@@ -198,22 +209,10 @@ const TransactionHistory = () => {
     {
       accessorKey: "method",
       size: 289,
-      header: ({ column }) => (
+      header: () => (
         <div className="flex items-center gap-2">
           <TransactionIcons.Method />
-
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="!p-0 hover:bg-transparent group "
-          >
-            Method
-            <TransactionIcons.ArrowDown
-              className={`${
-                column.getIsSorted() === "asc" ? "rotate-180" : ""
-              } transition-all duration-200 ease-in-out`}
-            />
-          </Button>
+          Method
         </div>
       ),
       cell: ({ row }) => row.getValue("method"),

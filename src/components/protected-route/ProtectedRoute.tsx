@@ -1,6 +1,7 @@
 import {
   logOut,
   selectCurrentExpiry,
+  selectCurrentRefreshToken,
   selectCurrentToken,
   selectVerifiedUser,
 } from "@/features/auth/auth.slice";
@@ -12,6 +13,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 const ProtectedRoute = () => {
   const location = useLocation();
   const token = useSelector(selectCurrentToken);
+  const refreshToken = useSelector(selectCurrentRefreshToken);
   const expiresAt = useSelector(selectCurrentExpiry);
   const verifiedUser = useSelector(selectVerifiedUser);
   const currentPath = location.pathname;
@@ -21,17 +23,17 @@ const ProtectedRoute = () => {
     if (
       !token ||
       !expiresAt ||
-      (token && expiresAt && expiresAt < Date.now())
+      (token && expiresAt && !refreshToken && expiresAt < Date.now())
     ) {
       dispatch(logOut());
     }
-  }, [token, expiresAt, dispatch]);
+  }, [token, expiresAt, dispatch, refreshToken]);
 
   if (!token || !expiresAt) {
     return <Navigate to="/" replace state={{ from: location }} />;
   }
 
-  if (token && expiresAt && expiresAt < Date.now()) {
+  if (token && expiresAt && !refreshToken && expiresAt < Date.now()) {
     return <Navigate to="/" replace state={{ from: location }} />;
   }
 

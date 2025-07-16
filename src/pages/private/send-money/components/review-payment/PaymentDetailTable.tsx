@@ -1,11 +1,11 @@
-import React from "react";
+import { ReactNode } from "react";
 type DetailsTableProps<T extends Rows> = {
   rows: T[];
 };
 
 type Rows = {
   label: string;
-  value: React.ReactNode;
+  value: ReactNode;
 };
 const PaymentDetailTable = <T extends Rows>({ rows }: DetailsTableProps<T>) => {
   return (

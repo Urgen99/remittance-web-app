@@ -82,7 +82,7 @@ const DropDownCountries = ({ country, setCountry }: DropDownCountriesProps) => {
           <DropdownMenuLabel
             onClick={() => setCountry({ name, flag, countryId, iso3, id })}
             key={iso3}
-            className="cursor-pointer flex items-center gap-1.5"
+            className="cursor-pointer flex items-center gap-1.5 hover:bg-[#EBEBF9] rounded-sm hover:text-[#1E2CA8] text-[#0a090b] transition-colors ease-linear duration-200"
           >
             <Avatar className="!size-[18px]">
               <AvatarImage src={flag} alt={name + "- flag"} />
@@ -91,7 +91,7 @@ const DropDownCountries = ({ country, setCountry }: DropDownCountriesProps) => {
               </AvatarFallback>
             </Avatar>
             <div className="px-1 flex flex-col gap-1">
-              <h4 className="font-inter font-[475] text-sm tracking-[-0.05px] text-[#0a090b] uppercase">
+              <h4 className="font-inter font-[475] text-sm tracking-[-0.05px] uppercase">
                 {iso3}
               </h4>
             </div>

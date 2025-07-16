@@ -15,36 +15,46 @@ interface DropDownCountriesProps {
 }
 
 // remove this fetch from db
-const countries = [
+const currencies = [
   {
+    id: 1,
     name: "Nepal",
-    code: "NPR",
-    currency: "Nepalese Rupee",
+    iso2: "NP",
+    iso3: "NPR",
+    countryId: 1,
     flag: "/images/nepal.svg",
   },
   {
-    name: "India",
-    code: "INR",
-    currency: "Indian Rupee",
-    flag: "/images/australia.svg",
-  },
-  {
+    id: 2,
     name: "Australia",
-    code: "AUD",
-    currency: "Australian Dollar",
+    iso2: "AU",
+    iso3: "AUD",
+    countryId: 2,
     flag: "/images/australia.svg",
   },
   {
-    name: "United States",
-    code: "USD",
-    currency: "United States Dollar",
+    id: 3,
+    name: "United States of America",
+    iso2: "US",
+    iso3: "USD",
+    countryId: 3,
     flag: "/images/australia.svg",
   },
   {
+    id: 4,
     name: "United Kingdom",
-    code: "GBP",
-    currency: "United Kingdom Pound",
+    iso2: "GB",
+    iso3: "GBP",
+    countryId: 4,
     flag: "/images/nepal.svg",
+  },
+  {
+    id: 5,
+    name: "India",
+    iso2: "IN",
+    iso3: "INR",
+    countryId: 5,
+    flag: "/images/australia.svg",
   },
 ];
 
@@ -71,11 +81,11 @@ const DropDownCountries: React.FC<DropDownCountriesProps> = ({
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        {countries.map(({ name, code, currency, flag }) => (
+        {currencies.map(({ countryId, name, iso3, flag, id }) => (
           <DropdownMenuLabel
-            onClick={() => setCountry({ name, code, currency, flag })}
-            key={code}
-            className="flex items-center gap-1.5"
+            onClick={() => setCountry({ name, flag, countryId, iso3, id })}
+            key={iso3}
+            className="cursor-pointer flex items-center gap-1.5 hover:bg-[#EBEBF9] rounded-sm hover:text-[#1E2CA8] text-[#0a090b] transition-colors ease-linear duration-200"
           >
             <Avatar className="!size-[18px]">
               <AvatarImage src={flag} alt={name + "- flag"} />
@@ -84,7 +94,7 @@ const DropDownCountries: React.FC<DropDownCountriesProps> = ({
               </AvatarFallback>
             </Avatar>
             <div className="px-1 flex flex-col gap-1">
-              <h4 className="font-inter font-[475] text-sm tracking-[-0.05px] text-[#0a090b]">
+              <h4 className="font-inter font-[475] text-sm tracking-[-0.05px]">
                 {name}
               </h4>
             </div>
