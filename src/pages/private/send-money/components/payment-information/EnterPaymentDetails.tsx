@@ -1,16 +1,18 @@
-import NavigationButtons from "@/pages/private/complete-profile/components/NavigationButtons";
 import { SendMoneyForm } from "@/components/icons/Icons";
 import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
 import CheckBox from "@/components/ui/forms/CheckBox";
 import TextInput from "@/components/ui/forms/TextInput";
+import { saveTransactionForm } from "@/features/transactions/transactions.slice";
 import {
   CardDetailsSchema,
   CardDetailsSchemaType,
 } from "@/lib/schemas/send-money/amountDetails";
 import { FormDescription } from "@/lib/type";
+import NavigationButtons from "@/pages/private/complete-profile/components/NavigationButtons";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 interface PaymentDetailsProps {
   handleNext: () => void;
@@ -24,20 +26,14 @@ const formDescription: FormDescription = {
     "Enter the card details of the from which you will be paying the amount",
 };
 
-// const PaymentDetailsSchema = z.object({
-//   cardName: z.string().min(1, "Please enter card holder's name"),
-//   cardNumber: z.string().min(1, "Please enter card number"),
-//   expiryDate: z.string().min(1, "Please enter expiry date"),
-//   csv: z.string().min(1, "Please enter csv"),
-//   isSaved: z.optional(z.boolean()),
-// });
-
-// export type PaymentDetailsSchema = z.infer<typeof PaymentDetailsSchema>;
-
 const EnterPaymentDetails = ({
   handleNext,
   handlePrev,
 }: PaymentDetailsProps) => {
+  const dispatch = useDispatch();
+  // const formState = useSelector(selectCurrentFormData);
+  // console.log("PaymentDetails", formState);
+
   const form = useForm<CardDetailsSchemaType>({
     mode: "all",
     resolver: zodResolver(CardDetailsSchema),
@@ -50,7 +46,7 @@ const EnterPaymentDetails = ({
     },
   });
   function onSubmit(data: CardDetailsSchemaType) {
-    alert(data);
+    dispatch(saveTransactionForm(data));
     handleNext();
   }
   return (

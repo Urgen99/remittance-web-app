@@ -1,10 +1,11 @@
-import NavigationButtons from "@/pages/private/complete-profile/components/NavigationButtons";
 import { SendMoneyForm } from "@/components/icons/Icons";
 import FormHeadingDescription from "@/components/shared/FormHeadingDescription";
+import NavigationButtons from "@/pages/private/complete-profile/components/NavigationButtons";
 
 import CheckBox from "@/components/ui/forms/CheckBox";
 import DropDownSelect from "@/components/ui/forms/DropDownSelect";
 import TextInput from "@/components/ui/forms/TextInput";
+import { saveTransactionForm } from "@/features/transactions/transactions.slice";
 import {
   ReceiverDetailsSchema,
   ReceiverDetailsSchemaType,
@@ -13,6 +14,7 @@ import { FormDescription } from "@/lib/type";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 interface RecipientDetailsProps {
   handleNext: () => void;
@@ -48,6 +50,10 @@ const EnterRecipientDetails = ({
   handleNext,
   handlePrev,
 }: RecipientDetailsProps) => {
+  const dispatch = useDispatch();
+  // const formState = useSelector(selectCurrentFormData);
+  // console.log("formState", formState);
+
   const form = useForm<ReceiverDetailsSchemaType>({
     mode: "all",
     resolver: zodResolver(ReceiverDetailsSchema),
@@ -64,7 +70,7 @@ const EnterRecipientDetails = ({
   });
 
   function onSubmit(data: ReceiverDetailsSchemaType) {
-    alert(data);
+    dispatch(saveTransactionForm(data));
     handleNext();
   }
 

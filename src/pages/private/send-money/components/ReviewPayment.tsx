@@ -7,6 +7,10 @@ import PaymentCountry from "./review-payment/PaymentCountry";
 import PaymentDetailTable from "./review-payment/PaymentDetailTable";
 import RecipientContainer from "./review-payment/RecipientContainer";
 import { format } from "date-fns";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/features/auth/auth.slice";
+import { selectCurrentFormData } from "@/features/send-money/sendMoney.slice";
+import { selectTransactionFormData } from "@/features/transactions/transactions.slice";
 interface ReviewPaymentProps {
   handleNext: () => void;
   handlePrev: () => void;
@@ -58,14 +62,18 @@ const transactionDetails = {
 };
 
 const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
+  const currentUser = useSelector(selectCurrentUser);
+  const formState = useSelector(selectTransactionFormData);
+  // select payment channel by browser
+
   const generalDetailsRows = [
     {
       label: "Sender name",
-      value: transactionDetails?.sender?.name,
+      value: currentUser?.split("@")[0],
     },
     {
       label: "Payment initiated date",
-      value: format(transactionDetails.date, "yyyy-MM-dd"),
+      value: format(new Date(), "yyyy-MM-dd"),
     },
     {
       label: "Payment Method",
@@ -77,13 +85,21 @@ const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
     },
     {
       label: "Channel",
-      value: transactionDetails?.channel,
+      value: "Web",
     },
     {
       label: "Remarks",
-      value: transactionDetails?.remarks,
+      value: formState?.remarks,
     },
   ];
+
+  const recipientDetails = {
+    name: `${formState?.beneficiaryFirstName} ${
+      formState?.beneficiaryMiddleName && ` ${formState?.beneficiaryMiddleName}`
+    } ${formState?.beneficiaryLastName}`,
+    bankName: `${formState?.BankName}`,
+    accountNumber: `${transactionDetails?.receiver?.accountNumber}`,
+  };
 
   return (
     <section className="mt-7">
@@ -110,9 +126,7 @@ const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
                 RECIPIENT
               </h3>
 
-              <RecipientContainer
-                recipientDetails={transactionDetails?.receiver}
-              />
+              <RecipientContainer recipientDetails={recipientDetails} />
             </div>
           </div>
 

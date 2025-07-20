@@ -26,7 +26,7 @@ const SendMoneyFormSchema = z.object({
 
   // Step - 3: Card Details
   CardHolderName: z.string().min(1, "Please enter card holder's name"),
-  CardNumber: z.string().min(1, "Please enter card number"),
+  CardNumber: z.string().min(1, "Please enter card number").max(16),
   CardExpiry: z.string().min(1, "Please enter card's expiry date"),
   CardCsv: z.string().min(1, "Please enter card's csv"),
   SavePaymentInfo: z.optional(z.boolean()),

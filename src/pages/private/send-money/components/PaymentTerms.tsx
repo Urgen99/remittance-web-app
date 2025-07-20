@@ -1,16 +1,22 @@
+import {
+  clearTransactionForm,
+  selectTransactionFormData,
+} from "@/features/transactions/transactions.slice";
 import { terms, Terms } from "@/lib/constant";
 import {
   TermsSchema,
   TermsSchemaType,
 } from "@/lib/schemas/send-money/amountDetails";
 import { FormDescription } from "@/lib/type";
+import { showError, showSuccess } from "@/utils/toaster";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
-import NavigationButtons from "../../complete-profile/components/NavigationButtons";
+import { useDispatch, useSelector } from "react-redux";
 import { SendMoneyForm } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
 import CheckBox from "../../../../components/ui/forms/CheckBox";
-import { FormMessage } from "@/components/ui/form";
+import NavigationButtons from "../../complete-profile/components/NavigationButtons";
+import { useInitiateTransactionMutation } from "@/features/transactions/transactionsApi.slice";
 
 interface PaymentTermsProps {
   handleNext: () => void;
@@ -24,15 +30,61 @@ const formDescription: FormDescription = {
 };
 
 const PaymentTerms = ({ handleNext, handlePrev }: PaymentTermsProps) => {
+  const formState = useSelector(selectTransactionFormData);
+  const dispatch = useDispatch();
   const form = useForm<TermsSchemaType>({
     mode: "all",
     resolver: zodResolver(TermsSchema),
-    // defaultValues: { TermsAccepted: false },
   });
 
-  function onSubmit(data: TermsSchemaType) {
-    alert(data);
-    handleNext();
+  const [initiateTransaction, { isLoading }] = useInitiateTransactionMutation();
+  async function onSubmit(data: TermsSchemaType) {
+    try {
+      if (data.TermsAccepted) {
+        // hit the initiate transaction api
+        const body = {
+          ...formState,
+
+          // Step - 2: Receiver Details
+          beneficiaryEmail: "test@gmail.com",
+
+          // NA in Payment Details UI
+          paymentInstitutionId: 1,
+          paymentInstitutionBranch: "test",
+          paymentInstitutionUniqueNo: "test",
+          //
+          // NA in  Receiver Details UI
+          beneficiaryAddressCountryId: 1,
+          beneficiaryAddressPostCode: "123",
+          beneficiaryAddressUnit: "test",
+          beneficiaryAddressStreet: "test",
+          beneficiaryAddressCity: "test",
+          beneficiaryAddressState: "test",
+          //
+          // NA in anywhere in ui
+          identityTypeId: 1,
+          identityNo: "123",
+          identityIssuedDate: "2025-07-12",
+          identityExpiryDate: "2025-07-12",
+          identityIssueCountryId: 1,
+          dateOfBirth: "2025-07-12",
+          relationId: 1,
+        };
+
+        const response = await initiateTransaction(body).unwrap();
+        console.log("response", response);
+
+        if (response?.data) {
+          showSuccess("Success", "Transaction initiated successfully");
+          dispatch(clearTransactionForm());
+        }
+
+        handleNext();
+      }
+    } catch (error) {
+      console.error("error", error);
+      showError("Error", "Something went wrong. Please try again.");
+    }
   }
 
   return (
@@ -63,8 +115,7 @@ const PaymentTerms = ({ handleNext, handlePrev }: PaymentTermsProps) => {
           <div className="max-w-[50rem] flex flex-col items-center w-full gap-14">
             <NavigationButtons
               onBackClick={handlePrev}
-              disabled={!form.formState.isValid}
-              onContinueClick={handleNext}
+              disabled={!form.formState.isValid || isLoading}
             />
           </div>
         </div>
@@ -92,7 +143,10 @@ const TermsLists = ({ terms }: { terms: Terms[] }) => {
               {subContent && (
                 <ul className="ml-1 list-disc list-inside">
                   {subContent.map(({ title, content }) => (
-                    <li className="font-roboto font-normal text-base leading-6 tracking-[-1%]">
+                    <li
+                      key={Math.random()}
+                      className="font-roboto font-normal text-base leading-6 tracking-[-1%]"
+                    >
                       <span className="text-[#1B1B1B]">{title}:</span>{" "}
                       <span className="text-[#696969]">{content}</span>
                     </li>
