@@ -11,7 +11,7 @@ export type AuthSavedState = {
 };
 const loadAuthState = (): AuthSavedState | null => {
   try {
-    const authData = sessionStorage.getItem(STORAGE.key);
+    const authData = localStorage.getItem(STORAGE.key);
     if (!authData) return null;
 
     const parsedData = JSON.parse(
@@ -41,7 +41,7 @@ const saveAuthState = (authState: AuthSavedState): void => {
     );
 
     // Decide later whether to use sessionStorage or localStorage
-    sessionStorage.setItem(STORAGE.key, encryptData);
+    localStorage.setItem(STORAGE.key, encryptData);
   } catch (err) {
     console.error("Error while saving auth state: ", err);
   }

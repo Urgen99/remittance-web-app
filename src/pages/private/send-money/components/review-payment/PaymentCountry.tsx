@@ -1,45 +1,45 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDecimal } from "@/utils/formatDecimals";
-import React from "react";
 
-interface TransactionDetails {
-  sentFrom: Country;
-  sentTo: Country;
-  amount: number;
-}
-
-type Country = {
-  flag: string;
-  name: string;
-  currency: string;
-  code: string;
+type TransactionDetails = {
+  sendingAmount: number;
+  payoutAmount: number;
+  sendingCurrency: string;
+  payoutCurrency: string;
+  sendingCountryFlag: string;
+  payoutCountryFlag: string;
 };
 
-const PaymentCountry = ({
-  transaction,
-}: {
+interface Props {
   transaction: TransactionDetails;
-}) => {
+}
+
+const PaymentCountry = ({ transaction }: Props) => {
+  const {
+    sendingAmount,
+    payoutAmount,
+    sendingCurrency,
+    payoutCurrency,
+    sendingCountryFlag,
+    payoutCountryFlag,
+  } = transaction;
   return (
     <div className="px-4 py-6 rounded-[6px] bg-[#2E2EB0] bg-gradient-to-b from-[#2E2EB0] to-[#0B3984]">
       <div className="flex justify-between items-center">
         {/* sender country */}
         <CountryDetails
           title="Sent amount"
-          flag={transaction?.sentFrom?.flag}
-          name={transaction?.sentFrom?.name}
-          currency={transaction?.sentFrom?.currency}
-          amount={transaction?.amount}
-          code={transaction?.sentFrom?.code}
+          flag={sendingCountryFlag}
+          currency={sendingCurrency}
+          amount={sendingAmount}
         />
+
         {/* receiver country */}
         <CountryDetails
           title="Received amount"
-          flag={transaction?.sentTo?.flag}
-          name={transaction?.sentTo?.name}
-          currency={transaction?.sentTo?.currency}
-          amount={transaction?.amount * 100}
-          code={transaction?.sentTo?.code}
+          flag={payoutCountryFlag}
+          currency={payoutCurrency}
+          amount={payoutAmount}
           end={true}
         />
       </div>
@@ -52,31 +52,26 @@ export default PaymentCountry;
 type CountryDetailsProps = {
   title: string;
   flag: string;
-  name: string;
   currency: string;
   amount: number;
-  code: string;
   end?: boolean;
 };
 
-const CountryDetails: React.FC<CountryDetailsProps> = ({
+const CountryDetails = ({
   title,
   flag,
-  name,
   currency,
   amount,
-  code,
   end = false,
-}) => {
+}: CountryDetailsProps) => {
   const formattedAmount = formatDecimal(amount);
-  console.log(formattedAmount);
 
   return (
     <div className={`flex flex-col gap-4 ${end ? "items-end" : ""}`}>
       <Avatar className="size-7">
-        <AvatarImage src={flag} alt={`${name} flag`} />
+        <AvatarImage src={flag} alt={`${currency} flag`} />
         <AvatarFallback className="font-inter font-medium text-sm leading-[120%] tracking-[-0.5px] text-[#1751D0]">
-          {code}
+          {currency}
         </AvatarFallback>
       </Avatar>
 

@@ -3,13 +3,14 @@ import { apiSlice } from "./api/api.slice";
 import authReducer from "./auth/auth.slice";
 import exchangeRateReducer from "./exchange-rate/exchange.slice";
 import kycReducer from "./kyc/kyc.slice";
-import sendMoneyReducer from "./send-money/sendMoney.slice";
+import transactionReducer from "./transactions/transactions.slice";
 import usersReducer from "./users/users.slice";
+
 export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
-    sendMoney: sendMoneyReducer,
+    transactions: transactionReducer,
     users: usersReducer,
     exchangeRate: exchangeRateReducer,
     kyc: kycReducer,

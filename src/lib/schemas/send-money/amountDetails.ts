@@ -6,7 +6,8 @@ const SendMoneyFormSchema = z.object({
   sendingCurrencyId: z.string(),
   payoutCountryId: z.string(),
   payoutCurrencyId: z.string(),
-  sendingAmount: z.string().min(1, "Amount is required"),
+  sendingAmount: z.string().min(1, "Sending amount is required"),
+  payoutAmount: z.string().min(1, "Payout amount is required"),
   paymentTypeId: z.string().min(1, "Please select a payment method"),
   deliveryMethodId: z.string().min(1, "Please select a delivery type"),
   remarks: z.string().min(1, "Remarks is required"),
@@ -26,7 +27,7 @@ const SendMoneyFormSchema = z.object({
 
   // Step - 3: Card Details
   CardHolderName: z.string().min(1, "Please enter card holder's name"),
-  CardNumber: z.string().min(1, "Please enter card number"),
+  CardNumber: z.string().min(1, "Please enter card number").max(16),
   CardExpiry: z.string().min(1, "Please enter card's expiry date"),
   CardCsv: z.string().min(1, "Please enter card's csv"),
   SavePaymentInfo: z.optional(z.boolean()),
@@ -46,6 +47,7 @@ const AmountDetailSchema = SendMoneyFormSchema.pick({
   payoutCountryId: true,
   payoutCurrencyId: true,
   sendingAmount: true,
+  payoutAmount: true,
   paymentTypeId: true,
   deliveryMethodId: true,
   remarks: true,

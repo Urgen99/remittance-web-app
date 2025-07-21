@@ -20,6 +20,7 @@ interface DropDownSelectProps {
   control: any;
   items: Items[];
   placeholder: string;
+  defaultValue?: string;
 }
 
 type Items = {
@@ -34,6 +35,7 @@ const DropDownSelect = ({
   control,
   items,
   placeholder,
+  defaultValue,
 }: DropDownSelectProps) => {
   return (
     <FormField
@@ -48,7 +50,10 @@ const DropDownSelect = ({
             <Select onValueChange={field.onChange}>
               <FormControl>
                 <SelectTrigger className="border-[#7f7d8356] shadow-sm font-inter placeholder:text-[#7F7D83] h-12">
-                  <SelectValue placeholder={placeholder} />
+                  <SelectValue
+                    placeholder={placeholder}
+                    defaultValue={defaultValue || ""}
+                  />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>

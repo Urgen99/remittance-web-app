@@ -51,7 +51,7 @@ const DataTable = <T,>({ table, columns }: TableProps<T>) => {
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}
-                    className="border border-[#F1F1F1] font-inter font-normal text-sm leading-[18px] text-[#1B1B1B]"
+                    className="border border-[#F1F1F1] font-roboto capitalize font-normal text-sm leading-4 tracking-[-1%] text-[#1B1B1B]"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>

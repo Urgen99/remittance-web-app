@@ -118,12 +118,7 @@ const SendMoney = () => {
                     handlePrev={handlePrev}
                   />
                 )}
-                {activeStep === 6 && (
-                  <TransactionStatus
-                    handleNext={handleNext}
-                    handlePrev={handlePrev}
-                  />
-                )}
+                {activeStep === 6 && <TransactionStatus />}
               </>
             )}
           </motion.div>

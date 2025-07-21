@@ -1,4 +1,12 @@
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { useGetPaymentTypesQuery } from "@/features/reference-data/typePaymentApi.slice";
+import { saveTransactionForm } from "@/features/transactions/transactions.slice";
 import {
   AmountDetailSchema,
   AmountDetailSchemaType,
@@ -7,8 +15,9 @@ import { FormDescription } from "@/lib/type";
 import { Country } from "@/pages/private/dashboard/components/CurrentTransactionRate";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SendMoneyForm } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
@@ -16,13 +25,6 @@ import DropDownSelect from "../../../../components/ui/forms/DropDownSelect";
 import TextInput from "../../../../components/ui/forms/TextInput";
 import CountryAmountSelect from "../../../../components/ui/send-money/CountryAmountSelect";
 import NavigationButtons from "../../complete-profile/components/NavigationButtons";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 interface AmountDetailProps {
   handleNext: () => void;
 }
@@ -61,23 +63,34 @@ const deliveryMethods = [
   },
 ];
 
+type LabelValueParameter = {
+  name: string;
+  id: number;
+};
+
+type FormatLabelValue = {
+  label: string;
+  value: number;
+};
+
 const AmountDetails = ({ handleNext }: AmountDetailProps) => {
+  const [loading, setLoading] = useState(false);
+  const [payoutAmount, setPayoutAmount] = useState(0);
   const [senderCountry, setSenderCountry] = useState<Country>(defaultSender);
   const [receiverCountry, setReceiverCountry] =
     useState<Country>(defaultReceiver);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const {
-    data: paymentData,
-    isLoading: paymentTypeLoading,
-    isFetching: paymentTypeFetching,
-  } = useGetPaymentTypesQuery("PAYMENT_TYPE");
+  // const amountDetails = useSelector(selectCurrentFormData);
+  // console.log("Form data", amountDetails);
 
-  const paymentMethods =
-    paymentData?.data.map((item) => ({
-      label: item?.name,
-      value: item?.id,
-    })) || [];
+  const { data: paymentData } = useGetPaymentTypesQuery("PAYMENT_TYPE");
+
+  const paymentMethods: FormatLabelValue[] = formatLabelValue(
+    paymentData?.data as LabelValueParameter[]
+  );
 
   const form = useForm<AmountDetailSchemaType>({
     mode: "all",
@@ -91,21 +104,38 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
       paymentTypeId: "",
       deliveryMethodId: "",
       remarks: "",
+      payoutAmount: payoutAmount.toString(),
     },
   });
+
+  // remove this for now later fetch from db
+  useEffect(() => {
+    // AUD just for now;
+    setLoading(true);
+    const sendingAmount = form.watch("sendingAmount");
+    const timeout = setTimeout(() => {
+      setPayoutAmount(Number(sendingAmount) * 90);
+      setLoading(false);
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [form.watch("sendingAmount")]);
 
   const handleBack = () => {
     navigate("/", { replace: true });
   };
 
   function onSubmit(data: AmountDetailSchemaType) {
-    const formData = {
-      ...data,
-      SendingCountry: senderCountry.countryId,
-      SendingCurrency: senderCountry.iso3,
-      ReceivingCountry: receiverCountry.countryId,
-      ReceivingCurrency: receiverCountry.iso3,
-    };
+    dispatch(
+      saveTransactionForm({
+        ...data,
+        sendingCountryId: senderCountry.countryId as string,
+        sendingCurrencyId: senderCountry.id as string,
+        payoutCountryId: receiverCountry.countryId as string,
+        payoutCurrencyId: receiverCountry.id as string,
+        payoutAmount: String(payoutAmount),
+      })
+    );
 
     handleNext();
   }
@@ -174,7 +204,7 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
 
                   <div className="relative px-3 w-full py-1 flex items-center justify-between shadow-sm rounded-[8px] h-12 border border-[#E6E6E6]">
                     <p className="font-general-sans font-medium text-[#5F5F5F]">
-                      loading... {/*converted amount goes here*/}
+                      {loading ? "Loading..." : payoutAmount.toFixed(2)}
                     </p>
 
                     <div className="absolute right-4">
@@ -253,7 +283,7 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
 
               <NavigationButtons
                 onBackClick={handleBack}
-                // disabled={!form.formState.isValid}
+                disabled={!form.formState.isValid}
                 type="submit"
               />
             </div>
@@ -266,3 +296,17 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
 };
 
 export default AmountDetails;
+
+function formatLabelValue(data: LabelValueParameter[]) {
+  return (
+    (data &&
+      (data?.map(
+        (item: LabelValueParameter) =>
+          ({
+            label: item?.name,
+            value: item?.id,
+          } as FormatLabelValue)
+      ) as FormatLabelValue[] | undefined)) ||
+    []
+  );
+}

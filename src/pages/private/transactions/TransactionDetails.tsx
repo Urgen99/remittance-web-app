@@ -1,10 +1,17 @@
 import { TransactionIcons } from "@/components/icons/Icons";
 import TextContainer from "@/components/shared/TextContainer";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { maskAccountNumber } from "@/utils/maskAccountNumber";
+import { showSuccess } from "@/utils/toaster";
+import { format } from "date-fns";
+import { useRef, useState } from "react";
 import CountryDetails from "./components/CountryDetails";
 import DetailsTable from "./components/DetailsTable";
-import { format } from "date-fns";
 
 // import { useParams } from "react-router-dom";
 const transactionDetails = {
@@ -58,6 +65,19 @@ const statusColors: Record<string, string> = {
 const getStatusColor = (status: string) => statusColors[status];
 
 const TransactionDetails = () => {
+  const [copyTitle, setCopyTitle] = useState("Copy");
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const copyToClipBoard = () => {
+    navigator.clipboard.writeText(transactionDetails.id);
+
+    setCopyTitle("Copied!");
+    showSuccess("Copied!", "Transaction ID copied to clipboard.");
+
+    setTimeout(() => {
+      setCopyTitle("Copy");
+    }, 2500);
+  };
+
   const senderDetailsRows = [
     {
       label: "Payment method",
@@ -145,26 +165,38 @@ const TransactionDetails = () => {
             <h4 className="font-general-sans font-medium text-lg tracking-[-1%] text-[#1b1b1b]">
               Transaction # {transactionDetails?.id}
             </h4>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-fit cursor-pointer"
-              title="Copy"
-            >
-              <TransactionIcons.Copy />
-            </Button>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-fit cursor-pointer"
+                  onClick={copyToClipBoard}
+                  disabled={copyTitle === "Copied!"}
+                >
+                  <TransactionIcons.Copy />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent
+                ref={tooltipRef}
+                className="font-inter font-normal text-sm"
+              >
+                {copyTitle}
+              </TooltipContent>
+            </Tooltip>
           </div>
 
-          <div>
-            <Button
-              variant="outline"
-              className="font-roboto font-normal text-sm leading-[18px] tracking-[-1%] text-[#4F4D55] rounded-[6px] shadow-xs cursor-pointer"
-              title="Export Data"
-            >
-              <TransactionIcons.AddSquare />
-              <p>Export Data</p>
-            </Button>
-          </div>
+          {/* on click download as a csv - todo later */}
+
+          <Button
+            variant="outline"
+            className="font-roboto font-normal text-sm leading-[18px] tracking-[-1%] text-[#4F4D55] rounded-[6px] shadow-xs cursor-pointer"
+            title="Export Data"
+          >
+            <TransactionIcons.AddSquare />
+            <p>Export Data</p>
+          </Button>
         </div>
 
         {/* Transaction Details */}

@@ -1,12 +1,15 @@
+import { selectCurrentUser } from "@/features/auth/auth.slice";
+import { selectTransactionFormData } from "@/features/transactions/transactions.slice";
 import { FormDescription } from "@/lib/type";
 import { maskAccountNumber } from "@/utils/maskAccountNumber";
-import NavigationButtons from "../../complete-profile/components/NavigationButtons";
+import { format } from "date-fns";
+import { useSelector } from "react-redux";
 import { SendMoneyForm } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
+import NavigationButtons from "../../complete-profile/components/NavigationButtons";
 import PaymentCountry from "./review-payment/PaymentCountry";
 import PaymentDetailTable from "./review-payment/PaymentDetailTable";
 import RecipientContainer from "./review-payment/RecipientContainer";
-import { format } from "date-fns";
 interface ReviewPaymentProps {
   handleNext: () => void;
   handlePrev: () => void;
@@ -58,14 +61,18 @@ const transactionDetails = {
 };
 
 const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
+  const currentUser = useSelector(selectCurrentUser);
+  const formState = useSelector(selectTransactionFormData);
+  // select payment channel by browser
+
   const generalDetailsRows = [
     {
       label: "Sender name",
-      value: transactionDetails?.sender?.name,
+      value: currentUser?.split("@")[0],
     },
     {
       label: "Payment initiated date",
-      value: format(transactionDetails.date, "yyyy-MM-dd"),
+      value: format(new Date(), "yyyy-MM-dd"),
     },
     {
       label: "Payment Method",
@@ -77,13 +84,30 @@ const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
     },
     {
       label: "Channel",
-      value: transactionDetails?.channel,
+      value: "Web",
     },
     {
       label: "Remarks",
-      value: transactionDetails?.remarks,
+      value: formState?.remarks,
     },
   ];
+
+  const recipientDetails = {
+    name: `${formState?.beneficiaryFirstName} ${
+      formState?.beneficiaryMiddleName && ` ${formState?.beneficiaryMiddleName}`
+    } ${formState?.beneficiaryLastName}`,
+    bankName: `${formState?.BankName}`,
+    accountNumber: `${transactionDetails?.receiver?.accountNumber}`,
+  };
+
+  const headerData = {
+    sendingAmount: parseInt(formState?.sendingAmount as string),
+    payoutAmount: parseInt(formState?.payoutAmount as string),
+    sendingCurrency: "AUD",
+    payoutCurrency: "NPR",
+    sendingCountryFlag: "/images/australia.svg",
+    payoutCountryFlag: "/images/nepal.svg",
+  };
 
   return (
     <section className="mt-7">
@@ -95,7 +119,7 @@ const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
 
         <div className="flex flex-col items-center gap-[18px] max-w-[35.15rem] w-full">
           <div className="max-w-[33.65rem] w-full">
-            <PaymentCountry transaction={transactionDetails} />
+            <PaymentCountry transaction={headerData} />
           </div>
 
           <div className="flex flex-col gap-6 items-center w-full">
@@ -110,9 +134,7 @@ const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
                 RECIPIENT
               </h3>
 
-              <RecipientContainer
-                recipientDetails={transactionDetails?.receiver}
-              />
+              <RecipientContainer recipientDetails={recipientDetails} />
             </div>
           </div>
 

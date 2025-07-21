@@ -92,6 +92,7 @@ const selectAuthPassword = (state: RootState) => state.auth.password;
 /* ---------- CURRENT USER SELECTORS ---------- */
 const selectCurrentUser = (state: RootState) => state.auth.user;
 const selectCurrentToken = (state: RootState) => state.auth.token;
+const selectCurrentRefreshToken = (state: RootState) => state.auth.refreshToken;
 const selectCurrentExpiry = (state: RootState) => state.auth.expiresAt;
 
 const selectVerifiedUser = createSelector(
@@ -106,6 +107,7 @@ export {
   selectAuthEmail,
   selectAuthPassword,
   selectCurrentExpiry,
+  selectCurrentRefreshToken,
   selectCurrentToken,
   selectCurrentUser,
   selectVerifiedUser,
