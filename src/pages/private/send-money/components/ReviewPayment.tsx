@@ -1,16 +1,15 @@
+import { selectCurrentUser } from "@/features/auth/auth.slice";
+import { selectTransactionFormData } from "@/features/transactions/transactions.slice";
 import { FormDescription } from "@/lib/type";
 import { maskAccountNumber } from "@/utils/maskAccountNumber";
-import NavigationButtons from "../../complete-profile/components/NavigationButtons";
+import { format } from "date-fns";
+import { useSelector } from "react-redux";
 import { SendMoneyForm } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
+import NavigationButtons from "../../complete-profile/components/NavigationButtons";
 import PaymentCountry from "./review-payment/PaymentCountry";
 import PaymentDetailTable from "./review-payment/PaymentDetailTable";
 import RecipientContainer from "./review-payment/RecipientContainer";
-import { format } from "date-fns";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "@/features/auth/auth.slice";
-import { selectCurrentFormData } from "@/features/send-money/sendMoney.slice";
-import { selectTransactionFormData } from "@/features/transactions/transactions.slice";
 interface ReviewPaymentProps {
   handleNext: () => void;
   handlePrev: () => void;
@@ -101,6 +100,15 @@ const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
     accountNumber: `${transactionDetails?.receiver?.accountNumber}`,
   };
 
+  const headerData = {
+    sendingAmount: parseInt(formState?.sendingAmount as string),
+    payoutAmount: parseInt(formState?.payoutAmount as string),
+    sendingCurrency: "AUD",
+    payoutCurrency: "NPR",
+    sendingCountryFlag: "/images/australia.svg",
+    payoutCountryFlag: "/images/nepal.svg",
+  };
+
   return (
     <section className="mt-7">
       <div className="flex flex-col gap-10 items-center justify-center ">
@@ -111,7 +119,7 @@ const ReviewPayment = ({ handleNext, handlePrev }: ReviewPaymentProps) => {
 
         <div className="flex flex-col items-center gap-[18px] max-w-[35.15rem] w-full">
           <div className="max-w-[33.65rem] w-full">
-            <PaymentCountry transaction={transactionDetails} />
+            <PaymentCountry transaction={headerData} />
           </div>
 
           <div className="flex flex-col gap-6 items-center w-full">

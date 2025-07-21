@@ -1,7 +1,9 @@
 import {
   clearTransactionForm,
   selectTransactionFormData,
+  setCurrentTransactionId,
 } from "@/features/transactions/transactions.slice";
+import { useInitiateTransactionMutation } from "@/features/transactions/transactionsApi.slice";
 import { terms, Terms } from "@/lib/constant";
 import {
   TermsSchema,
@@ -16,7 +18,6 @@ import { SendMoneyForm } from "../../../../components/icons/Icons";
 import FormHeadingDescription from "../../../../components/shared/FormHeadingDescription";
 import CheckBox from "../../../../components/ui/forms/CheckBox";
 import NavigationButtons from "../../complete-profile/components/NavigationButtons";
-import { useInitiateTransactionMutation } from "@/features/transactions/transactionsApi.slice";
 
 interface PaymentTermsProps {
   handleNext: () => void;
@@ -44,6 +45,7 @@ const PaymentTerms = ({ handleNext, handlePrev }: PaymentTermsProps) => {
         // hit the initiate transaction api
         const body = {
           ...formState,
+          deliveryMethodId: 10,
 
           // Step - 2: Receiver Details
           beneficiaryEmail: "test@gmail.com",
@@ -72,14 +74,12 @@ const PaymentTerms = ({ handleNext, handlePrev }: PaymentTermsProps) => {
         };
 
         const response = await initiateTransaction(body).unwrap();
-        console.log("response", response);
-
         if (response?.data) {
           showSuccess("Success", "Transaction initiated successfully");
           dispatch(clearTransactionForm());
+          dispatch(setCurrentTransactionId(response.data as string));
+          handleNext();
         }
-
-        handleNext();
       }
     } catch (error) {
       console.error("error", error);
@@ -95,28 +95,33 @@ const PaymentTerms = ({ handleNext, handlePrev }: PaymentTermsProps) => {
           <FormHeadingDescription formDescription={formDescription} />
         </div>
 
-        <div className="max-w-[32.35rem] w-full space-y-[58px]">
-          <div className="max-w-[32.2rem] space-y-4">
+        <div className="max-w-[32.35rem] w-full">
+          <div className="max-w-[32.2rem] flex flex-col gap-4">
             <div className="max-h-[27rem] overflow-y-scroll border-[#E0E0E0] border px-6 py-4 shadow-xs rounded-[12px]">
               <TermsLists terms={terms} />
             </div>
 
             <FormProvider {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex flex-col gap-[3.6rem]"
+              >
                 <CheckBox
                   name="TermsAccepted"
                   label="I agree with Eagle Remit's terms and condition and usage policy"
                   isImportant
                   control={form.control}
                 />
+
+                <div className="flex flex-col items-center w-full gap-14">
+                  <NavigationButtons
+                    onBackClick={handlePrev}
+                    disabled={!form.formState.isValid || isLoading}
+                    type="submit"
+                  />
+                </div>
               </form>
             </FormProvider>
-          </div>
-          <div className="max-w-[50rem] flex flex-col items-center w-full gap-14">
-            <NavigationButtons
-              onBackClick={handlePrev}
-              disabled={!form.formState.isValid || isLoading}
-            />
           </div>
         </div>
       </div>

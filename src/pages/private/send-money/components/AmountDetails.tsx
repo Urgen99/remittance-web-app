@@ -104,6 +104,7 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
       paymentTypeId: "",
       deliveryMethodId: "",
       remarks: "",
+      payoutAmount: payoutAmount.toString(),
     },
   });
 
@@ -128,10 +129,11 @@ const AmountDetails = ({ handleNext }: AmountDetailProps) => {
     dispatch(
       saveTransactionForm({
         ...data,
-        sendingCountryId: senderCountry.countryId,
-        sendingCurrencyId: senderCountry.id,
-        payoutCountryId: receiverCountry.countryId,
-        payoutCurrencyId: receiverCountry.id,
+        sendingCountryId: senderCountry.countryId as string,
+        sendingCurrencyId: senderCountry.id as string,
+        payoutCountryId: receiverCountry.countryId as string,
+        payoutCurrencyId: receiverCountry.id as string,
+        payoutAmount: String(payoutAmount),
       })
     );
 
